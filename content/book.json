@@ -1,0 +1,1265 @@
+{
+  "title": "Spiritual Seasons Daily Devotional",
+  "subtitle": "A 120-Day Journey Through Winter, Spring, Summer, and Fall",
+  "author": "Dr. Jacqueline Ghee, MSW, MPCC, DMIN",
+  "description": "A 120-day devotional journey through Winter, Spring, Summer, and Autumn.",
+  "acknowledgements": "This book would not have been possible without the guidance and grace of God. All glory and honor belong to Him alone. I am deeply grateful for the vision and strength God provided to complete this work, and for the special people He placed in my life during this season.\n\nTo my adult children, thank you for always standing by me and encouraging me to finish what I started. Your unwavering love and support through every journey, even when the path was unclear, have been a true blessing. As a mother, I am profoundly grateful to have such a strong support system in you.\n\nA special thank you to Dena Sliver for your dedication and hard work in bringing this workbook to life. Your time, effort, and commitment to this project and to me are sincerely appreciated.\n\nI am also thankful for all my clients over the years. Thank you for choosing Embracing Your New Normal, LLC, and for allowing me the opportunity to walk alongside you during challenging times. Your stories and resilience have inspired the creation of this daily devotional workbook.\n\nFinally, to my friends who encouraged me to write this workbook, thank you. Your encouragement and belief in me have made all the difference.",
+  "aboutAuthor": "Dr. Jacqueline Ghee is recognized for her ability to address the core of any issue with clarity and compassion. As a dedicated preacher, teacher, and professional counselor, she has made a profound impact on the lives of those she mentors and counsels. Her holistic approach considers the needs of the whole person—mind, body, and soul—ensuring exceptional care for everyone.\n\nDriven by compassion, Dr. Ghee founded Beneath God's Wings Total Ministries, which encompasses initiatives such as Sister with a Cause, The King's Daughters, Grief Share, and Shoe Box Ministry. In April 2015, Beneath God's Wings Total Ministries achieved 501(c)(3) status. She also established Embracing Your New Normal, LLC, specializing in spiritual grief counseling and Christian counseling.\n\nMinister Ghee earned her Doctoral degree in the Ministry of Pastoral Counseling from Liberty University in the summer of 2025. She holds a Master of Social Work (MSW) from Kean University and a Master of Arts in Pastoral Care and Counseling from New Brunswick Theological Seminary, which she completed in May 2019. Her clinical training includes a unit of Clinical Pastoral Education at Robert Wood Johnson University Hospital. She is a Certified School Social Worker, Certified Domestic Violence Responder, Certified Mental Health First Aid Responder, and Certified Grief Counselor. Additionally, she serves as Assistant Director of a Trio Program.",
+  "frontMatter": {
+    "introduction": {
+      "text": "Welcome to Spiritual Seasons: A 120-Day Journey, a devotional designed to guide you through the rhythms of life with God. Just as the natural world moves through seasons—spring, summer, fall, and winter—our spiritual lives flow through cycles of growth, rest, harvest, and renewal.",
+      "scripture": {
+        "reference": "Deuteronomy 11:14–15",
+        "text": "then he will send the rains in their proper seasons—the early and late rains—so you can bring in your harvests of grain, new wine, and olive oil. He will give you lush pastureland for your livestock, and you yourself will have all you want to eat."
+      },
+      "purpose": "This passage reminds us that every season has its purpose, and God provides guidance, strength, and sustenance for each moment of our journey.",
+      "structure": {
+        "intro": "This devotional workbook is divided into four spiritual seasons. Please feel free to color each seasonal image:",
+        "seasons": [
+          {
+            "title": "Winter – Stillness & Trust",
+            "description": "A time to rest, reflect, and rely on God's unseen work."
+          },
+          {
+            "title": "Spring – Renewal & Planting",
+            "description": "A season for new beginnings, sowing seeds of faith, and embracing hope."
+          },
+          {
+            "title": "Summer – Abundance & Joy",
+            "description": "A season to celebrate growth, enjoy God's blessings, and share joy with others."
+          },
+          {
+            "title": "Fall – Harvest & Letting Go",
+            "description": "A time to reap the fruits of your labor, express gratitude, and release what no longer serves you."
+          }
+        ]
+      },
+      "dailyFormat": {
+        "intro": "Each day includes:",
+        "elements": [
+          "A scripture to meditate on",
+          "A reflection prompt to help you engage your heart and mind",
+          "Writing space for journaling your thoughts, prayers, and insights"
+        ]
+      },
+      "closing": "Whether you are entering a season of quiet reflection, planting new dreams, rejoicing in abundance, or releasing the past, this workbook is your companion to grow deeper in faith, self-awareness, and spiritual maturity.\n\nTake this journey one day at a time, trusting that God is at work in every season, and let His Word guide you through the rhythms of life."
+    },
+    "howToUse": {
+      "title": "How to Use This Devotional",
+      "steps": [
+        "Begin with the Season Identification Quiz to discover your current spiritual season.",
+        "Read each day's scripture prayerfully and slowly.",
+        "Reflect on the prompt and write freely in your journal.",
+        "Trust the process—growth happens in every season."
+      ]
+    }
+  },
+  "seasons": [
+    {
+      "id": "winter",
+      "title": "Winter — A Season of Stillness and Trust",
+      "daysRange": "1–30",
+      "color": "#4A90A4",
+      "colorLight": "#E3F2FD",
+      "colorDark": "#2E6171",
+      "overview": {
+        "description": "Winter is a time of quiet reflection, rest, and deep spiritual grounding. Though the landscape may appear barren, beneath the surface, roots are deepening and strength is being cultivated. This season invites us to trust God's timing and find peace in stillness.",
+        "characteristics": [
+          "Stillness and Reflection",
+          "Trust and Surrender",
+          "Rest and Renewal",
+          "Patience and Faith",
+          "Deep Inner Work"
+        ],
+        "practices": [
+          "Meditative prayer",
+          "Contemplative journaling",
+          "Scripture meditation",
+          "Solitude and silence",
+          "Resting in God's presence"
+        ]
+      },
+      "days": [
+        {
+          "day": 1,
+          "scriptureRef": "Psalm 46:10",
+          "scriptureText": "Be still, and know that I am God! I will be honored by every nation. I will be honored throughout the world.",
+          "prompt": "Where do I need to release control and rest in God's presence?",
+          "pdfPage": 1
+        },
+        {
+          "day": 2,
+          "scriptureRef": "Isaiah 30:15",
+          "scriptureText": "This is what the Sovereign Lord, the Holy One of Israel, says: “Only in returning to me and resting in me will you be saved. In quietness and confidence is your strength. But you would have none of it.”",
+          "prompt": "How can I practice quietness before God today?",
+          "pdfPage": 2
+        },
+        {
+          "day": 3,
+          "scriptureRef": "Lamentations 3:25",
+          "scriptureText": "The Lord is good to those who depend on him, to those who search for him.",
+          "prompt": "What am I waiting on God for in this season?",
+          "pdfPage": 3
+        },
+        {
+          "day": 4,
+          "scriptureRef": "Lamentations 3:25-26",
+          "scriptureText": "The Lord is good to those who depend on him, to those who search for him. So it is good to wait quietly for salvation from the Lord.",
+          "prompt": "What areas of my life need His rest today?",
+          "pdfPage": 4
+        },
+        {
+          "day": 5,
+          "scriptureRef": "Habakkuk 2:3",
+          "scriptureText": "This vision is for a future time. It describes the end, and it will be fulfilled. If it seems slow in coming, wait patiently, for it will surely take place. It will not be delayed.",
+          "prompt": "How can I remain patient when God's promises feel delayed?",
+          "pdfPage": 5
+        },
+        {
+          "day": 6,
+          "scriptureRef": "Psalm 37:7",
+          "scriptureText": "Be still in the presence of the Lord, and wait patiently for him to act. Don’t worry about evil people who prosper or fret about their wicked schemes.",
+          "prompt": "What distractions keep me from waiting on Him?",
+          "pdfPage": 6
+        },
+        {
+          "day": 7,
+          "scriptureRef": "Micah 7:7",
+          "scriptureText": "As for me, I look to the Lord for help. I wait confidently for God to save me, and my God will certainly hear me.",
+          "prompt": "What does watch in hope look like for me today?",
+          "pdfPage": 17
+        },
+        {
+          "day": 8,
+          "scriptureRef": "Ecclesiastes 3:1",
+          "scriptureText": "For everything there is a season, a time for every activity under heaven.",
+          "prompt": "What season of life do I sense I am in right now?",
+          "pdfPage": 8
+        },
+        {
+          "day": 9,
+          "scriptureRef": "Isaiah 45:3",
+          "scriptureText": "And I will give you treasures hidden in the darkness—secret riches. I will do this so you may know that I am the Lord, the God of Israel, the one who calls you by name.",
+          "prompt": "What treasures might God be forming in me behind the scenes?",
+          "pdfPage": 9
+        },
+        {
+          "day": 10,
+          "scriptureRef": "Psalm 37:7",
+          "scriptureText": "Be still in the presence of the Lord, and wait patiently for him to act. Don’t worry about evil people who prosper or fret about their wicked schemes.",
+          "prompt": "How does knowing God works in his time comfort me?",
+          "pdfPage": 10
+        },
+        {
+          "day": 11,
+          "scriptureRef": "Isaiah 40:31",
+          "scriptureText": "But those who trust in the Lord will find new strength. They will soar high on wings like eagles. They will run and not grow weary. They will walk and not faint.",
+          "prompt": "How has waiting made me stronger in the past?",
+          "pdfPage": 11
+        },
+        {
+          "day": 12,
+          "scriptureRef": "John 12:24",
+          "scriptureText": "I tell you the truth, unless a kernel of wheat is planted in the soil and dies there, it remains alone. But its death will produce many new kernels—a plentiful harvest of new lives.",
+          "prompt": "What part of me needs to surrender before new growth can come?",
+          "pdfPage": 12
+        },
+        {
+          "day": 13,
+          "scriptureRef": "Colossians 2:7",
+          "scriptureText": "Let your roots grow down into him, and let your lives be built on him. Then your faith will grow strong in the truth you were taught, and you will overflow with thankfulness.",
+          "prompt": "What practices deepen my roots in Christ?",
+          "pdfPage": 13
+        },
+        {
+          "day": 14,
+          "scriptureRef": "Jeremiah 17:7-8",
+          "scriptureText": "But blessed are those who trust in the Lord and have made the Lord their hope and confidence. They are like trees planted along a riverbank, with roots that reach deep into the water. Such trees are not bothered by the heat or worried by long months of drought. Their leaves stay green, and they never stop producing fruit.",
+          "prompt": "What nourishes me spiritually during seasons?",
+          "pdfPage": 14
+        },
+        {
+          "day": 15,
+          "scriptureRef": "Romans 8:25",
+          "scriptureText": "But if we look forward to something we don’t yet have, we must wait patiently and confidently.",
+          "prompt": "What unseen hope am I clinging to?",
+          "pdfPage": 15
+        },
+        {
+          "day": 16,
+          "scriptureRef": "Psalm 27:14",
+          "scriptureText": "Wait patiently for the Lord. Be brave and courageous. Yes, wait patiently for the Lord.",
+          "prompt": "Where do I need courage to keep waiting?",
+          "pdfPage": 16
+        },
+        {
+          "day": 17,
+          "scriptureRef": "Micah 7:7",
+          "scriptureText": "As for me, I look to the Lord for help. I wait confidently for God to save me, and my God will certainly hear me.",
+          "prompt": "What does watch in hope look like for me today?",
+          "pdfPage": 17
+        },
+        {
+          "day": 18,
+          "scriptureRef": "Romans 15:13",
+          "scriptureText": "I pray that God, the source of hope, will fill you completely with joy and peace because you trust in him. Then you will overflow with confident hope through the power of the Holy Spirit.",
+          "prompt": "How can I open myself to God's joy and peace while I wait?",
+          "pdfPage": 18
+        },
+        {
+          "day": 19,
+          "scriptureRef": "Hebrews 11:1",
+          "scriptureText": "Faith shows the reality of what we hope for; it is the evidence of things we cannot see.",
+          "prompt": "What's one area where God is stretching my faith?",
+          "pdfPage": 19
+        },
+        {
+          "day": 20,
+          "scriptureRef": "Psalm 130:5",
+          "scriptureText": "I am counting on the Lord; yes, I am counting on him. I have put my hope in his word.",
+          "prompt": "What would it mean to wait with my whole self, not just partially?",
+          "pdfPage": 20
+        },
+        {
+          "day": 21,
+          "scriptureRef": "1 Peter 1:3",
+          "scriptureText": "All praise to God, the Father of our Lord Jesus Christ. It is by his great mercy that we have been born again, because God raised Jesus Christ from the dead. Now we live with great expectation.",
+          "prompt": "How does Jesus give me hope for what's ahead?",
+          "pdfPage": 21
+        },
+        {
+          "day": 22,
+          "scriptureRef": "James 1:4",
+          "scriptureText": "So let it grow, for when your endurance is fully developed, you will be perfect and complete, needing nothing.",
+          "prompt": "What work is perseverance doing in me?",
+          "pdfPage": 22
+        },
+        {
+          "day": 23,
+          "scriptureRef": "Romans 5:3",
+          "scriptureText": "We can rejoice, too, when we run into problems and trials, for we know that they help us develop endurance.",
+          "prompt": "How has difficulty grown my character?",
+          "pdfPage": 23
+        },
+        {
+          "day": 24,
+          "scriptureRef": "Hebrews 12:1",
+          "scriptureText": "Therefore, since we are surrounded by such a huge crowd of witnesses to the life of faith, let us strip off every weight that slows us down, especially the sin that so easily trips us up. And let us run with endurance the race God has set before us.",
+          "prompt": "What helps me keep my eyes on Jesus when weary?",
+          "pdfPage": 24
+        },
+        {
+          "day": 25,
+          "scriptureRef": "2 Corinthians 12:9",
+          "scriptureText": "Each time he said, “My grace is all you need. My power works best in weakness.” So now I am glad to boast about my weaknesses, so that the power of Christ can work through me.",
+          "prompt": "Where do I need to rely on God's grace today?",
+          "pdfPage": 25
+        },
+        {
+          "day": 26,
+          "scriptureRef": "Philippians 4:12",
+          "scriptureText": "I know how to live on almost nothing or with everything. I have learned the secret of living in every situation, whether it is with a full stomach or empty, with plenty or little.",
+          "prompt": "How can I lean into Christ's strength instead of my own?",
+          "pdfPage": 26
+        },
+        {
+          "day": 27,
+          "scriptureRef": "Psalm 73:26",
+          "scriptureText": "My health may fail, and my spirit may grow weak, but God remains the strength of my heart; he is mine forever.",
+          "prompt": "What weakness can I bring to God's strength today?",
+          "pdfPage": 27
+        },
+        {
+          "day": 28,
+          "scriptureRef": "Isaiah 41:10",
+          "scriptureText": "Don’t be afraid, for I am with you. Don’t be discouraged, for I am your God. I will strengthen you and help you. I will hold you up with my victorious right hand.",
+          "prompt": "Where do I need God's real presence?",
+          "pdfPage": 28
+        },
+        {
+          "day": 29,
+          "scriptureRef": "1 Corinthians 15:58",
+          "scriptureText": "So, my dear brothers and sisters, be strong and immovable. Always work enthusiastically for the Lord, for you know that nothing you do for the Lord is ever useless.",
+          "prompt": "What truth helps me stand firm today?",
+          "pdfPage": 29
+        },
+        {
+          "day": 30,
+          "scriptureRef": "Revelation 21:5",
+          "scriptureText": "And the one sitting on the throne said, “Look, I am making everything new!” And then he said, “Write this down, for what I tell you is trustworthy and true.”",
+          "prompt": "How does this promise carry me through winter seasons?",
+          "pdfPage": 30
+        }
+      ]
+    },
+    {
+      "id": "spring",
+      "title": "Spring — A Season of Renewal and Planting",
+      "daysRange": "31–60",
+      "color": "#8BC34A",
+      "colorLight": "#DCEDC8",
+      "colorDark": "#558B2F",
+      "overview": {
+        "description": "Spring brings new beginnings, fresh hope, and the stirring of new life. Seeds that were planted in faith begin to sprout, and the soul awakens to new possibilities. This is a time to embrace renewal and step forward with courage.",
+        "characteristics": [
+          "New Beginnings",
+          "Hope and Expectation",
+          "Planting Seeds of Faith",
+          "Fresh Vision",
+          "Awakening Purpose"
+        ],
+        "practices": [
+          "Setting spiritual intentions",
+          "Planting seeds of faith",
+          "Embracing new opportunities",
+          "Cultivating hope",
+          "Prayer walks and nature connection"
+        ]
+      },
+      "days": [
+        {
+          "day": 31,
+          "scriptureRef": "Isaiah 43:19",
+          "scriptureText": "For I am about to do something new. See, I have already begun! Do you not see it? I will make a pathway through the wilderness. I will create rivers in the dry wasteland.",
+          "prompt": "What new thing is God birthing in me?",
+          "pdfPage": 31
+        },
+        {
+          "day": 32,
+          "scriptureRef": "Song of Solomon 2:11-12",
+          "scriptureText": "Look, the winter is past, and the rains are over and gone. The flowers are springing up, the season of singing birds has come, and the cooing of turtledoves fills the air.",
+          "prompt": "Where do I see signs of new life around me?",
+          "pdfPage": 32
+        },
+        {
+          "day": 33,
+          "scriptureRef": "Hosea 10:12",
+          "scriptureText": "I said, ‘Plant the good seeds of righteousness, and you will harvest a crop of love. Plow up the hard ground of your hearts, for now is the time to seek the Lord, that he may come and shower righteousness upon you.’",
+          "prompt": "What seeds am I planting in this season?",
+          "pdfPage": 33
+        },
+        {
+          "day": 34,
+          "scriptureRef": "Galatians 6:7",
+          "scriptureText": "Don’t be misled—you cannot mock the justice of God. You will always harvest what you plant.",
+          "prompt": "What choices now will shape my future harvest?",
+          "pdfPage": 34
+        },
+        {
+          "day": 35,
+          "scriptureRef": "2 Corinthians 5:17",
+          "scriptureText": "This means that anyone who belongs to Christ has become a new person. The old life is gone; a new life has begun!",
+          "prompt": "How has Christ made me new?",
+          "pdfPage": 35
+        },
+        {
+          "day": 36,
+          "scriptureRef": "1 Peter 1:23",
+          "scriptureText": "For you have been born again, but not to a life that will quickly end. Your new life will last forever because it comes from the eternal, living word of God.",
+          "prompt": "What new growth has God already started in me?",
+          "pdfPage": 36
+        },
+        {
+          "day": 37,
+          "scriptureRef": "John 15:5",
+          "scriptureText": "“Yes, I am the vine; you are the branches. Those who remain in me, and I in them, will produce much fruit. For apart from me you can do nothing.”",
+          "prompt": "How can I stay connected to the Vine daily?",
+          "pdfPage": 37
+        },
+        {
+          "day": 38,
+          "scriptureRef": "Jeremiah 31:3",
+          "scriptureText": "Long ago the Lord said to Israel: “I have loved you, my people, with an everlasting love. With unfailing love I have drawn you to myself.”",
+          "prompt": "Where am I flourishing in my faith?",
+          "pdfPage": 38
+        },
+        {
+          "day": 39,
+          "scriptureRef": "Jeremiah 29:11",
+          "scriptureText": "For I know the plans I have for you,” says the Lord. “They are plans for good and not for disaster, to give you a future and a hope.",
+          "prompt": "How does God's promise of hope encourage me today?",
+          "pdfPage": 39
+        },
+        {
+          "day": 40,
+          "scriptureRef": "Isaiah 55:10",
+          "scriptureText": "The rain and snow come down from the heavens and stay on the ground to water the earth. They cause the grain to grow, producing seed for the farmer and bread for the hungry.",
+          "prompt": "How has God's word produced growth in me?",
+          "pdfPage": 40
+        },
+        {
+          "day": 41,
+          "scriptureRef": "Ezekiel 36:26",
+          "scriptureText": "And I will give you a new heart, and I will put a new spirit in you. I will take out your stony, stubborn heart and give you a tender, responsive heart.",
+          "prompt": "What areas of my heart need renewal?",
+          "pdfPage": 41
+        },
+        {
+          "day": 42,
+          "scriptureRef": "Psalm 1:3",
+          "scriptureText": "They are like trees planted along the riverbank, bearing fruit each season. Their leaves never wither, and they prosper in all they do.",
+          "prompt": "How can I stay rooted by God's living water?",
+          "pdfPage": 42
+        },
+        {
+          "day": 43,
+          "scriptureRef": "1 Corinthians 3:6",
+          "scriptureText": "I planted the seed in your hearts, and Apollos watered it, but it was God who made it grow.",
+          "prompt": "How has God refreshed me lately?",
+          "pdfPage": 43
+        },
+        {
+          "day": 44,
+          "scriptureRef": "Philippians 1:6",
+          "scriptureText": "And I am certain that God, who began the good work within you, will continue his work until it is finally finished on the day when Christ Jesus returns.",
+          "prompt": "What good gifts has God given me in this season of renewal?",
+          "pdfPage": 44
+        },
+        {
+          "day": 45,
+          "scriptureRef": "Matthew 13:23",
+          "scriptureText": "The seed that fell on good soil represents those who truly hear and understand God’s word and produce a harvest of thirty, sixty, or even a hundred times as much as had been planted!",
+          "prompt": "How can I cultivate good soil in my life?",
+          "pdfPage": 45
+        },
+        {
+          "day": 46,
+          "scriptureRef": "Psalm 40:3",
+          "scriptureText": "He has given me a new song to sing, a hymn of praise to our God. Many will see what he has done and be amazed. They will put their trust in the Lord.",
+          "prompt": "What new song of praise or gratitude can I lift to Him today?",
+          "pdfPage": 46
+        },
+        {
+          "day": 47,
+          "scriptureRef": "Isaiah 61:3",
+          "scriptureText": "To all who mourn in Israel, he will give a crown of beauty for ashes, a joyous blessing instead of mourning, festive praise instead of despair. In their righteousness, they will be like great oaks that the Lord has planted for his own glory.",
+          "prompt": "Where has God turned mourning into joy for me?",
+          "pdfPage": 47
+        },
+        {
+          "day": 48,
+          "scriptureRef": "James 1:21",
+          "scriptureText": "So get rid of all the filth and evil in your lives, and humbly accept the word God has planted in your hearts, for it has the power to save your souls.",
+          "prompt": "How is God's Word taking root in my heart?",
+          "pdfPage": 48
+        },
+        {
+          "day": 49,
+          "scriptureRef": "Luke 8:15",
+          "scriptureText": "And the seeds that fell on the good soil represent honest, good-hearted people who hear God’s word, cling to it, and patiently produce a huge harvest.",
+          "prompt": "How can I persevere to produce a harvest?",
+          "pdfPage": 49
+        },
+        {
+          "day": 50,
+          "scriptureRef": "Psalm 85:12",
+          "scriptureText": "Yes, the Lord pours down his blessings. Our land will yield its bountiful harvest.",
+          "prompt": "What good gifts of God am I seeing right now?",
+          "pdfPage": 50
+        },
+        {
+          "day": 51,
+          "scriptureRef": "Romans 6:4",
+          "scriptureText": "For we died and were buried with Christ by baptism. And just as Christ was raised from the dead by the glorious power of the Father, now we also may live new lives.",
+          "prompt": "What old patterns do I need to leave behind?",
+          "pdfPage": 51
+        },
+        {
+          "day": 52,
+          "scriptureRef": "Isaiah 65:17",
+          "scriptureText": "“Look! I am creating new heavens and a new earth, and no one will even think about the old ones anymore.”",
+          "prompt": "How do I hold hope for God's ultimate renewal?",
+          "pdfPage": 52
+        },
+        {
+          "day": 53,
+          "scriptureRef": "Matthew 6:28",
+          "scriptureText": "“And why worry about your clothing? Look at the lilies of the field and how they grow. They don’t work or make their clothing,”",
+          "prompt": "What can I learn from creation about trusting God?",
+          "pdfPage": 53
+        },
+        {
+          "day": 54,
+          "scriptureRef": "2 Corinthians 9:10",
+          "scriptureText": "For God is the one who provides seed for the farmer and then bread to eat. In the same way, he will provide and increase your resources and then produce a great harvest of generosity in you.",
+          "prompt": "How is God equipping me to sow generously?",
+          "pdfPage": 54
+        },
+        {
+          "day": 55,
+          "scriptureRef": "Ephesians 4:23",
+          "scriptureText": "Instead, let the Spirit renew your thoughts and attitudes.",
+          "prompt": "What mindset shift is God calling me into?",
+          "pdfPage": 55
+        },
+        {
+          "day": 56,
+          "scriptureRef": "Psalm 126:5",
+          "scriptureText": "Those who plant in tears will harvest with shouts of joy.",
+          "prompt": "Where do I trust God to turn sorrow into joy in my life?",
+          "pdfPage": 56
+        },
+        {
+          "day": 57,
+          "scriptureRef": "Zechariah 10:1",
+          "scriptureText": "Ask the Lord for rain in the spring, for he makes the storm clouds. And he will send showers of rain so every field becomes a lush pasture.",
+          "prompt": "What refreshing do I need to ask God for today?",
+          "pdfPage": 57
+        },
+        {
+          "day": 58,
+          "scriptureRef": "Matthew 5:14",
+          "scriptureText": "“You are the light of the world—like a city on a hilltop that cannot be hidden.”",
+          "prompt": "How can I shine light in a new way today?",
+          "pdfPage": 58
+        },
+        {
+          "day": 59,
+          "scriptureRef": "Revelation 21:5",
+          "scriptureText": "And the one sitting on the throne said, “Look, I am making everything new!” And then he said, “Write this down, for what I tell you is trustworthy and true.”",
+          "prompt": "Where is God bringing fresh renewal in my life?",
+          "pdfPage": 59
+        },
+        {
+          "day": 60,
+          "scriptureRef": "John 10:10",
+          "scriptureText": "The thief’s purpose is to steal and kill and destroy. My purpose is to give them a rich and satisfying life.",
+          "prompt": "What does abundant life look like for me in this season?",
+          "pdfPage": 60
+        }
+      ]
+    },
+    {
+      "id": "summer",
+      "title": "Summer — A Season of Abundance and Growth",
+      "daysRange": "61–90",
+      "color": "#F9A825",
+      "colorLight": "#FFF9C4",
+      "colorDark": "#F57F17",
+      "overview": {
+        "description": "Summer is a time of abundance, productivity, and visible growth. The seeds planted in spring are now thriving, and there is energy for work and expansion. This season calls us to steward our growth and share our blessings generously.",
+        "characteristics": [
+          "Abundance and Fruitfulness",
+          "Productivity and Energy",
+          "Visible Growth",
+          "Generosity and Sharing",
+          "Stewardship"
+        ],
+        "practices": [
+          "Active service and ministry",
+          "Sharing blessings with others",
+          "Pursuing God-given purposes",
+          "Celebrating growth",
+          "Stewarding resources well"
+        ]
+      },
+      "days": [
+        {
+          "day": 61,
+          "scriptureRef": "Galatians 5:22",
+          "scriptureText": "But the Holy Spirit produces this kind of fruit in our lives: love, joy, peace, patience, kindness, goodness, faithfulness,",
+          "prompt": "Which fruit is God growing most in me?",
+          "pdfPage": 61
+        },
+        {
+          "day": 62,
+          "scriptureRef": "Psalm 16:11",
+          "scriptureText": "You will show me the way of life, granting me the joy of your presence and the pleasures of living with you forever.",
+          "prompt": "How can I spend more time in His presence today?",
+          "pdfPage": 62
+        },
+        {
+          "day": 63,
+          "scriptureRef": "John 7:38",
+          "scriptureText": "Anyone who believes in me may come and drink! For the Scriptures declare, ‘Rivers of living water will flow from his heart.’”",
+          "prompt": "How can I overflow with God's Spirit today?",
+          "pdfPage": 63
+        },
+        {
+          "day": 64,
+          "scriptureRef": "Psalm 84:11",
+          "scriptureText": "For the Lord God is our sun and our shield. He gives us grace and glory. The Lord will withhold no good thing from those who do what is right.",
+          "prompt": "What blessings has God poured out on me?",
+          "pdfPage": 64
+        },
+        {
+          "day": 65,
+          "scriptureRef": "Isaiah 58:11",
+          "scriptureText": "The Lord will guide you continually, giving you water when you are dry and restoring your strength. You will be like a well-watered garden, like an ever-flowing spring.",
+          "prompt": "How is God refreshing me this season?",
+          "pdfPage": 65
+        },
+        {
+          "day": 66,
+          "scriptureRef": "Proverbs 11:25",
+          "scriptureText": "The generous will prosper; those who refresh others will themselves be refreshed.",
+          "prompt": "How can I bring refreshment to someone today?",
+          "pdfPage": 66
+        },
+        {
+          "day": 67,
+          "scriptureRef": "Psalm 34:8",
+          "scriptureText": "Taste and see that the Lord is good. Oh, the joys of those who take refuge in him!",
+          "prompt": "How have I experienced God's goodness?",
+          "pdfPage": 67
+        },
+        {
+          "day": 68,
+          "scriptureRef": "John 15:8",
+          "scriptureText": "When you produce much fruit, you are my true disciples. This brings great glory to my Father.",
+          "prompt": "What fruit of obedience is showing in my life?",
+          "pdfPage": 68
+        },
+        {
+          "day": 69,
+          "scriptureRef": "Philippians 4:4",
+          "scriptureText": "Always be full of joy in the Lord. I say it again—rejoice!",
+          "prompt": "How can I choose joy today?",
+          "pdfPage": 69
+        },
+        {
+          "day": 70,
+          "scriptureRef": "Nehemiah 8:10",
+          "scriptureText": "And Nehemiah continued, “Go and celebrate with a feast of rich foods and sweet drinks, and share gifts of food with people who have nothing prepared. This is a sacred day before our Lord. Don’t be dejected and sad, for the joy of the Lord is your strength!”",
+          "prompt": "What strengthens me when I lean into His joy?",
+          "pdfPage": 70
+        },
+        {
+          "day": 71,
+          "scriptureRef": "Matthew 5:6",
+          "scriptureText": "God blesses those who hunger and thirst for justice, for they will be satisfied.",
+          "prompt": "How am I hungering for God in this season?",
+          "pdfPage": 71
+        },
+        {
+          "day": 72,
+          "scriptureRef": "Isaiah 12:3",
+          "scriptureText": "With joy you will drink deeply from the fountain of salvation!",
+          "prompt": "Where can I draw joy from God's salvation today?",
+          "pdfPage": 72
+        },
+        {
+          "day": 73,
+          "scriptureRef": "Psalm 1:2-3",
+          "scriptureText": "But they delight in the law of the Lord, meditating on it day and night. They are like trees planted along the riverbank, bearing fruit each season. Their leaves never wither, and they prosper in all they do.",
+          "prompt": "What fruit is my meditation on God's Word producing?",
+          "pdfPage": 73
+        },
+        {
+          "day": 74,
+          "scriptureRef": "John 4:14",
+          "scriptureText": "But those who drink the water I give will never be thirsty again. It becomes a fresh, bubbling spring within them, giving them eternal life.",
+          "prompt": "How do I experience lasting satisfaction in Christ?",
+          "pdfPage": 74
+        },
+        {
+          "day": 75,
+          "scriptureRef": "Colossians 3:16",
+          "scriptureText": "Let the message about Christ, in all its richness, fill your lives. Teach and counsel each other with all the wisdom he gives. Sing psalms and hymns and spiritual songs to God with thankful hearts.",
+          "prompt": "How can God's word dwell more richly in me?",
+          "pdfPage": 75
+        },
+        {
+          "day": 76,
+          "scriptureRef": "Psalm 23:5",
+          "scriptureText": "You prepare a feast for me in the presence of my enemies. You honor me by anointing my head with oil. My cup overflows with blessings.",
+          "prompt": "What area of my life is overflowing with God's blessing?",
+          "pdfPage": 76
+        },
+        {
+          "day": 77,
+          "scriptureRef": "Jeremiah 31:25",
+          "scriptureText": "For I have given rest to the weary and joy to the sorrowing.",
+          "prompt": "Where do I need God's refreshing most?",
+          "pdfPage": 77
+        },
+        {
+          "day": 78,
+          "scriptureRef": "Matthew 11:28",
+          "scriptureText": "Then Jesus said, “Come to me, all of you who are weary and carry heavy burdens, and I will give you rest.”",
+          "prompt": "What rest do I need from Jesus this week?",
+          "pdfPage": 78
+        },
+        {
+          "day": 79,
+          "scriptureRef": "Psalm 84:11",
+          "scriptureText": "For the Lord God is our sun and our shield. He gives us grace and glory. The Lord will withhold no good thing from those who do what is right.",
+          "prompt": "What great things has the Lord done in my life?",
+          "pdfPage": 79
+        },
+        {
+          "day": 80,
+          "scriptureRef": "Romans 14:17",
+          "scriptureText": "For the Kingdom of God is not a matter of what we eat or drink, but of living a life of goodness and peace and joy in the Holy Spirit.",
+          "prompt": "How can I live out the joy of God's kingdom today?",
+          "pdfPage": 80
+        },
+        {
+          "day": 81,
+          "scriptureRef": "Psalm 92:4",
+          "scriptureText": "You thrill me, Lord, with all you have done for me! I sing for joy because of what you have done.",
+          "prompt": "How can I cultivate gratitude for God's works?",
+          "pdfPage": 81
+        },
+        {
+          "day": 82,
+          "scriptureRef": "Deuteronomy 28:12",
+          "scriptureText": "The Lord will send rain at the proper time from his rich treasury in the heavens and will bless all the work you do. You will lend to many nations, but you will never need to borrow from them.",
+          "prompt": "How is God blessing the work I'm doing now?",
+          "pdfPage": 82
+        },
+        {
+          "day": 83,
+          "scriptureRef": "Psalm 118:24",
+          "scriptureText": "This is the day the Lord has made. We will rejoice and be glad in it.",
+          "prompt": "What reasons do I have to rejoice in today?",
+          "pdfPage": 83
+        },
+        {
+          "day": 84,
+          "scriptureRef": "John 15:11",
+          "scriptureText": "I have told you these things so that you will be filled with my joy. Yes, your joy will overflow!",
+          "prompt": "How is Christ's joy being made complete in me?",
+          "pdfPage": 84
+        },
+        {
+          "day": 85,
+          "scriptureRef": "Luke 16:10",
+          "scriptureText": "“If you are faithful in little things, you will be faithful in large ones. But if you are dishonest in little things, you won’t be honest with greater responsibilities.”",
+          "prompt": "How can I be faithful with what God has entrusted to me today?",
+          "pdfPage": 85
+        },
+        {
+          "day": 86,
+          "scriptureRef": "Psalm 36:8",
+          "scriptureText": "You feed them from the abundance of your own house, letting them drink from your river of delights.",
+          "prompt": "How am I feasting on God's abundance?",
+          "pdfPage": 86
+        },
+        {
+          "day": 87,
+          "scriptureRef": "Romans 5:5",
+          "scriptureText": "And this hope will not lead to disappointment. For we know how dearly God loves us, because he has given us the Holy Spirit to fill our hearts with his love.",
+          "prompt": "How do I experience God's love overflowing in me?",
+          "pdfPage": 87
+        },
+        {
+          "day": 88,
+          "scriptureRef": "Ephesians 2:10",
+          "scriptureText": "For we are God’s masterpiece. He has created us anew in Christ Jesus, so we can do the good things he planned for us long ago.",
+          "prompt": "What good work has God prepared for me to do today?",
+          "pdfPage": 88
+        },
+        {
+          "day": 89,
+          "scriptureRef": "Psalm 90:17",
+          "scriptureText": "And may the Lord our God show us his approval and make our efforts successful. Yes, make our efforts successful!",
+          "prompt": "How can I care for body, soul, and spirit in full abundance?",
+          "pdfPage": 89
+        },
+        {
+          "day": 90,
+          "scriptureRef": "Ephesians 3:20",
+          "scriptureText": "Now all glory to God, who is able, through his mighty power at work within us, to accomplish infinitely more than we might ask or think.",
+          "prompt": "How am I trusting God for \"immeasurably more\"?",
+          "pdfPage": 90
+        }
+      ]
+    },
+    {
+      "id": "autumn",
+      "title": "Autumn — A Season of Harvest and Letting Go",
+      "daysRange": "91–120",
+      "color": "#E65100",
+      "colorLight": "#FFE0B2",
+      "colorDark": "#BF360C",
+      "overview": {
+        "description": "Autumn is a time of harvest, reflection, and transition. We gather the fruits of our labor, celebrate God's faithfulness, and prepare to release what must be let go. This season teaches us gratitude and the grace of surrender.",
+        "characteristics": [
+          "Harvest and Celebration",
+          "Reflection and Gratitude",
+          "Letting Go and Releasing",
+          "Transition and Change",
+          "Wisdom and Maturity"
+        ],
+        "practices": [
+          "Gratitude journaling",
+          "Celebrating milestones",
+          "Releasing what no longer serves",
+          "Reflecting on lessons learned",
+          "Preparing for new seasons"
+        ]
+      },
+      "days": [
+        {
+          "day": 91,
+          "scriptureRef": "Galatians 6:9",
+          "scriptureText": "So let’s not get tired of doing what is good. At just the right time we will reap a harvest of blessing if we don’t give up.",
+          "prompt": "What good seeds have I planted that are now bearing fruit?",
+          "pdfPage": 91
+        },
+        {
+          "day": 92,
+          "scriptureRef": "Ecclesiastes 3:1-2",
+          "scriptureText": "For everything there is a season, a time for every activity under heaven. A time to be born and a time to die. A time to plant and a time to harvest.",
+          "prompt": "What might God be asking me to release?",
+          "pdfPage": 92
+        },
+        {
+          "day": 93,
+          "scriptureRef": "Psalm 126:5-6",
+          "scriptureText": "Those who plant in tears will harvest with shouts of joy. They weep as they go to plant their seed, but they sing as they return with the harvest.",
+          "prompt": "How has God turned past struggles into joy?",
+          "pdfPage": 93
+        },
+        {
+          "day": 94,
+          "scriptureRef": "Leviticus 26:4",
+          "scriptureText": "I will send you the seasonal rains. The land will then yield its crops, and the trees of the field will produce their fruit.",
+          "prompt": "Where have I seen God's faithful provision?",
+          "pdfPage": 94
+        },
+        {
+          "day": 95,
+          "scriptureRef": "James 5:7",
+          "scriptureText": "Dear brothers and sisters, be patient as you wait for the Lord’s return. Consider the farmers who patiently wait for the rains in the fall and in the spring. They eagerly look for the valuable harvest to ripen.",
+          "prompt": "How can I be patient?",
+          "pdfPage": 95
+        },
+        {
+          "day": 96,
+          "scriptureRef": "Proverbs 20:4",
+          "scriptureText": "Those too lazy to plow in the right season will have no food at the harvest.",
+          "prompt": "How can I be diligent now to prepare for future harvests?",
+          "pdfPage": 96
+        },
+        {
+          "day": 97,
+          "scriptureRef": "Matthew 9:37",
+          "scriptureText": "He said to his disciples, “The harvest is great, but the workers are few.”",
+          "prompt": "How is God calling me to serve in His harvest?",
+          "pdfPage": 97
+        },
+        {
+          "day": 98,
+          "scriptureRef": "Hebrews 12:11",
+          "scriptureText": "No discipline is enjoyable while it is happening—it’s painful! But afterward there will be a peaceful harvest of right living for those who are trained in this way.",
+          "prompt": "What discipline is God shaping in me now?",
+          "pdfPage": 98
+        },
+        {
+          "day": 99,
+          "scriptureRef": "Deuteronomy 16:15",
+          "scriptureText": "For seven days you must celebrate this festival to honor the Lord your God at the place he chooses, for it is he who blesses you with bountiful harvests and gives you success in all your work. This festival will be a time of great joy for all.",
+          "prompt": "How has God blessed my labor this year?",
+          "pdfPage": 99
+        },
+        {
+          "day": 100,
+          "scriptureRef": "Isaiah 9:3",
+          "scriptureText": "You will enlarge the nation of Israel, and its people will rejoice. They will rejoice before you as people rejoice at the harvest and like warriors dividing the plunder.",
+          "prompt": "What blessings make me rejoice this season?",
+          "pdfPage": 100
+        },
+        {
+          "day": 101,
+          "scriptureRef": "Matthew 13:39",
+          "scriptureText": "The enemy who planted the weeds among the wheat is the devil. The harvest is the end of the world, and the harvesters are the angels.",
+          "prompt": "How can I live with eternity in view today?",
+          "pdfPage": 101
+        },
+        {
+          "day": 102,
+          "scriptureRef": "Proverbs 3:9",
+          "scriptureText": "Honor the Lord with your wealth and with the best part of everything you produce.",
+          "prompt": "How can I honor God with my resources?",
+          "pdfPage": 102
+        },
+        {
+          "day": 103,
+          "scriptureRef": "2 Corinthians 9:6",
+          "scriptureText": "Remember this—a farmer who plants only a few seeds will get a small crop. But the one who plants generously will get a generous crop.",
+          "prompt": "Where is God calling me to sow more generously?",
+          "pdfPage": 103
+        },
+        {
+          "day": 104,
+          "scriptureRef": "Jeremiah 8:20",
+          "scriptureText": "The harvest is finished, and the summer is gone,” the people cry, “yet we are not saved!”",
+          "prompt": "What lessons am I carrying from this past season?",
+          "pdfPage": 104
+        },
+        {
+          "day": 105,
+          "scriptureRef": "Psalm 67:6",
+          "scriptureText": "Then the earth will yield its harvests, and God, our God, will richly bless us.",
+          "prompt": "How am I recognizing God's blessings right now?",
+          "pdfPage": 105
+        },
+        {
+          "day": 106,
+          "scriptureRef": "Matthew 13:30",
+          "scriptureText": "Let both grow together until the harvest. Then I will tell the harvesters to sort out the weeds, tie them into bundles, and burn them, and to put the wheat in the barn.’",
+          "prompt": "What do I need patience to let God separate in time?",
+          "pdfPage": 106
+        },
+        {
+          "day": 107,
+          "scriptureRef": "Genesis 8:22",
+          "scriptureText": "As long as the earth remains, there will be planting and harvest, cold and heat, summer and winter, day and night.",
+          "prompt": "How does this truth reassure me of God's faithfulness?",
+          "pdfPage": 107
+        },
+        {
+          "day": 108,
+          "scriptureRef": "Proverbs 10:5",
+          "scriptureText": "A wise youth harvests in the summer, but one who sleeps during harvest is a disgrace.",
+          "prompt": "How can I be wise with the opportunities before me?",
+          "pdfPage": 108
+        },
+        {
+          "day": 109,
+          "scriptureRef": "Isaiah 62:9",
+          "scriptureText": "You raised the grain, and you will eat it, praising the Lord. Within the courtyards of the Temple, you yourselves will drink the wine you have pressed.",
+          "prompt": "How can I turn my blessings into praise?",
+          "pdfPage": 109
+        },
+        {
+          "day": 110,
+          "scriptureRef": "James 1:2",
+          "scriptureText": "Dear brothers and sisters, when troubles of any kind come your way, consider it an opportunity for great joy.",
+          "prompt": "How is God using current trials to mature my faith?",
+          "pdfPage": 110
+        },
+        {
+          "day": 111,
+          "scriptureRef": "Ruth 2:12",
+          "scriptureText": "May the Lord, the God of Israel, under whose wings you have come to take refuge, reward you fully for what you have done.",
+          "prompt": "How has God rewarded my faithfulness in small ways?",
+          "pdfPage": 111
+        },
+        {
+          "day": 112,
+          "scriptureRef": "John 4:35",
+          "scriptureText": "You know the saying, ‘Four months between planting and harvest.’ But I say, wake up and look around. The fields are already ripe for harvest.",
+          "prompt": "What opportunities is God asking me to see with fresh eyes?",
+          "pdfPage": 112
+        },
+        {
+          "day": 113,
+          "scriptureRef": "Exodus 23:16",
+          "scriptureText": "“Second, celebrate the Festival of Harvest, when you bring me the first crops of your harvest. “Finally, celebrate the Festival of the Final Harvest at the end of the harvest season, when you have harvested all the crops from your fields.”",
+          "prompt": "How can I celebrate God's provision today?",
+          "pdfPage": 113
+        },
+        {
+          "day": 114,
+          "scriptureRef": "Psalm 85:11-12",
+          "scriptureText": "Truth springs up from the earth, and righteousness smiles down from heaven. Yes, the Lord pours down his blessings. Our land will yield its bountiful harvest.",
+          "prompt": "Where has God's goodness shown up in my life?",
+          "pdfPage": 114
+        },
+        {
+          "day": 115,
+          "scriptureRef": "2 Timothy 4:7",
+          "scriptureText": "I have fought the good fight, I have finished the race, and I have remained faithful.",
+          "prompt": "What part of my race am I running now?",
+          "pdfPage": 115
+        },
+        {
+          "day": 116,
+          "scriptureRef": "James 3:18",
+          "scriptureText": "And those who are peacemakers will plant seeds of peace and reap a harvest of righteousness.",
+          "prompt": "How can I sow peace around me today?",
+          "pdfPage": 116
+        },
+        {
+          "day": 117,
+          "scriptureRef": "Revelation 14:15",
+          "scriptureText": "Then another angel came from the Temple and shouted to the one sitting on the cloud, “Swing the sickle, for the time of harvest has come; the crop on earth is ripe.”",
+          "prompt": "What spiritual fruit is God ready to harvest in me?",
+          "pdfPage": 117
+        },
+        {
+          "day": 118,
+          "scriptureRef": "Deuteronomy 28:8",
+          "scriptureText": "The Lord will guarantee a blessing on everything you do and will fill your storehouses with grain. The Lord your God will bless you in the land he is giving you.",
+          "prompt": "What work of mine needs His blessing today?",
+          "pdfPage": 118
+        },
+        {
+          "day": 119,
+          "scriptureRef": "Psalm 100:4",
+          "scriptureText": "Enter his gates with thanksgiving; go into his courts with praise. Give thanks to him and praise his name.",
+          "prompt": "What am I most thankful for this season?",
+          "pdfPage": 119
+        },
+        {
+          "day": 120,
+          "scriptureRef": "Philippians 1:11",
+          "scriptureText": "May you always be filled with the fruit of your salvation—the righteous character produced in your life by Jesus Christ—for this will bring much glory and praise to God.",
+          "prompt": "As this 120-day journey concludes, how has God made my journey beautiful in His time?",
+          "pdfPage": 120
+        }
+      ]
+    }
+  ],
+  "seasonalOverviews": {
+    "winter": {
+      "title": "Winter – A Season of Stillness & Trust (Days 1-30)",
+      "introduction": "A Winter Season of Stillness and Trust is a time of quiet reflection, rest, and deep spiritual grounding. Like the natural world that slows down in winter, this season invites our hearts to pause, release control, and lean fully on God's presence and timing.",
+      "characteristics": {
+        "title": "Characteristics of Winter",
+        "items": [
+          {
+            "name": "Stillness and Reflection",
+            "description": "Winter encourages slowing down and listening. It's a season to pause from constant activity, evaluate our spiritual journey, and reflect on lessons learned."
+          },
+          {
+            "name": "Trust and Surrender",
+            "description": "Just as the earth rests under snow and frost, we are called to trust God even when visible growth is not apparent. This is a season to surrender our anxieties, plans, and control, relying on God's wisdom and timing."
+          },
+          {
+            "name": "Rest and Renewal",
+            "description": "Winter provides a natural pause, allowing us to restore energy, gain clarity, and prepare for the next season of growth. It's a time to focus on inner spiritual life rather than outward productivity."
+          },
+          {
+            "name": "Patience and Faith",
+            "description": "The quiet of winter teaches patience. Though the world may seem dormant, God is working beneath the surface, orchestrating renewal for the coming seasons."
+          }
+        ]
+      },
+      "practices": {
+        "title": "Spiritual Practices for Winter",
+        "items": [
+          {
+            "practice": "Meditative Prayer",
+            "description": "Spend intentional time in silence, listening for God's guidance."
+          },
+          {
+            "practice": "Journaling",
+            "description": "Reflect on your past season, noting lessons learned and areas for growth."
+          },
+          {
+            "practice": "Sabbath Rest",
+            "description": "Allow yourself slower days, rest, and rejuvenation."
+          },
+          {
+            "practice": "Scripture Meditation",
+            "description": "Focus on verses that remind you of God's faithfulness and timing."
+          }
+        ]
+      },
+      "scripturalInspiration": {
+        "title": "Scriptural Inspiration",
+        "verses": [
+          {
+            "reference": "Psalm 46:10",
+            "text": "Be still, and know that I am God! I will be honored by every nation. I will be honored throughout the world."
+          },
+          {
+            "reference": "Isaiah 30:15",
+            "text": "This is what the Sovereign Lord, the Holy One of Israel, says: “Only in returning to me and resting in me will you be saved. In quietness and confidence is your strength. But you would have none of it.”"
+          },
+          {
+            "reference": "Psalm 62:1",
+            "text": "I wait quietly before God, for my victory comes from him."
+          }
+        ]
+      },
+      "closing": "In the Winter Season of Stillness and Trust, the world may feel quiet, but God is deeply at work. It's a sacred time to rest in His presence, trust His plans, and prepare for the renewal ahead."
+    },
+    "spring": {
+      "title": "Spring – A Season of Renewal & Planting (Days 31-60)",
+      "introduction": "A Spring Season of Renewal and Planting is a time of fresh beginnings, hope, and the stirring of new life. After the quiet introspection of winter, spring awakens the spirit with energy, possibility, and purpose.",
+      "characteristics": {
+        "title": "Characteristics of Spring",
+        "items": [
+          {
+            "name": "Renewal and New Beginnings",
+            "description": "Spring symbolizes resurrection and rebirth. It's a season where past disappointments or failures are left behind, and God invites fresh starts, renewed vision, and new opportunities."
+          },
+          {
+            "name": "Hope and Expectancy",
+            "description": "With spring comes a sense of anticipation. There is an undeniable expectation that good things are coming. Faith flourishes in this season, as you believe for what has not yet been seen."
+          },
+          {
+            "name": "Planting Seeds of Faith",
+            "description": "Spring is a time of intentional sowing—planting seeds of faith, effort, and prayer. Just as a farmer plants expecting a harvest, this season calls for purposeful action, knowing that God will bring growth."
+          },
+          {
+            "name": "Growth and Awakening",
+            "description": "After the dormancy of winter, spring awakens potential and purpose. It's a season to nurture dreams, develop skills, or start new spiritual disciplines. Growth is not always visible immediately, but it is happening beneath the surface."
+          }
+        ]
+      },
+      "practices": {
+        "title": "Spiritual Practices for Spring",
+        "items": [
+          {
+            "practice": "Vision Planning",
+            "description": "Set spiritual goals and write down prayers for the season ahead."
+          },
+          {
+            "practice": "Planting Seeds of Faith",
+            "description": "Begin new practices, relationships, or projects that align with God's purposes."
+          },
+          {
+            "practice": "Hope-Filled Prayer",
+            "description": "Pray with expectation, believing God for new things."
+          },
+          {
+            "practice": "Scripture Declarations",
+            "description": "Speak God's promises over your life and circumstances."
+          }
+        ]
+      },
+      "scripturalInspiration": {
+        "title": "Scriptural Inspiration",
+        "verses": [
+          {
+            "reference": "Isaiah 43:19",
+            "text": "For I am about to do something new. See, I have already begun! Do you not see it? I will make a pathway through the wilderness. I will create rivers in the dry wasteland."
+          },
+          {
+            "reference": "2 Corinthians 5:17",
+            "text": "This means that anyone who belongs to Christ has become a new person. The old life is gone; a new life has begun!"
+          },
+          {
+            "reference": "Lamentations 3:22-23",
+            "text": "The faithful love of the Lord never ends! His mercies never cease. Great is his faithfulness; his mercies begin afresh each morning."
+          }
+        ]
+      },
+      "closing": "In the Spring Season of Renewal and Planting, the air is fresh, possibilities are endless, and God's faithfulness is evident. It's a time to step forward with courage, embrace new beginnings, and trust that what you plant in faith will flourish."
+    },
+    "summer": {
+      "title": "Summer - A Season of Abundance & Joy (Days 61-90)",
+      "introduction": "A Summer Season of Abundance and Joy is a spiritually vibrant and energizing time, mirroring the warmth, brightness, and fullness of the summer months. It is a season of celebration, fruitfulness, and delight in God's blessings.",
+      "characteristics": {
+        "title": "Characteristics of Summer",
+        "items": [
+          {
+            "name": "Fruitfulness and Productivity",
+            "description": "Just as summer brings growth to plants and crops, this season reflects the maturation of efforts, prayers, and spiritual growth. It is a time when the seeds planted in earlier seasons begin to flourish, and the results of diligence and faith become visible, bringing a sense of accomplishment and satisfaction."
+          },
+          {
+            "name": "Joy and Celebration",
+            "description": "Summer is a time that encourages us to revel in God's goodness. The long days and abundance of life inspire gratitude, delight, and active enjoyment of the blessings in our lives. It's a season to celebrate victories, relationships, and answered prayers."
+          },
+          {
+            "name": "Generosity and Sharing",
+            "description": "With abundance comes the opportunity to give and bless others. Spiritually, summer encourages a flowing of joy and resources outward, reflecting God's generosity. It is a season of sharing, hospitality, and encouragement, filling our hearts with warmth and a spirit of generosity."
+          },
+          {
+            "name": "Energy and Engagement",
+            "description": "Summer invites us to engage with life and the world around us. It's a time for vitality, active faith, and embracing opportunities for growth, service, and connection, filling us with a sense of invigoration and activity."
+          }
+        ]
+      },
+      "practices": {
+        "title": "Spiritual Practices for Summer",
+        "items": [
+          {
+            "practice": "Gratitude Journaling",
+            "description": "Record daily blessings and moments of joy."
+          },
+          {
+            "practice": "Acts of Generosity",
+            "description": "Share time, talents, or resources with others."
+          },
+          {
+            "practice": "Celebrate Creation",
+            "description": "Spend time outdoors, appreciating the vibrancy of life."
+          },
+          {
+            "practice": "Active Worship",
+            "description": "Engage in joyful praise, music, and community fellowship."
+          }
+        ]
+      },
+      "scripturalInspiration": {
+        "title": "Scriptural Inspiration",
+        "verses": [
+          {
+            "reference": "Psalm 16:11",
+            "text": "You will show me the way of life, granting me the joy of your presence and the pleasures of living with you forever."
+          },
+          {
+            "reference": "Galatians 5:22-23",
+            "text": "But the Holy Spirit produces this kind of fruit in our lives: love, joy, peace, patience, kindness, goodness, faithfulness, gentleness, and self-control. There is no law against these things!"
+          },
+          {
+            "reference": "John 10:10",
+            "text": "The thief’s purpose is to steal and kill and destroy. My purpose is to give them a rich and satisfying life."
+          }
+        ]
+      },
+      "closing": "In the Summer Season of Abundance and Joy, life is whole, God's blessings are evident, and hearts are called to celebrate, share, and bask in the joy of His provision. It's a time to rejoice in growth, gratitude, and the overwhelming abundance of God's love, embracing each day with vitality, hope, and a deep sense of security."
+    },
+    "autumn": {
+      "title": "Fall – A Season of Harvest & Letting Go (Days 91-120)",
+      "introduction": "A Fall Season of Harvest and Letting Go is a spiritually rich and reflective period, mirroring the natural changes of autumn. It is a time when the hard work, growth, and faithfulness of previous seasons come to fruition, and at the same time, we are invited to release what no longer serves us.",
+      "characteristics": {
+        "title": "Characteristics of Fall",
+        "items": [
+          {
+            "name": "Reaping the Harvest",
+            "description": "Just as crops are gathered in autumn, this season is about recognizing the fruits of your efforts. Spiritually and emotionally, you may see answered prayers, personal growth, or the results of persistent faith and hard work. It's a time for gratitude, celebration, and acknowledgment of the significant spiritual growth that God has accomplished in your life."
+          },
+          {
+            "name": "Reflection and Assessment",
+            "description": "Fall, with its changing colors and cooling temperatures, serves as a gentle reminder to turn inwards. It's a season that encourages introspection, where you can evaluate what has worked well, what lessons have been learned, and what adjustments may be made before the next cycle. It's a time to take stock of accomplishments, relationships, and personal growth."
+          },
+          {
+            "name": "Letting Go",
+            "description": "As trees shed their leaves, the fall season becomes a powerful teacher of the grace of release. It's a time to let go of old fears, grudges, habits, or situations that no longer serve your spiritual growth. Surrendering what must fall away creates space for God's new work in your life."
+          },
+          {
+            "name": "Preparing for Rest and Renewal",
+            "description": "Letting Go Is Not an End, but a Preparation. By releasing, you create space for introspection during winter and the new beginnings of spring. Fall is both a culmination and a preparation phase, a time to look forward with hope and optimism to the new beginnings that await in the rhythm of life."
+          }
+        ]
+      },
+      "practices": {
+        "title": "Spiritual Practices for Fall",
+        "items": [
+          {
+            "practice": "Gratitude Lists",
+            "description": "Document the harvest and blessings of the season."
+          },
+          {
+            "practice": "Release Rituals",
+            "description": "Intentionally let go of what no longer serves your growth."
+          },
+          {
+            "practice": "Life Assessment",
+            "description": "Evaluate accomplishments and lessons learned."
+          },
+          {
+            "practice": "Preparing for Winter",
+            "description": "Begin to quiet your spirit in anticipation of rest."
+          }
+        ]
+      },
+      "scripturalInspiration": {
+        "title": "Scriptural Inspiration",
+        "verses": [
+          {
+            "reference": "Galatians 6:9",
+            "text": "So let’s not get tired of doing what is good. At just the right time we will reap a harvest of blessing if we don’t give up."
+          },
+          {
+            "reference": "Ecclesiastes 3:1",
+            "text": "For everything there is a season, a time for every activity under heaven."
+          },
+          {
+            "reference": "Philippians 3:13-14",
+            "text": "No, dear brothers and sisters, I have not achieved it, but I focus on this one thing: Forgetting the past and looking forward to what lies ahead, I press on to reach the end of the race and receive the heavenly prize for which God, through Christ Jesus, is calling us."
+          }
+        ]
+      },
+      "closing": "In the Fall Season of Harvest and Letting Go, we celebrate God's faithfulness while releasing what we no longer need. It is a season of gratitude, reflection, and graceful preparation for the cycles ahead."
+    }
+  }
+}

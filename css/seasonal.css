@@ -1,0 +1,397 @@
+/* ============================================
+   SPIRITUAL SEASONS - SEASONAL THEMING
+   
+   Visual effects, backgrounds, and animations
+   that enhance the seasonal experience
+   ============================================ */
+
+/* ============================================
+   SEASONAL BACKGROUNDS & GRADIENTS
+   ============================================ */
+
+/* Season background wrapper */
+.season-bg {
+  position: relative;
+  min-height: 100vh;
+  background: linear-gradient(
+    180deg,
+    color-mix(in srgb, var(--season-light) 20%, var(--bg-cream)),
+    var(--bg-cream)
+  );
+}
+
+/* Winter Season - Snowflakes */
+[data-season="winter"] .season-bg::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background-image: 
+    radial-gradient(circle at 20% 30%, rgba(255, 255, 255, 0.6) 1px, transparent 1px),
+    radial-gradient(circle at 80% 20%, rgba(255, 255, 255, 0.4) 1.5px, transparent 1.5px),
+    radial-gradient(circle at 40% 70%, rgba(255, 255, 255, 0.5) 1px, transparent 1px),
+    radial-gradient(circle at 60% 50%, rgba(255, 255, 255, 0.3) 2px, transparent 2px),
+    radial-gradient(circle at 90% 80%, rgba(255, 255, 255, 0.4) 1px, transparent 1px);
+  background-size: 100px 100px, 150px 150px, 120px 120px, 180px 180px, 90px 90px;
+  pointer-events: none;
+  opacity: 0.4;
+  animation: snowfall 20s linear infinite;
+}
+
+@keyframes snowfall {
+  0% { background-position: 0 0, 0 0, 0 0, 0 0, 0 0; }
+  100% { background-position: 0 100px, 0 150px, 0 120px, 0 180px, 0 90px; }
+}
+
+/* Spring Season - Bloom Effect */
+[data-season="spring"] .season-bg::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background-image: 
+    radial-gradient(ellipse at 30% 20%, rgba(200, 230, 201, 0.3) 0%, transparent 50%),
+    radial-gradient(ellipse at 70% 40%, rgba(248, 187, 208, 0.25) 0%, transparent 45%),
+    radial-gradient(ellipse at 50% 80%, rgba(255, 245, 157, 0.2) 0%, transparent 40%);
+  pointer-events: none;
+  opacity: 0.6;
+}
+
+/* Summer Season - Sun Glow */
+[data-season="summer"] .season-bg::before {
+  content: '';
+  position: absolute;
+  top: -50%;
+  right: -25%;
+  width: 80%;
+  height: 80%;
+  background: radial-gradient(
+    circle,
+    rgba(253, 216, 53, 0.2) 0%,
+    rgba(249, 168, 37, 0.12) 30%,
+    transparent 70%
+  );
+  pointer-events: none;
+  animation: sunGlow 8s ease-in-out infinite;
+}
+
+@keyframes sunGlow {
+  0%, 100% { 
+    opacity: 0.6; 
+    transform: scale(1); 
+  }
+  50% { 
+    opacity: 0.8; 
+    transform: scale(1.05); 
+  }
+}
+
+/* Autumn Season - Warm Gradient */
+[data-season="autumn"] .season-bg::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background-image: 
+    radial-gradient(ellipse at 20% 30%, rgba(255, 183, 77, 0.25) 0%, transparent 40%),
+    radial-gradient(ellipse at 80% 60%, rgba(255, 138, 101, 0.2) 0%, transparent 45%),
+    radial-gradient(ellipse at 50% 90%, rgba(230, 81, 0, 0.08) 0%, transparent 35%);
+  pointer-events: none;
+  opacity: 0.7;
+}
+
+/* ============================================
+   SEASONAL ACCENT BAR
+   ============================================ */
+
+.season-accent-bar {
+  height: 4px;
+  background: linear-gradient(
+    90deg,
+    var(--season-dark),
+    var(--season-primary),
+    var(--season-accent),
+    var(--season-primary),
+    var(--season-dark)
+  );
+  background-size: 200% 100%;
+  animation: shimmer 3s ease-in-out infinite;
+}
+
+@keyframes shimmer {
+  0% { background-position: 100% 0; }
+  100% { background-position: -100% 0; }
+}
+
+/* ============================================
+   SEASONAL CARDS & SURFACES
+   ============================================ */
+
+.season-card {
+  background: var(--card-bg);
+  border-radius: var(--radius-xl);
+  padding: var(--space-6);
+  box-shadow: var(--shadow-md);
+  border-left: 4px solid var(--season-primary);
+  transition: transform var(--transition-base), box-shadow var(--transition-base);
+}
+
+.season-card:hover {
+  transform: translateY(-2px);
+  box-shadow: var(--shadow-lg);
+}
+
+/* ============================================
+   SEASON ICONS
+   ============================================ */
+
+.season-icon {
+  width: 48px;
+  height: 48px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: var(--radius-lg);
+  background: linear-gradient(
+    135deg,
+    var(--season-light),
+    color-mix(in srgb, var(--season-primary) 80%, var(--season-light))
+  );
+  color: white;
+  box-shadow: var(--shadow-season);
+}
+
+.season-icon-sm {
+  width: 32px;
+  height: 32px;
+}
+
+.season-icon-lg {
+  width: 64px;
+  height: 64px;
+}
+
+/* ============================================
+   SCRIPTURE BOX
+   ============================================ */
+
+.scripture-box {
+  position: relative;
+  padding: var(--space-8) var(--space-6);
+  background: linear-gradient(
+    135deg,
+    var(--card-bg) 0%,
+    color-mix(in srgb, var(--season-light) 30%, var(--card-bg)) 100%
+  );
+  border-radius: var(--radius-xl);
+  border: 1px solid color-mix(in srgb, var(--season-primary) 20%, transparent);
+  overflow: hidden;
+  box-shadow: var(--shadow-md);
+}
+
+.scripture-box::before {
+  content: '"';
+  position: absolute;
+  top: -20px;
+  left: 10px;
+  font-family: var(--font-display);
+  font-size: 8rem;
+  color: color-mix(in srgb, var(--season-light) 50%, transparent);
+  line-height: 1;
+  pointer-events: none;
+  z-index: 0;
+}
+
+.scripture-text {
+  font-family: var(--font-display);
+  font-size: var(--text-2xl);
+  font-style: italic;
+  color: var(--text-primary);
+  line-height: var(--leading-relaxed);
+  position: relative;
+  z-index: 1;
+}
+
+.scripture-ref {
+  display: block;
+  margin-top: var(--space-4);
+  font-family: var(--font-body);
+  font-size: var(--text-sm);
+  font-weight: var(--font-semibold);
+  color: var(--season-dark);
+  text-align: right;
+}
+
+/* ============================================
+   SEASON PROGRESS RING
+   ============================================ */
+
+.season-progress-ring {
+  transform: rotate(-90deg);
+}
+
+.season-progress-ring circle {
+  transition: stroke-dashoffset var(--transition-slow);
+}
+
+.season-progress-ring .bg {
+  stroke: var(--season-light);
+  opacity: 0.3;
+}
+
+.season-progress-ring .progress {
+  stroke: var(--season-primary);
+  stroke-linecap: round;
+}
+
+/* ============================================
+   SEASON TRANSITION ANIMATIONS
+   ============================================ */
+
+.season-transition {
+  animation: seasonFade 0.5s ease-out;
+}
+
+@keyframes seasonFade {
+  0% {
+    opacity: 0;
+    filter: blur(4px);
+  }
+  100% {
+    opacity: 1;
+    filter: blur(0);
+  }
+}
+
+/* Page transition animation */
+@keyframes pageEnter {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* ============================================
+   SEASONAL EMBELLISHMENTS
+   ============================================ */
+
+/* Decorative corner accent */
+.season-corner-accent {
+  position: relative;
+}
+
+.season-corner-accent::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  right: 0;
+  width: 60px;
+  height: 60px;
+  background: linear-gradient(
+    135deg,
+    var(--season-primary) 0%,
+    transparent 100%
+  );
+  opacity: 0.1;
+  border-radius: 0 var(--radius-xl) 0 100%;
+  pointer-events: none;
+}
+
+/* Season divider with icon */
+.season-divider {
+  display: flex;
+  align-items: center;
+  gap: var(--space-4);
+  margin: var(--space-8) 0;
+}
+
+.season-divider::before,
+.season-divider::after {
+  content: '';
+  flex: 1;
+  height: 2px;
+  background: linear-gradient(
+    90deg,
+    transparent,
+    var(--season-primary),
+    transparent
+  );
+}
+
+.season-divider-icon {
+  width: 32px;
+  height: 32px;
+  color: var(--season-primary);
+  opacity: 0.6;
+}
+
+/* ============================================
+   DARK MODE ADJUSTMENTS
+   ============================================ */
+
+[data-theme="dark"] .season-bg {
+  background: linear-gradient(
+    180deg,
+    color-mix(in srgb, var(--season-primary) 8%, var(--bg-cream)),
+    var(--bg-cream)
+  );
+}
+
+[data-theme="dark"] [data-season="winter"] .season-bg::before,
+[data-theme="dark"] [data-season="spring"] .season-bg::before,
+[data-theme="dark"] [data-season="autumn"] .season-bg::before {
+  opacity: 0.2;
+}
+
+[data-theme="dark"] [data-season="summer"] .season-bg::before {
+  opacity: 0.3;
+}
+
+[data-theme="dark"] .season-card {
+  background: var(--card-bg);
+  border-left-color: var(--season-primary);
+}
+
+[data-theme="dark"] .scripture-box {
+  background: linear-gradient(
+    135deg,
+    var(--card-bg) 0%,
+    color-mix(in srgb, var(--season-primary) 8%, var(--card-bg)) 100%
+  );
+}
+
+[data-theme="dark"] .scripture-box::before {
+  color: color-mix(in srgb, var(--season-primary) 15%, transparent);
+}
+
+/* ============================================
+   REDUCED MOTION PREFERENCES
+   ============================================ */
+
+@media (prefers-reduced-motion: reduce) {
+  [data-season="winter"] .season-bg::before,
+  [data-season="summer"] .season-bg::before,
+  .season-accent-bar,
+  .season-transition {
+    animation: none;
+  }
+  
+  .season-card:hover {
+    transform: none;
+  }
+}
+
+/* ============================================
+   RESPONSIVE ADJUSTMENTS
+   ============================================ */
+
+@media (max-width: 768px) {
+  .scripture-box::before {
+    font-size: 6rem;
+  }
+  
+  .scripture-text {
+    font-size: var(--text-xl);
+  }
+}

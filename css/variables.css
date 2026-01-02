@@ -1,0 +1,388 @@
+/* ============================================
+   SPIRITUAL SEASONS - DESIGN SYSTEM VARIABLES
+   
+   Single source of truth for all design tokens.
+   Seasons control global styling via data-season attribute.
+   ============================================ */
+
+:root {
+  /* ============================================
+     SPACING SCALE (0.25rem base)
+     ============================================ */
+  --space-0: 0;
+  --space-1: 0.25rem;    /* 4px */
+  --space-2: 0.5rem;     /* 8px */
+  --space-3: 0.75rem;    /* 12px */
+  --space-4: 1rem;       /* 16px */
+  --space-5: 1.25rem;    /* 20px */
+  --space-6: 1.5rem;     /* 24px */
+  --space-8: 2rem;       /* 32px */
+  --space-10: 2.5rem;    /* 40px */
+  --space-12: 3rem;      /* 48px */
+  --space-16: 4rem;      /* 64px */
+  --space-20: 5rem;      /* 80px */
+  --space-24: 6rem;      /* 96px */
+
+  /* ============================================
+     TYPOGRAPHY
+     ============================================ */
+  
+  /* Font Families */
+  --font-display: 'Cormorant Garamond', Georgia, serif;
+  --font-body: 'Source Sans 3', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+  --font-mono: 'JetBrains Mono', 'Fira Code', Consolas, monospace;
+
+  /* Font Sizes (modular scale) */
+  --text-xs: 0.75rem;     /* 12px */
+  --text-sm: 0.875rem;    /* 14px */
+  --text-base: 1rem;      /* 16px */
+  --text-lg: 1.125rem;    /* 18px */
+  --text-xl: 1.25rem;     /* 20px */
+  --text-2xl: 1.5rem;     /* 24px */
+  --text-3xl: 1.875rem;   /* 30px */
+  --text-4xl: 2.25rem;    /* 36px */
+  --text-5xl: 3rem;       /* 48px */
+
+  /* Line Heights */
+  --leading-none: 1;
+  --leading-tight: 1.25;
+  --leading-snug: 1.375;
+  --leading-normal: 1.5;
+  --leading-relaxed: 1.625;
+  --leading-loose: 2;
+
+  /* Font Weights */
+  --font-light: 300;
+  --font-normal: 400;
+  --font-medium: 500;
+  --font-semibold: 600;
+  --font-bold: 700;
+
+  /* Letter Spacing */
+  --tracking-tighter: -0.02em;
+  --tracking-tight: -0.01em;
+  --tracking-normal: 0;
+  --tracking-wide: 0.01em;
+  --tracking-wider: 0.02em;
+
+  /* ============================================
+     BORDER RADIUS
+     ============================================ */
+  --radius-none: 0;
+  --radius-sm: 0.25rem;   /* 4px */
+  --radius-md: 0.5rem;    /* 8px */
+  --radius-lg: 0.75rem;   /* 12px */
+  --radius-xl: 1rem;      /* 16px */
+  --radius-2xl: 1.5rem;   /* 24px */
+  --radius-3xl: 2rem;     /* 32px */
+  --radius-full: 9999px;
+
+  /* ============================================
+     SHADOWS
+     ============================================ */
+  --shadow-xs: 0 1px 2px rgba(0, 0, 0, 0.04);
+  --shadow-sm: 0 1px 3px rgba(0, 0, 0, 0.05), 0 1px 2px rgba(0, 0, 0, 0.03);
+  --shadow-md: 0 4px 6px rgba(0, 0, 0, 0.07), 0 2px 4px rgba(0, 0, 0, 0.05);
+  --shadow-lg: 0 10px 15px rgba(0, 0, 0, 0.1), 0 4px 6px rgba(0, 0, 0, 0.05);
+  --shadow-xl: 0 20px 25px rgba(0, 0, 0, 0.1), 0 10px 10px rgba(0, 0, 0, 0.04);
+  --shadow-2xl: 0 25px 50px rgba(0, 0, 0, 0.15);
+  --shadow-inner: inset 0 2px 4px rgba(0, 0, 0, 0.06);
+  --shadow-season: 0 4px 20px color-mix(in srgb, var(--season-primary) 25%, transparent);
+
+  /* ============================================
+     TRANSITIONS & ANIMATIONS
+     ============================================ */
+  --transition-fast: 150ms cubic-bezier(0.4, 0, 0.2, 1);
+  --transition-base: 250ms cubic-bezier(0.4, 0, 0.2, 1);
+  --transition-slow: 350ms cubic-bezier(0.4, 0, 0.2, 1);
+  --transition-spring: 500ms cubic-bezier(0.34, 1.56, 0.64, 1);
+
+  /* ============================================
+     Z-INDEX SCALE
+     ============================================ */
+  --z-base: 0;
+  --z-dropdown: 100;
+  --z-sticky: 200;
+  --z-fixed: 300;
+  --z-modal-backdrop: 400;
+  --z-modal: 500;
+  --z-popover: 600;
+  --z-tooltip: 700;
+  --z-toast: 800;
+  --z-max: 9999;
+
+  /* ============================================
+     CONTAINER & LAYOUT
+     ============================================ */
+  --container-xs: 20rem;    /* 320px */
+  --container-sm: 24rem;    /* 384px */
+  --container-md: 28rem;    /* 448px */
+  --container-lg: 32rem;    /* 512px */
+  --container-xl: 36rem;    /* 576px */
+  --container-2xl: 42rem;   /* 672px */
+  --container-3xl: 48rem;   /* 768px */
+  --container-4xl: 56rem;   /* 896px */
+  --container-max: 48rem;   /* Default max width */
+  --container-padding: var(--space-4);
+
+  /* Safe Areas (for notched devices) */
+  --safe-top: env(safe-area-inset-top, 0px);
+  --safe-bottom: env(safe-area-inset-bottom, 0px);
+  --safe-left: env(safe-area-inset-left, 0px);
+  --safe-right: env(safe-area-inset-right, 0px);
+}
+
+/* ============================================
+   SEASON COLOR DEFINITIONS
+   These are the base seasonal colors that never change
+   ============================================ */
+:root {
+  /* Winter */
+  --winter-primary: #4A90A4;
+  --winter-primary-rgb: 74, 144, 164;
+  --winter-light: #E3F2FD;
+  --winter-dark: #2E6171;
+  --winter-accent: #B3E5FC;
+
+  /* Spring */
+  --spring-primary: #8BC34A;
+  --spring-primary-rgb: 139, 195, 74;
+  --spring-light: #DCEDC8;
+  --spring-dark: #558B2F;
+  --spring-accent: #C5E1A5;
+
+  /* Summer */
+  --summer-primary: #FFA726;
+  --summer-primary-rgb: 255, 167, 38;
+  --summer-light: #FFE0B2;
+  --summer-dark: #E65100;
+  --summer-accent: #FFCC80;
+
+  /* Autumn */
+  --autumn-primary: #D32F2F;
+  --autumn-primary-rgb: 211, 47, 47;
+  --autumn-light: #FFCDD2;
+  --autumn-dark: #B71C1C;
+  --autumn-accent: #EF9A9A;
+}
+
+/* ============================================
+   NEUTRAL COLOR PALETTE
+   ============================================ */
+:root {
+  /* Cream/Warm tones (light mode base) */
+  --cream: #FFF8F0;
+  --cream-dark: #F5EDE3;
+  --cream-darker: #E8DED0;
+
+  /* Grayscale */
+  --white: #FFFFFF;
+  --gray-50: #FAFAFA;
+  --gray-100: #F5F5F5;
+  --gray-200: #E5E5E5;
+  --gray-300: #D4D4D4;
+  --gray-400: #A3A3A3;
+  --gray-500: #737373;
+  --gray-600: #525252;
+  --gray-700: #404040;
+  --gray-800: #262626;
+  --gray-900: #171717;
+  --black: #0A0A0A;
+
+  /* Semantic colors */
+  --success: #4CAF50;
+  --success-light: #C8E6C9;
+  --success-dark: #388E3C;
+  
+  --error: #F44336;
+  --error-light: #FFCDD2;
+  --error-dark: #D32F2F;
+  
+  --warning: #FF9800;
+  --warning-light: #FFE0B2;
+  --warning-dark: #F57C00;
+  
+  --info: #2196F3;
+  --info-light: #BBDEFB;
+  --info-dark: #1976D2;
+}
+
+/* ============================================
+   LIGHT MODE (DEFAULT)
+   Semantic color tokens that change based on theme
+   ============================================ */
+:root,
+:root[data-theme="light"] {
+  /* Backgrounds */
+  --bg-primary: #FFFFFF;
+  --bg-secondary: #F5F5F5;
+  --bg-tertiary: #FAFAFA;
+  --bg-cream: var(--cream);
+  --bg-overlay: rgba(0, 0, 0, 0.5);
+  
+  /* Text */
+  --text-primary: #1A1A1A;
+  --text-secondary: #525252;
+  --text-tertiary: #737373;
+  --text-muted: #A3A3A3;
+  --text-inverse: #FFFFFF;
+  --text-light: #737373; /* Alias for text-tertiary */
+  
+  /* Borders */
+  --border-primary: #E5E5E5;
+  --border-secondary: #D4D4D4;
+  --border-focus: var(--season-primary);
+  --border-color: #E5E5E5; /* Alias for border-primary */
+  
+  /* Interactive states */
+  --hover-bg: rgba(0, 0, 0, 0.04);
+  --active-bg: rgba(0, 0, 0, 0.08);
+  --focus-ring: color-mix(in srgb, var(--season-primary) 20%, transparent);
+  
+  /* Cards & surfaces */
+  --card-bg: #FFFFFF;
+  --card-border: var(--border-primary);
+  
+  /* Overlays */
+  --overlay-bg: rgba(0, 0, 0, 0.5);
+  
+  /* Shadows (reuse from above, but semantic) */
+  --shadow-card: var(--shadow-md);
+  --shadow-modal: var(--shadow-xl);
+  --shadow: var(--shadow-sm); /* Default shadow alias */
+  
+  /* Accent aliases (will update per season) */
+  --accent-primary: var(--season-primary);
+  --accent-light: var(--season-light);
+  --accent-dark: var(--season-dark);
+  
+  /* Season gradient */
+  --season-gradient: linear-gradient(135deg, var(--season-light), #FFFFFF);
+  
+  /* Neutral/Front-matter backgrounds (Introduction section) */
+  --bg-neutral-subtle: #F5F5F5;      /* Light gray for Introduction section */
+  --text-on-neutral: #1A1A1A;        /* Text color on neutral backgrounds */
+  --border-neutral: #E5E5E5;         /* Border for neutral sections */
+}
+
+/* ============================================
+   DARK MODE
+   ============================================ */
+:root[data-theme="dark"] {
+  /* Backgrounds */
+  --bg-primary: #0A0A0A;
+  --bg-secondary: #171717;
+  --bg-tertiary: #262626;
+  --bg-cream: #1A1614;
+  --bg-overlay: rgba(0, 0, 0, 0.8);
+  
+  /* Text */
+  --text-primary: #FAFAFA;        /* Very light - excellent contrast */
+  --text-secondary: #E5E5E5;      /* Light gray - better contrast than before */
+  --text-tertiary: #B3B3B3;       /* Medium-light gray - WCAG AA compliant */
+  --text-muted: #8A8A8A;          /* Muted gray - still readable */
+  --text-inverse: #0A0A0A;        /* Dark for light backgrounds */
+  --text-light: #B3B3B3;          /* Alias for text-tertiary */
+  
+  /* Borders */
+  --border-primary: #404040;      /* Lighter for better visibility */
+  --border-secondary: #525252;    /* Even lighter for emphasis */
+  --border-focus: var(--season-primary);
+  --border-color: #404040;        /* Alias for border-primary */
+  
+  /* Interactive states */
+  --hover-bg: rgba(255, 255, 255, 0.08);
+  --active-bg: rgba(255, 255, 255, 0.12);
+  --focus-ring: color-mix(in srgb, var(--season-primary) 30%, transparent);
+  
+  /* Cards & surfaces */
+  --card-bg: #171717;
+  --card-border: var(--border-primary);
+  
+  /* Adjusted shadows for dark mode */
+  --shadow-xs: 0 1px 2px rgba(0, 0, 0, 0.4);
+  --shadow-sm: 0 1px 3px rgba(0, 0, 0, 0.5);
+  --shadow-md: 0 4px 6px rgba(0, 0, 0, 0.6);
+  --shadow-lg: 0 10px 15px rgba(0, 0, 0, 0.7);
+  --shadow-xl: 0 20px 25px rgba(0, 0, 0, 0.8);
+  --shadow-card: var(--shadow-md);
+  --shadow-modal: var(--shadow-xl);
+  --shadow: var(--shadow-sm); /* Default shadow alias */
+  
+  /* Overlays */
+  --overlay-bg: rgba(0, 0, 0, 0.8);
+  
+  /* Accent aliases (will update per season) */
+  --accent-primary: var(--season-primary);
+  --accent-light: var(--season-light);
+  --accent-dark: var(--season-dark);
+  
+  /* Season gradient */
+  --season-gradient: linear-gradient(135deg, var(--season-light), #171717);
+  
+  /* Adjust cream for dark mode */
+  --cream: #1A1614;
+  --cream-dark: #141210;
+  
+  /* Adjust seasonal lights for dark mode - MUCH lighter for proper contrast */
+  --winter-light: rgba(74, 144, 164, 0.15);      /* Semi-transparent blue overlay */
+  --spring-light: rgba(139, 195, 74, 0.15);      /* Semi-transparent green overlay */
+  --summer-light: rgba(255, 167, 38, 0.15);      /* Semi-transparent orange overlay */
+  --autumn-light: rgba(211, 47, 47, 0.15);       /* Semi-transparent red overlay */
+  
+  /* Adjust seasonal darks (become lighter in dark mode for text contrast) */
+  --winter-dark: #8BC9E0;    /* Lighter blue for better readability */
+  --spring-dark: #C5E1A5;    /* Lighter green for better readability */
+  --summer-dark: #FFCC80;    /* Lighter orange for better readability */
+  --autumn-dark: #FFAB91;    /* Lighter coral for better readability */
+  
+  /* Neutral/Front-matter backgrounds in dark mode */
+  --bg-neutral-subtle: #262626;      /* Darker but visible background */
+  --text-on-neutral: #FAFAFA;        /* Light text for good contrast */
+  --border-neutral: #404040;         /* Visible border in dark mode */
+}
+
+/* ============================================
+   SEASONAL THEME APPLICATION
+   The data-season attribute controls which season colors are active
+   ============================================ */
+
+/* Winter Season */
+:root[data-season="winter"],
+[data-season="winter"] {
+  --season-primary: var(--winter-primary);
+  --season-primary-rgb: var(--winter-primary-rgb);
+  --season-light: var(--winter-light);
+  --season-dark: var(--winter-dark);
+  --season-accent: var(--winter-accent);
+}
+
+/* Spring Season */
+:root[data-season="spring"],
+[data-season="spring"] {
+  --season-primary: var(--spring-primary);
+  --season-primary-rgb: var(--spring-primary-rgb);
+  --season-light: var(--spring-light);
+  --season-dark: var(--spring-dark);
+  --season-accent: var(--spring-accent);
+}
+
+/* Summer Season */
+:root[data-season="summer"],
+[data-season="summer"] {
+  --season-primary: var(--summer-primary);
+  --season-primary-rgb: var(--summer-primary-rgb);
+  --season-light: var(--summer-light);
+  --season-dark: var(--summer-dark);
+  --season-accent: var(--summer-accent);
+}
+
+/* Autumn Season */
+:root[data-season="autumn"],
+[data-season="autumn"] {
+  --season-primary: var(--autumn-primary);
+  --season-primary-rgb: var(--autumn-primary-rgb);
+  --season-light: var(--autumn-light);
+  --season-dark: var(--autumn-dark);
+  --season-accent: var(--autumn-accent);
+}

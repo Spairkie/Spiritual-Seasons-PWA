@@ -1,0 +1,94 @@
+{
+  "title": "Spiritual Season Identification Quiz",
+  "description": "Discover your current spiritual season through thoughtful reflection on where you are in your faith journey.",
+  "instructions": "For each statement, select how true it feels for you right now. There are no right or wrong answers—simply be honest about where you are.",
+  "scale": {
+    "min": 1,
+    "max": 5,
+    "labels": {
+      "1": "Not True",
+      "2": "A Little True",
+      "3": "Somewhat True",
+      "4": "Mostly True",
+      "5": "Very True"
+    }
+  },
+  "rules": {
+    "minScore": 4,
+    "maxScore": 20,
+    "winnerLogic": "highest_total",
+    "tieBehavior": "prompt_user_choice"
+  },
+  "seasons": [
+    {
+      "id": "winter",
+      "title": "Winter — Stillness & Trust",
+      "shortTitle": "Winter",
+      "description": "A season of inward focus, rest, and deep trust in God's timing.",
+      "questions": [
+        "I crave rest, solitude, or quiet more than usual.",
+        "I feel emotionally tender or vulnerable right now.",
+        "I sense that something in my life is coming to an end.",
+        "I feel God drawing me inward for deeper reflection."
+      ]
+    },
+    {
+      "id": "spring",
+      "title": "Spring — Renewal & Hope",
+      "shortTitle": "Spring",
+      "description": "A season of new beginnings, fresh vision, and awakening hope.",
+      "questions": [
+        "I feel hopeful and refreshed about the future.",
+        "I am beginning something new or sensing a fresh start.",
+        "I am gaining clarity in an area that was once confusing.",
+        "I sense spiritual renewal and new life stirring within me."
+      ]
+    },
+    {
+      "id": "summer",
+      "title": "Summer — Abundance & Growth",
+      "shortTitle": "Summer",
+      "description": "A season of productivity, fruitfulness, and visible spiritual growth.",
+      "questions": [
+        "I feel fruitful, productive, and energized in my faith.",
+        "I can see obvious spiritual growth in my life.",
+        "I feel inspired and enthusiastic about serving God.",
+        "Doors and opportunities seem to be opening for me."
+      ]
+    },
+    {
+      "id": "autumn",
+      "title": "Autumn — Harvest & Letting Go",
+      "shortTitle": "Autumn",
+      "description": "A season of reflection, gratitude, and graceful release.",
+      "questions": [
+        "I am processing lessons learned from recent experiences.",
+        "I sense something shifting or changing in my life.",
+        "I feel wiser, more mature, and reflective than before.",
+        "God is leading me to release or let go of something."
+      ]
+    }
+  ],
+  "results": {
+    "winter": {
+      "title": "You are in a Winter Season",
+      "message": "Winter is a sacred time of stillness, trust, and deep inner work. Though it may feel quiet or even barren, remember that beneath the surface, roots are growing deeper. This is not a season of inactivity—it is a season of preparation. Embrace the rest God is offering you, and trust that spring will come.",
+      "encouragement": "Be still and know that He is God. Your waiting is not wasted."
+    },
+    "spring": {
+      "title": "You are in a Spring Season",
+      "message": "Spring is a beautiful time of renewal, hope, and new beginnings! Something fresh is stirring in your spirit, and God is planting new seeds of purpose in your life. This is a time to embrace possibility, step out in faith, and nurture the new growth that's emerging.",
+      "encouragement": "The old has passed—behold, the new has come!"
+    },
+    "summer": {
+      "title": "You are in a Summer Season",
+      "message": "Summer is a time of abundance, productivity, and visible growth! You are bearing fruit, and the work you've invested is yielding results. This is a season to celebrate, serve generously, and steward well the blessings God has given you.",
+      "encouragement": "Let your light shine brightly—this is your time to flourish!"
+    },
+    "autumn": {
+      "title": "You are in an Autumn Season",
+      "message": "Autumn is a rich time of harvest, reflection, and transition. You are gathering the fruits of your journey and processing valuable lessons. This season also invites you to release what no longer serves your growth. Trust God with what you're letting go.",
+      "encouragement": "Give thanks in all things—your harvest is more abundant than you know."
+    }
+  }
+}
