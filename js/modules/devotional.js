@@ -132,8 +132,7 @@ const Devotional = (() => {
     Utils.clearElement(container);
 
     const devotionalContent = document.createElement('div');
-    devotionalContent.className = 'season-bg';
-    devotionalContent.style.minHeight = '100vh';
+    devotionalContent.className = 'page-surface devotional-surface';
 
     devotionalContent.innerHTML = `
       <div class="devotional-header">

@@ -314,6 +314,16 @@ const Settings = (() => {
         <div class="settings-list">
           <div class="settings-item">
             <div class="settings-item-info">
+              <div class="settings-item-label">Privacy & Data</div>
+              <div class="settings-item-description">Review storage, manage data, and privacy details</div>
+            </div>
+            <button class="btn btn-secondary btn-sm" data-route="privacy">
+              Manage
+            </button>
+          </div>
+
+          <div class="settings-item">
+            <div class="settings-item-info">
               <div class="settings-item-label">Export Data</div>
               <div class="settings-item-description">Download a backup of all your data</div>
             </div>

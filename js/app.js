@@ -314,7 +314,7 @@ const App = (() => {
     // Wrapper with max-width for consistent layout
     const contentWrapper = Utils.createElement('div', { className: 'page-content' });
 
-    const homeContent = Utils.createElement('div', { className: 'season-bg' });
+    const homeContent = Utils.createElement('div', { className: 'page-surface home-surface' });
 
     // Hero section with greeting and seasonal badge
     const hero = Utils.createElement('div', { className: 'home-hero' },
@@ -720,6 +720,7 @@ const App = (() => {
   function renderAppShell() {
     document.body.innerHTML = `
       <div class="app-shell">
+        <div class="app-background season-bg" aria-hidden="true"></div>
         <header class="app-header">
           <div class="season-accent-bar"></div>
           <div class="header-content">
@@ -846,4 +847,3 @@ if ('serviceWorker' in navigator) {
 
 // Note: Global error handlers are in error-handler.js
 // No duplicate handlers needed here
-

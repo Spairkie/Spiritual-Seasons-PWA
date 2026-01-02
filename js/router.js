@@ -143,7 +143,12 @@ const Router = (() => {
         }
       });
 
-      window.scrollTo(0, 0);
+      const appMain = document.querySelector('.app-main');
+      if (appMain) {
+        appMain.scrollTop = 0;
+      } else {
+        window.scrollTo(0, 0);
+      }
     } else {
       console.warn(`Route not found: ${cleanPath}`);
       navigate(defaultRoute);

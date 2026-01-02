@@ -10,7 +10,6 @@
 .app-shell {
   display: flex;
   flex-direction: column;
-  min-height: 100vh;
   min-height: 100dvh;
 }
 
@@ -668,8 +667,23 @@
 .devotional-header {
   text-align: center;
   padding: var(--space-10) var(--space-4) var(--space-8);
-  background: linear-gradient(180deg, var(--season-light) 0%, transparent 100%);
   position: relative;
+  overflow: hidden;
+}
+
+.devotional-header::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 100vw;
+  background: linear-gradient(
+    180deg,
+    color-mix(in srgb, var(--season-light) 70%, transparent) 0%,
+    transparent 100%
+  );
+  z-index: 0;
 }
 
 .devotional-header::after {
@@ -682,6 +696,12 @@
   height: 4px;
   background: var(--season-primary);
   border-radius: var(--radius-full);
+  z-index: 1;
+}
+
+.devotional-header > * {
+  position: relative;
+  z-index: 1;
 }
 
 .devotional-day-badge {
@@ -1230,7 +1250,7 @@
    ============================================ */
 
 .home-hero {
-  padding: var(--space-8) var(--space-4);
+  padding: var(--space-6) var(--space-4) var(--space-5);
   text-align: center;
 }
 
@@ -1253,7 +1273,7 @@
   background: var(--bg-primary);
   border-radius: var(--radius-2xl);
   padding: var(--space-6);
-  margin: 0 var(--space-4) var(--space-6);
+  margin: 0 var(--space-4) var(--space-5);
   box-shadow: var(--shadow-lg);
   border: 1px solid var(--border-primary);
 }
@@ -1477,7 +1497,7 @@
 
 /* Wellness Section */
 .wellness-section {
-  padding: var(--space-6) var(--space-4);
+  padding: var(--space-5) var(--space-4);
 }
 
 .wellness-header {
@@ -1558,7 +1578,7 @@
 
 /* Home Verse Quote */
 .home-verse-quote {
-  padding: var(--space-6) var(--space-4);
+  padding: var(--space-5) var(--space-4);
   text-align: center;
 }
 

@@ -20,6 +20,7 @@ html {
   -webkit-text-size-adjust: 100%;
   -webkit-tap-highlight-color: transparent;
   scroll-behavior: smooth;
+  height: 100%;
 }
 
 body {
@@ -29,12 +30,12 @@ body {
   line-height: var(--leading-relaxed);
   color: var(--text-primary);
   background-color: var(--bg-cream);
-  min-height: 100vh;
   min-height: 100dvh;
+  height: 100%;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   text-rendering: optimizeLegibility;
-  overflow-x: hidden;
+  overflow: hidden;
 }
 
 /* ============================================
