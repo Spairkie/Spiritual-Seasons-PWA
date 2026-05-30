@@ -5,7 +5,7 @@
 
 // VERSION CONFIGURATION
 const VERSION = '1.0.1';
-const BUILD_TIME = '20260530';
+const BUILD_TIME = '20260530b';
 const CACHE_NAME = `spiritual-seasons-v${VERSION}-${BUILD_TIME}`;
 const FONT_CACHE = `spiritual-seasons-fonts-v${VERSION}`;
 
@@ -73,9 +73,16 @@ const STATIC_ASSETS = [
   // Content
   './content/book.json',
   './content/quiz.json',
-  // Assets
+  // Assets — all icon sizes referenced in manifest.webmanifest
   './assets/icons/icon.svg',
+  './assets/icons/icon-simple.svg',
+  './assets/icons/icon-72.png',
+  './assets/icons/icon-96.png',
+  './assets/icons/icon-128.png',
+  './assets/icons/icon-144.png',
+  './assets/icons/icon-152.png',
   './assets/icons/icon-192.png',
+  './assets/icons/icon-384.png',
   './assets/icons/icon-512.png',
   './assets/images/book-cover.webp'
 ];
