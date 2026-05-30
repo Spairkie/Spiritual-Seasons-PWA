@@ -167,28 +167,24 @@ const OnboardingTour = (() => {
     }
 
     // Scroll target into view first (with offset for bottom nav)
+    // html/body are overflow:hidden — only .app-main can scroll
+    const appMain = document.querySelector('.app-main');
     const targetRect = target.getBoundingClientRect();
     const viewportHeight = window.innerHeight;
-    const bottomNavHeight = 80; // Approximate height of bottom nav
-    
+    const bottomNavHeight = 64; // Height of fixed bottom nav
+
     // Check if target is hidden by bottom nav
     if (targetRect.bottom > viewportHeight - bottomNavHeight) {
       // Scroll to make it visible above bottom nav
       const scrollOffset = targetRect.bottom - (viewportHeight - bottomNavHeight - 20);
-      window.scrollBy({
-        top: scrollOffset,
-        behavior: 'smooth'
-      });
-      
+      if (appMain) appMain.scrollBy({ top: scrollOffset, behavior: 'smooth' });
+
       // Wait for scroll to complete before showing highlight
       setTimeout(() => continueShowStep(step, stepIndex), 300);
     } else if (targetRect.top < 100) {
       // Scroll to make it visible below header
-      window.scrollBy({
-        top: targetRect.top - 100,
-        behavior: 'smooth'
-      });
-      
+      if (appMain) appMain.scrollBy({ top: targetRect.top - 100, behavior: 'smooth' });
+
       setTimeout(() => continueShowStep(step, stepIndex), 300);
     } else {
       continueShowStep(step, stepIndex);
