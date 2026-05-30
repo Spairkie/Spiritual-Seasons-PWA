@@ -8,94 +8,77 @@ const DataExport = (() => {
    * Collect all user data
    */
   async function collectAllData() {
-    const data = {
-      exportDate: new Date().toISOString(),
-      appVersion: CONFIG.APP_VERSION,
-      data: {
-        // Progress data
-        completedDays: await Store.getCompletedDays(),
-        currentDay: await Store.getCurrentDay(),
-        currentSeason: await Store.getCurrentSeason(),
-        
-        // Quiz results
-        quizResults: await Store.getQuizResults(),
-        
-        // Journal entries
-        journalEntries: {},
-        
-        // Reflections
-        reflections: {},
-        
-        // Favorites
-        favorites: await Store.getAllFavorites(),
-        
-        // Settings
-        settings: {},
-        
-        // Audio notes (metadata only, not the actual audio)
-        audioNotes: {}
-      }
-    };
-
-    // Collect journal entries
-    for (let day = 1; day <= 120; day++) {
-      const entry = await Store.getJournalEntry(day);
-      if (entry && entry.content) {
-        data.data.journalEntries[day] = entry;
-      }
-    }
-
-    // Collect weekly reflections
-    for (let week = 1; week <= 17; week++) {
-      const reflection = await Store.getWeeklyReflection(week);
-      if (reflection && reflection.content) {
-        data.data.reflections[week] = reflection;
-      }
-    }
-
-    // Collect all settings
     const settingKeys = [
-      'theme',
-      'textSize',
-      'lineHeight',
-      'fontFamily',
-      'ttsVoice',
-      'ttsRate',
-      'ttsPitch',
-      'ambientSound',
-      'ambientVolume',
-      'keyboardShortcuts',
-      'meditationTimer',
-      'onboardingCompleted'
+      'theme', 'textSize', 'lineHeight', 'fontFamily',
+      'ttsVoice', 'ttsRate', 'ttsPitch',
+      'ambientSound', 'ambientVolume',
+      'keyboardShortcuts', 'meditationTimer', 'onboardingCompleted'
     ];
 
-    for (const key of settingKeys) {
-      const value = await Store.getSetting(key);
-      if (value !== null && value !== undefined) {
-        data.data.settings[key] = value;
-      }
+    // Fetch all bulk data in parallel — avoids 270+ sequential IDB reads
+    const [
+      completedDays, currentDay, currentSeason, quizResults,
+      favorites, allJournalEntries, allReflections, allAudioNotes,
+      ...settingValues
+    ] = await Promise.all([
+      Store.getCompletedDays(),
+      Store.getCurrentDay(),
+      Store.getCurrentSeason(),
+      Store.getQuizResults(),
+      Store.getAllFavorites(),
+      Store.getAllJournalEntries(),
+      Store.getAllWeeklyReflections(),
+      Store.getAllAudioNotes(),
+      ...settingKeys.map(k => Store.getSetting(k))
+    ]);
+
+    // Index journal entries by day (only those with content)
+    const journalEntries = {};
+    for (const entry of allJournalEntries) {
+      if (entry && entry.content) journalEntries[entry.day] = entry;
     }
 
-    // Collect audio note metadata
-    for (let day = 1; day <= 120; day++) {
-      const hasAudio = await Store.hasAudioNote(day);
-      if (hasAudio) {
-        data.data.audioNotes[day] = {
+    // Index reflections by week (weekly reflections use `responses`, not `content`)
+    const reflections = {};
+    for (const r of allReflections) {
+      if (r && r.responses && r.responses.length > 0) reflections[r.week] = r;
+    }
+
+    // Index audio note metadata by day
+    const audioNotes = {};
+    for (const note of allAudioNotes) {
+      if (note && note.day) {
+        audioNotes[note.day] = {
           exists: true,
           note: 'Audio files cannot be exported - please save separately if needed'
         };
       }
     }
 
-    return data;
+    // Build settings map (skip null/undefined)
+    const settings = {};
+    settingKeys.forEach((key, i) => {
+      if (settingValues[i] !== null && settingValues[i] !== undefined) {
+        settings[key] = settingValues[i];
+      }
+    });
+
+    return {
+      exportDate: new Date().toISOString(),
+      appVersion: CONFIG.APP_VERSION,
+      data: {
+        completedDays, currentDay, currentSeason, quizResults,
+        favorites, journalEntries, reflections, settings, audioNotes
+      }
+    };
   }
 
   /**
-   * Export data as JSON file
+   * Export data as JSON file (importable format via Settings > Import)
    */
   async function exportAsJSON() {
     try {
-      const data = await collectAllData();
+      const data = await Store.exportAllData();
       const json = JSON.stringify(data, null, 2);
       const blob = new Blob([json], { type: 'application/json' });
       const url = URL.createObjectURL(blob);
@@ -151,7 +134,7 @@ JOURNAL ENTRIES (${Object.keys(data.data.journalEntries).length})
         const dayData = Devotional.getDay(parseInt(day));
         text += `
 DAY ${day}: ${dayData ? dayData.scriptureRef : 'Unknown'}
-Date: ${new Date(entry.timestamp).toLocaleString()}
+Date: ${new Date(entry.updatedAt).toLocaleString()}
 ───────────────────────────────────────────────────────
 ${entry.content}
 
@@ -172,9 +155,9 @@ WEEKLY REFLECTIONS (${Object.keys(data.data.reflections).length})
           const reflection = data.data.reflections[week];
           text += `
 WEEK ${week}
-Date: ${new Date(reflection.timestamp).toLocaleString()}
+Date: ${new Date(reflection.createdAt).toLocaleString()}
 ───────────────────────────────────────────────────────
-${reflection.content}
+${(reflection.responses || []).filter(Boolean).join('\n\n')}
 
 `;
         }
