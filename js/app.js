@@ -867,6 +867,10 @@ const App = (() => {
           <button class="btn btn-primary" data-action="reload">Refresh</button>
         </div>
       `;
+      // Router.init() never ran in this failure path, so delegated data-action="reload"
+      // handling is not active. Attach a direct listener to ensure Refresh works.
+      const reloadBtn = document.body.querySelector('[data-action="reload"]');
+      if (reloadBtn) reloadBtn.addEventListener('click', () => window.location.reload());
     }
   }
 
