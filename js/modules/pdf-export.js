@@ -102,7 +102,8 @@ const PDFExport = (() => {
     } catch (error) {
       Utils.debug.error('PDF export failed:', error);
       Modal.close();
-      Toast.error('Failed to export journal');
+      const isNetworkError = error.message && error.message.includes('internet connection');
+      Toast.error(isNetworkError ? error.message : 'Failed to export journal. Please try again.');
     }
   }
 
@@ -222,7 +223,7 @@ const PDFExport = (() => {
         resolve();
       };
       script.onerror = () => {
-        reject(new Error('Failed to load jsPDF library'));
+        reject(new Error('PDF library could not be loaded. Please check your internet connection and try again.'));
       };
       document.head.appendChild(script);
     });
