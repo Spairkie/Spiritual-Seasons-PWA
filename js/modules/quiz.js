@@ -524,7 +524,7 @@ const Quiz = (() => {
       `;
 
       container.querySelectorAll('.tiebreaker-option').forEach(btn => {
-        btn.addEventListener('click', () => {
+        btn.addEventListener('click', async () => {
           tieBreakerAnswers.push(btn.getAttribute('data-season'));
           currentQ++;
           
@@ -548,7 +548,7 @@ const Quiz = (() => {
               tieResolution: 'tiebreaker'
             };
             
-            saveResultsAndSetSeason(finalResults);
+            await saveResultsAndSetSeason(finalResults);
             displayFinalResults(containerId, finalResults);
           }
         });

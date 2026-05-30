@@ -8,25 +8,27 @@ const App = (() => {
   let bookData = null;
   let quizData = null;
   let listenerManager = null;
-  let abortController = null; // For cancelling fetch requests
+  const activeControllers = new Set(); // Track all active fetch controllers
 
   /**
    * Fetch with timeout and cancellation support
+   * Each call uses its own AbortController to avoid race conditions
+   * when multiple fetches run in parallel.
    */
   async function fetchWithTimeout(url, timeout = 10000) {
-    // Create new abort controller for this request
-    abortController = new AbortController();
-    const signal = abortController.signal;
-    
-    return Promise.race([
-      fetch(url, { signal }),
-      new Promise((_, reject) => 
-        setTimeout(() => {
-          abortController.abort();
-          reject(new Error(`Request timeout for ${url}`));
-        }, timeout)
-      )
-    ]);
+    const controller = new AbortController();
+    activeControllers.add(controller);
+    const timer = setTimeout(() => controller.abort(), timeout);
+    try {
+      const response = await fetch(url, { signal: controller.signal });
+      clearTimeout(timer);
+      return response;
+    } catch (error) {
+      clearTimeout(timer);
+      throw error;
+    } finally {
+      activeControllers.delete(controller);
+    }
   }
 
   /**
@@ -199,7 +201,7 @@ const App = (() => {
         We encountered an issue loading this page. You can try refreshing or return to the home page.
       </p>
       <div style="display: flex; gap: var(--space-3); justify-content: center; flex-wrap: wrap;">
-        <button class="btn btn-primary" onclick="location.reload()">
+        <button class="btn btn-primary" data-action="reload">
           ${Utils.getIcon('undo', 16)}
           <span>Refresh Page</span>
         </button>
@@ -392,12 +394,13 @@ const App = (() => {
 
     Utils.showLoading(container, 'Loading...');
 
-    // Fetch all required data in parallel for better performance
-    const [currentDay, completedCount, streak, weekProgress] = await Promise.all([
-      Store.getCurrentDay(),
+    // Fetch current day first, then load the rest in parallel
+    const currentDay = await Store.getCurrentDay();
+    const [completedCount, streak, weekProgress, journalEntry] = await Promise.all([
       Store.getCompletedDaysCount(),
       Store.getStreak(),
-      Store.getWeekProgress()
+      Store.getWeekProgress(),
+      Store.getJournalEntry(currentDay || 1).catch(() => null)
     ]);
 
     // Get devotional data for current day
@@ -445,20 +448,29 @@ const App = (() => {
     const todayCard = Utils.createElement('div', { className: 'today-card' });
     
     if (dayData && season) {
+      const lastJournaledNote = journalEntry?.updatedAt
+        ? `<p style="font-size: var(--text-xs); color: var(--color-text-muted); margin: var(--space-1) 0 0;">Last journaled ${Utils.formatTimeAgo(journalEntry.updatedAt)}</p>`
+        : '';
+      const progressPct = Math.round(((completedCount || 0) / 120) * 100);
       todayCard.innerHTML = `
         <div class="today-card-header">
           <span class="today-label">📖 TODAY'S DEVOTIONAL</span>
-          <span class="today-progress">DAY ${dayInSeason} OF 30</span>
+          <span class="today-progress">Day ${currentDay || 1} of 120</span>
+        </div>
+        <p style="font-size: var(--text-xs); color: var(--color-text-muted); margin: 0 0 var(--space-2);">Day ${dayInSeason} of 30 in ${season.name || ''}</p>
+        <div style="height: 4px; background: var(--color-border); border-radius: 2px; margin-bottom: var(--space-3);">
+          <div style="height: 100%; width: ${progressPct}%; background: var(--season-primary); border-radius: 2px; transition: width 0.4s ease;"></div>
         </div>
         <h3 class="today-scripture">${Utils.escapeHtml(dayData.scriptureRef)}</h3>
         <p class="today-text">"${Utils.escapeHtml(dayData.scriptureText)}"</p>
+        ${lastJournaledNote}
       `;
-      
+
       const continueBtn = Utils.createElement('button', {
         className: 'btn btn-primary btn-block',
         dataset: { route: 'devotional', day: currentDay }
       });
-      continueBtn.textContent = 'Continue Reading →';
+      continueBtn.textContent = `Read Day ${currentDay || 1} →`;
       todayCard.appendChild(continueBtn);
     } else {
       todayCard.innerHTML = `
@@ -852,7 +864,7 @@ const App = (() => {
           </svg>
           <h2 style="color: var(--text-primary);">Something went wrong</h2>
           <p style="color: var(--text-secondary);">${Utils.escapeHtml(error.message) || 'Please refresh the page to try again.'}</p>
-          <button class="btn btn-primary" onclick="location.reload()">Refresh</button>
+          <button class="btn btn-primary" data-action="reload">Refresh</button>
         </div>
       `;
     }
@@ -865,7 +877,7 @@ const App = (() => {
           <div class="season-accent-bar"></div>
           <div class="header-content">
             <div class="header-title" data-route="home" style="cursor: pointer;">
-              <img src="assets/icons/icon.svg" alt="" class="header-logo" onerror="this.style.display='none'">
+              <img src="assets/icons/icon.svg" alt="" class="header-logo" id="header-logo">
               Spiritual Seasons
             </div>
             <div class="header-actions">
@@ -921,14 +933,18 @@ const App = (() => {
         </nav>
       </div>
     `;
+
+    // Attach image error handlers post-render (avoids inline onerror)
+    const headerLogo = document.getElementById('header-logo');
+    if (headerLogo) {
+      headerLogo.addEventListener('error', function () { this.style.display = 'none'; });
+    }
   }
 
   function cleanup() {
-    // Cancel any pending requests
-    if (abortController) {
-      abortController.abort();
-      abortController = null;
-    }
+    // Cancel all pending fetch requests
+    activeControllers.forEach(controller => controller.abort());
+    activeControllers.clear();
     
     if (listenerManager) {
       listenerManager.removeAll();
@@ -966,6 +982,25 @@ const App = (() => {
     cleanup
   };
 })();
+
+// Attach splash logo error handler immediately (before any network requests)
+(function () {
+  const splashLogo = document.getElementById('splash-logo');
+  if (splashLogo) {
+    splashLogo.addEventListener('error', function () { this.style.display = 'none'; });
+  }
+})();
+
+// Dismiss splash screen after load (moved from inline script in index.html)
+window.addEventListener('load', () => {
+  setTimeout(() => {
+    const splash = document.getElementById('splash');
+    if (splash) {
+      splash.classList.add('fade-out');
+      setTimeout(() => splash.remove(), 500);
+    }
+  }, 800);
+});
 
 // Start the app
 document.addEventListener('DOMContentLoaded', () => {
@@ -1069,6 +1104,10 @@ if ('serviceWorker' in navigator) {
                   action: {
                     text: 'Update',
                     onClick: () => {
+                      // Tell the waiting SW to activate before reloading
+                      if (registration.waiting) {
+                        registration.waiting.postMessage({ type: 'SKIP_WAITING' });
+                      }
                       window.location.reload();
                     }
                   }

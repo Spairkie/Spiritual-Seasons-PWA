@@ -556,9 +556,9 @@ const Store = (() => {
 
     // Validate settings
     if (data.settings) {
-      const validFontSizes = ['small', 'medium', 'large'];
-      const validLineSpacing = ['compact', 'normal', 'relaxed'];
-      const validThemes = ['light', 'dark'];
+      const validFontSizes = ['small', 'medium', 'large', 'extra-large'];
+      const validLineSpacing = ['compact', 'normal', 'relaxed', 'loose'];
+      const validThemes = ['light', 'dark', 'system'];
       
       if (data.settings.fontSize && !validFontSizes.includes(data.settings.fontSize)) {
         warnings.push('Invalid font size, will use default');

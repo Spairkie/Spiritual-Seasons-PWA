@@ -199,7 +199,6 @@ const WeeklyReflection = (() => {
     // If specific week not found, use a rotating pattern
     const index = (week - 1) % REFLECTION_QUESTIONS.length;
     return REFLECTION_QUESTIONS[index]?.questions || REFLECTION_QUESTIONS[0].questions;
-    return REFLECTION_QUESTIONS[index].questions;
   }
 
   /**
@@ -333,6 +332,7 @@ const WeeklyReflection = (() => {
             <p style="margin-top: var(--space-2); font-size: var(--text-sm); color: var(--text-tertiary);">
               You'll be prompted to reflect after every 7 days you complete.
             </p>
+            <button class="btn btn-primary" style="margin-top: var(--space-4);" data-route="devotional">Start Reading</button>
           </div>
         `;
         return;
@@ -402,14 +402,14 @@ const WeeklyReflection = (() => {
                 </div>
                 
                 <div class="reflection-actions">
-                  <button class="btn btn-ghost btn-sm" onclick="WeeklyReflection.editReflection(${reflection.week})">
+                  <button class="btn btn-ghost btn-sm" data-edit-week="${reflection.week}">
                     <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                       <path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/>
                       <path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/>
                     </svg>
                     <span>Edit</span>
                   </button>
-                  <button class="btn btn-ghost btn-sm" onclick="WeeklyReflection.exportReflection(${reflection.week})">
+                  <button class="btn btn-ghost btn-sm" data-export-week="${reflection.week}">
                     <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                       <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/>
                       <polyline points="7 10 12 15 17 10"/>
@@ -429,12 +429,31 @@ const WeeklyReflection = (() => {
       container.innerHTML = `
         <div class="error-message">
           <p>Unable to load reflections</p>
-          <button class="btn btn-secondary" onclick="WeeklyReflection.renderReflectionsView('${containerId}')">
+          <button class="btn btn-secondary" data-retry-reflections="${containerId}">
             Try Again
           </button>
         </div>
       `;
     }
+
+    // Delegated listeners for edit/export/retry actions (replaces inline onclick handlers)
+    container.addEventListener('click', function reflectionClickHandler(e) {
+      const editBtn = e.target.closest('[data-edit-week]');
+      if (editBtn) {
+        editReflection(Number(editBtn.getAttribute('data-edit-week')));
+        return;
+      }
+      const exportBtn = e.target.closest('[data-export-week]');
+      if (exportBtn) {
+        exportReflection(Number(exportBtn.getAttribute('data-export-week')));
+        return;
+      }
+      const retryBtn = e.target.closest('[data-retry-reflections]');
+      if (retryBtn) {
+        container.removeEventListener('click', reflectionClickHandler);
+        renderReflectionsView(retryBtn.getAttribute('data-retry-reflections'));
+      }
+    });
   }
 
   /**
@@ -480,7 +499,7 @@ const WeeklyReflection = (() => {
 
             await saveReflection(week, responses);
             // Refresh the view
-            renderReflectionsView('content');
+            renderReflectionsView('reflections-content');
             return true;
           }
         },

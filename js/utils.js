@@ -309,6 +309,26 @@ const Utils = (() => {
   }
 
   /**
+   * Format a date or ISO string as a human-readable "time ago" string.
+   * @param {Date|string} date
+   * @returns {string}
+   */
+  function formatTimeAgo(date) {
+    const d = date instanceof Date ? date : new Date(date);
+    if (isNaN(d.getTime())) return 'recently';
+    const diffMs = Date.now() - d.getTime();
+    const mins = Math.floor(diffMs / 60000);
+    if (mins < 2) return 'just now';
+    if (mins < 60) return `${mins}m ago`;
+    const hours = Math.floor(mins / 60);
+    if (hours < 24) return `${hours}h ago`;
+    const days = Math.floor(hours / 24);
+    if (days === 1) return 'yesterday';
+    if (days < 7) return `${days} days ago`;
+    return d.toLocaleDateString('en-US', { month: 'short', day: 'numeric' });
+  }
+
+  /**
    * Get time-based greeting
    * @returns {string}
    */
@@ -466,7 +486,7 @@ const Utils = (() => {
         </svg>
         <h3 style="color: var(--text-primary); margin: 0;">${escapeHtml(message)}</h3>
         <p style="color: var(--text-secondary); margin: 0;">Please try again or refresh the page.</p>
-        <button class="btn btn-primary" onclick="location.reload()">Refresh Page</button>
+        <button class="btn btn-primary" data-action="reload">Refresh Page</button>
       </div>
     `;
     
@@ -588,6 +608,7 @@ const Utils = (() => {
     isSameDay,
     getYesterday,
     formatDate,
+    formatTimeAgo,
     getGreeting,
     
     // Seasons

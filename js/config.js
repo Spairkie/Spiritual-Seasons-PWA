@@ -6,12 +6,12 @@
 const CONFIG = {
   // Application Info
   APP_NAME: 'Spiritual Seasons',
-  APP_VERSION: '1.0.0',
+  APP_VERSION: '1.0.1',
   APP_DESCRIPTION: 'Daily Devotional Workbook',
   AUTHOR: 'Dr. Jacqueline Ghee, MSW, MPCC, DMIN',
   
-  // Debug mode - set to false for production
-  DEBUG: true,
+  // Debug mode - false for production
+  DEBUG: false,
 
   // Database Configuration
   DB: {
@@ -134,12 +134,12 @@ const CONFIG = {
     QUIZ: 'quiz',
     HOME: 'home',
     DEVOTIONAL: 'devotional',
-    TOC: 'toc',
+    TOC: 'contents',
     SEARCH: 'search',
     SETTINGS: 'settings',
     ABOUT: 'about',
     INTRO_PAGES: 'intro',
-    WEEKLY_REFLECTION: 'weekly-reflection',
+    WEEKLY_REFLECTION: 'reflections',
     PROGRESS: 'progress'
   },
 

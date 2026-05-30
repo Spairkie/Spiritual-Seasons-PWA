@@ -218,10 +218,12 @@ const Devotional = (() => {
     }
 
     const season = getSeasonForDay(validDay);
-    const [journalEntry, progress, isFavorite] = await Promise.all([
+    const [journalEntry, progress, isFavorite, bibleTranslation, autoSave] = await Promise.all([
       Store.getJournalEntry(validDay),
       Store.getDayProgress(validDay),
-      Store.isFavorite(validDay)
+      Store.isFavorite(validDay),
+      Store.getSetting('bibleTranslation'),
+      Store.getSetting('autoSave')
     ]);
 
     // Update theme
@@ -250,8 +252,8 @@ const Devotional = (() => {
           </button>
           
           <!-- Bible Gateway Link -->
-          <a 
-            href="${createBibleGatewayLink(dayData.scriptureRef)}" 
+          <a
+            href="${createBibleGatewayLink(dayData.scriptureRef, bibleTranslation || 'NLT')}"
             target="_blank" 
             rel="noopener noreferrer" 
             class="btn btn-ghost btn-sm"
@@ -290,13 +292,21 @@ const Devotional = (() => {
           class="journal-textarea" 
           id="journal-entry"
           maxlength="50000"
-          placeholder="Write your reflections here... Your entries are automatically saved as you type."
+          placeholder="Write your reflections here...${autoSave !== false ? ' Your entries are automatically saved as you type.' : ' Use the Save button below to save your entry.'}"
           aria-label="Journal entry"
         >${Utils.escapeHtml(journalEntry?.content || '')}</textarea>
         <div class="journal-footer">
           <span class="journal-char-count" id="char-count">0 characters</span>
           <span class="journal-last-saved" id="last-saved"></span>
         </div>
+        ${autoSave === false ? `
+        <div style="padding: var(--space-2) 0;">
+          <button class="btn btn-secondary btn-sm" id="manual-save-btn">
+            ${Utils.getIcon('save', 16)}
+            Save Journal
+          </button>
+        </div>
+        ` : ''}
         
         <!-- Audio recording container -->
         <div id="audio-container" style="margin-top: var(--space-4);"></div>
@@ -327,7 +337,7 @@ const Devotional = (() => {
             ${isFavorite ? Utils.getIcon('heartFilled', 20) : Utils.getIcon('heart', 20)}
           </button>
           
-          <button class="devotional-complete-btn ${progress?.completed ? 'completed' : ''}" id="mark-complete">
+          <button class="devotional-complete-btn ${progress?.completed ? 'completed' : ''}" id="mark-complete" aria-pressed="${progress?.completed ? 'true' : 'false'}">
             ${progress?.completed ? `${Utils.getIcon('check', 16)} Completed` : 'Mark Complete'}
           </button>
         </div>
@@ -348,7 +358,7 @@ const Devotional = (() => {
     contentWrapper.appendChild(devotionalContent);
     
     container.appendChild(contentWrapper);
-    attachListeners(containerId, validDay, season, dayData);
+    attachListeners(containerId, validDay, season, dayData, autoSave !== false);
   }
 
   function renderError(container, message) {
@@ -369,7 +379,7 @@ const Devotional = (() => {
     container.appendChild(errorContent);
   }
 
-  function attachListeners(containerId, day, season, dayData) {
+  function attachListeners(containerId, day, season, dayData, autoSave = true) {
     // Enhanced Journal auto-save with word/character count
     const textarea = document.getElementById('journal-entry');
     const saveIndicator = document.getElementById('save-indicator');
@@ -381,19 +391,18 @@ const Devotional = (() => {
       // Initial count update
       updateCounts(textarea.value);
 
-      // Enhanced autosave with visual feedback
       listenerManager.add(textarea, 'input', () => {
         const content = textarea.value;
-        
-        // Update counts immediately
         updateCounts(content);
-        
+
+        if (!autoSave) return;
+
         // Show saving indicator
         if (saveIndicator) {
           saveIndicator.classList.remove('saved');
           saveIndicator.classList.add('saving');
         }
-        
+
         // Debounced save with race-condition-free queuing
         clearTimeout(saveTimeout);
         saveTimeout = setTimeout(() => {
@@ -402,6 +411,21 @@ const Devotional = (() => {
           });
         }, CONFIG.JOURNAL.AUTOSAVE_DELAY_MS);
       });
+
+      // Manual save button (shown when autoSave is off)
+      const manualSaveBtn = document.getElementById('manual-save-btn');
+      if (manualSaveBtn) {
+        listenerManager.add(manualSaveBtn, 'click', () => {
+          const content = textarea.value;
+          if (saveIndicator) {
+            saveIndicator.classList.remove('saved');
+            saveIndicator.classList.add('saving');
+          }
+          queueJournalSave(day, content, season.id).catch(error => {
+            Utils.debug.error('Save error:', error);
+          });
+        });
+      }
 
       // Handle focus/blur for better UX
       listenerManager.add(textarea, 'focus', () => {
@@ -580,15 +604,21 @@ const Devotional = (() => {
           if (progress?.completed) {
             await Store.markDayIncomplete(day);
             completeBtn.classList.remove('completed');
+            completeBtn.setAttribute('aria-pressed', 'false');
             completeBtn.innerHTML = 'Mark Complete';
             Toast.show('Day marked as incomplete', 'warning');
           } else {
             await Store.markDayComplete(day, season.id);
             await Store.updateStreak();
-            await Store.setCurrentDay(day);
-            
+            const nextDay = Math.min(day + 1, CONFIG.PROGRESS.TOTAL_DAYS);
+            await Store.setCurrentDay(nextDay);
+
             completeBtn.classList.add('completed');
+            completeBtn.setAttribute('aria-pressed', 'true');
             completeBtn.innerHTML = `${Utils.getIcon('check', 16)} Completed`;
+
+            // Show completion card with CTA
+            showCompletionCard(day, season, nextDay);
             Toast.show('Day completed! Keep up the great work.', 'success');
           }
         } catch (error) {
@@ -597,6 +627,62 @@ const Devotional = (() => {
         }
       });
     }
+  }
+
+  function showCompletionCard(day, season, nextDay) {
+    const navEl = document.querySelector('.devotional-nav');
+    if (!navEl) return;
+
+    // Remove any existing card
+    const existing = document.getElementById('completion-card');
+    if (existing) existing.remove();
+
+    const isJourneyComplete = day >= CONFIG.PROGRESS.TOTAL_DAYS;
+    const isSeasonEnd = day === 30 || day === 60 || day === 90;
+
+    const nextSeasonNames = { 30: 'Spring', 60: 'Summer', 90: 'Autumn' };
+    const nextSeasonDescriptions = {
+      30: 'Renewal & Planting — you\'re entering a season of growth.',
+      60: 'Abundance & Joy — step into a season of flourishing.',
+      90: 'Harvest & Letting Go — embrace a season of release and gratitude.'
+    };
+
+    const card = document.createElement('div');
+    card.id = 'completion-card';
+    card.className = 'completion-card';
+    card.style.cssText = 'margin: var(--space-4) var(--space-4) 0; padding: var(--space-5); background: var(--color-surface); border-radius: var(--radius-xl); border: 2px solid var(--season-primary); text-align: center;';
+
+    if (isJourneyComplete) {
+      card.innerHTML = `
+        <div style="font-size: 2.5rem; margin-bottom: var(--space-3);">🎉</div>
+        <h3 style="font-family: var(--font-display); font-size: var(--text-xl); margin-bottom: var(--space-2); color: var(--season-primary);">Journey Complete!</h3>
+        <p style="color: var(--color-text-secondary); margin-bottom: var(--space-4);">You have completed all 120 days. Your faithfulness is a testament to God's work in your life.</p>
+        <div style="display: flex; gap: var(--space-2); justify-content: center; flex-wrap: wrap;">
+          <button class="btn btn-primary" data-route="progress">View My Journey</button>
+          <button class="btn btn-secondary" id="export-journey-btn">Export My Journal</button>
+        </div>
+      `;
+      const exportBtn = card.querySelector('#export-journey-btn');
+      if (exportBtn && typeof DataExport !== 'undefined') {
+        exportBtn.addEventListener('click', () => DataExport.exportAll());
+      }
+    } else if (isSeasonEnd) {
+      const nextSeasonName = nextSeasonNames[day];
+      card.innerHTML = `
+        <div style="font-size: 2rem; margin-bottom: var(--space-3);">${season.emoji || '🌿'}</div>
+        <h3 style="font-family: var(--font-display); font-size: var(--text-xl); margin-bottom: var(--space-2); color: var(--season-primary);">Season Complete</h3>
+        <p style="color: var(--color-text-secondary); margin-bottom: var(--space-1);">You've finished the ${Utils.escapeHtml(season.name)} season.</p>
+        <p style="color: var(--color-text-secondary); margin-bottom: var(--space-4); font-size: var(--text-sm);">${Utils.escapeHtml(nextSeasonDescriptions[day])}</p>
+        <button class="btn btn-primary" data-route="devotional" data-day="${nextDay}">Begin ${Utils.escapeHtml(nextSeasonName)} Season →</button>
+      `;
+    } else {
+      card.innerHTML = `
+        <p style="color: var(--color-text-secondary); margin-bottom: var(--space-3);">Well done completing Day ${day}.</p>
+        <button class="btn btn-primary" data-route="devotional" data-day="${nextDay}">Continue to Day ${nextDay} →</button>
+      `;
+    }
+
+    navEl.insertAdjacentElement('afterend', card);
   }
 
   return {

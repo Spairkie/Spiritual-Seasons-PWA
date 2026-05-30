@@ -124,7 +124,7 @@ const Router = (() => {
                 </svg>
                 <h3 style="color: var(--text-primary); margin-bottom: var(--space-2);">Failed to Load Page</h3>
                 <p style="color: var(--text-secondary); margin-bottom: var(--space-4);">An error occurred while loading this page.</p>
-                <button class="btn btn-primary" onclick="location.reload()">Refresh Page</button>
+                <button class="btn btn-primary" data-action="reload">Refresh Page</button>
               </div>
             `;
           }
@@ -152,7 +152,9 @@ const Router = (() => {
   function updateNav(path) {
     document.querySelectorAll('.nav-item').forEach(item => {
       const itemPath = item.getAttribute('data-route');
-      item.classList.toggle('active', itemPath === path);
+      const isActive = itemPath === path;
+      item.classList.toggle('active', isActive);
+      item.setAttribute('aria-current', isActive ? 'page' : 'false');
     });
   }
 
@@ -213,6 +215,14 @@ const Router = (() => {
   }
 
   function handleClick(e) {
+    // Handle data-action="reload" buttons (replaces inline onclick="location.reload()")
+    const actionEl = e.target.closest('[data-action="reload"]');
+    if (actionEl) {
+      e.preventDefault();
+      window.location.reload();
+      return;
+    }
+
     const navItem = e.target.closest('[data-route]');
     if (navItem) {
       e.preventDefault();
@@ -220,18 +230,18 @@ const Router = (() => {
       const dayAttr = navItem.getAttribute('data-day');
       const pageAttr = navItem.getAttribute('data-page');
       const params = {};
-      
+
       if (dayAttr) {
         const validDay = Utils.validateDay(dayAttr);
         if (validDay !== null) {
           params.day = validDay;
         }
       }
-      
+
       if (pageAttr) {
         params.page = pageAttr;
       }
-      
+
       navigate(route, params);
     }
   }
