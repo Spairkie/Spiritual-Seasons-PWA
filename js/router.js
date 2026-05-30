@@ -142,7 +142,9 @@ const Router = (() => {
         }
       });
 
-      window.scrollTo(0, 0);
+      // Reset the actual scroll container (html/body are overflow:hidden; only .app-main scrolls)
+      const appMain = document.querySelector('.app-main');
+      if (appMain) appMain.scrollTop = 0;
     } else {
       Utils.debug.warn(`Route not found: ${cleanPath}`);
       navigate(defaultRoute);

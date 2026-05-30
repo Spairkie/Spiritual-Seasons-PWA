@@ -192,10 +192,11 @@ const PageTransitions = (() => {
    * Scroll to top of page
    */
   function scrollToTop(smooth = true) {
-    window.scrollTo({
-      top: 0,
-      behavior: smooth ? 'smooth' : 'auto'
-    });
+    // html/body are overflow:hidden — only .app-main scrolls
+    const appMain = document.querySelector('.app-main');
+    if (appMain) {
+      appMain.scrollTo({ top: 0, behavior: smooth ? 'smooth' : 'auto' });
+    }
   }
 
   return {
