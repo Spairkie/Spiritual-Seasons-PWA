@@ -650,13 +650,13 @@ const Devotional = (() => {
     const card = document.createElement('div');
     card.id = 'completion-card';
     card.className = 'completion-card';
-    card.style.cssText = 'margin: var(--space-4) var(--space-4) 0; padding: var(--space-5); background: var(--color-surface); border-radius: var(--radius-xl); border: 2px solid var(--season-primary); text-align: center;';
+    card.style.cssText = 'margin: var(--space-4) var(--space-4) 0; padding: var(--space-5); background: var(--bg-primary); border-radius: var(--radius-xl); border: 2px solid var(--season-primary); text-align: center;';
 
     if (isJourneyComplete) {
       card.innerHTML = `
         <div style="font-size: 2.5rem; margin-bottom: var(--space-3);">🎉</div>
         <h3 style="font-family: var(--font-display); font-size: var(--text-xl); margin-bottom: var(--space-2); color: var(--season-primary);">Journey Complete!</h3>
-        <p style="color: var(--color-text-secondary); margin-bottom: var(--space-4);">You have completed all 120 days. Your faithfulness is a testament to God's work in your life.</p>
+        <p style="color: var(--text-secondary); margin-bottom: var(--space-4);">You have completed all 120 days. Your faithfulness is a testament to God's work in your life.</p>
         <div style="display: flex; gap: var(--space-2); justify-content: center; flex-wrap: wrap;">
           <button class="btn btn-primary" data-route="progress">View My Journey</button>
           <button class="btn btn-secondary" id="export-journey-btn">Export My Journal</button>
@@ -671,13 +671,13 @@ const Devotional = (() => {
       card.innerHTML = `
         <div style="font-size: 2rem; margin-bottom: var(--space-3);">${season.emoji || '🌿'}</div>
         <h3 style="font-family: var(--font-display); font-size: var(--text-xl); margin-bottom: var(--space-2); color: var(--season-primary);">Season Complete</h3>
-        <p style="color: var(--color-text-secondary); margin-bottom: var(--space-1);">You've finished the ${Utils.escapeHtml(season.name)} season.</p>
-        <p style="color: var(--color-text-secondary); margin-bottom: var(--space-4); font-size: var(--text-sm);">${Utils.escapeHtml(nextSeasonDescriptions[day])}</p>
+        <p style="color: var(--text-secondary); margin-bottom: var(--space-1);">You've finished the ${Utils.escapeHtml(season.name)} season.</p>
+        <p style="color: var(--text-secondary); margin-bottom: var(--space-4); font-size: var(--text-sm);">${Utils.escapeHtml(nextSeasonDescriptions[day])}</p>
         <button class="btn btn-primary" data-route="devotional" data-day="${nextDay}">Begin ${Utils.escapeHtml(nextSeasonName)} Season →</button>
       `;
     } else {
       card.innerHTML = `
-        <p style="color: var(--color-text-secondary); margin-bottom: var(--space-3);">Well done completing Day ${day}.</p>
+        <p style="color: var(--text-secondary); margin-bottom: var(--space-3);">Well done completing Day ${day}.</p>
         <button class="btn btn-primary" data-route="devotional" data-day="${nextDay}">Continue to Day ${nextDay} →</button>
       `;
     }

@@ -5,7 +5,7 @@
 
 // VERSION CONFIGURATION
 const VERSION = '1.0.1';
-const BUILD_TIME = '20260101';
+const BUILD_TIME = '20260530';
 const CACHE_NAME = `spiritual-seasons-v${VERSION}-${BUILD_TIME}`;
 const FONT_CACHE = `spiritual-seasons-fonts-v${VERSION}`;
 

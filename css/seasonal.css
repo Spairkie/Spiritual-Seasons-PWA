@@ -27,7 +27,10 @@
 #page-progress,
 #page-favorites,
 #page-reflections,
-#page-intro {
+#page-intro,
+#page-search,
+#page-settings,
+#page-privacy {
   position: relative;
   min-height: 100vh;
   background: linear-gradient(
@@ -44,7 +47,10 @@
 #page-progress > *,
 #page-favorites > *,
 #page-reflections > *,
-#page-intro > * {
+#page-intro > *,
+#page-search > *,
+#page-settings > *,
+#page-privacy > * {
   position: relative;
   z-index: 1;
 }
@@ -57,7 +63,10 @@
 [data-season="winter"] #page-progress::before,
 [data-season="winter"] #page-favorites::before,
 [data-season="winter"] #page-reflections::before,
-[data-season="winter"] #page-intro::before {
+[data-season="winter"] #page-intro::before,
+[data-season="winter"] #page-search::before,
+[data-season="winter"] #page-settings::before,
+[data-season="winter"] #page-privacy::before {
   content: '';
   position: absolute;
   inset: 0;
@@ -87,7 +96,10 @@
 [data-season="spring"] #page-progress::before,
 [data-season="spring"] #page-favorites::before,
 [data-season="spring"] #page-reflections::before,
-[data-season="spring"] #page-intro::before {
+[data-season="spring"] #page-intro::before,
+[data-season="spring"] #page-search::before,
+[data-season="spring"] #page-settings::before,
+[data-season="spring"] #page-privacy::before {
   content: '';
   position: absolute;
   inset: 0;
@@ -108,7 +120,10 @@
 [data-season="summer"] #page-progress::before,
 [data-season="summer"] #page-favorites::before,
 [data-season="summer"] #page-reflections::before,
-[data-season="summer"] #page-intro::before {
+[data-season="summer"] #page-intro::before,
+[data-season="summer"] #page-search::before,
+[data-season="summer"] #page-settings::before,
+[data-season="summer"] #page-privacy::before {
   content: '';
   position: absolute;
   top: -50%;
@@ -145,7 +160,10 @@
 [data-season="autumn"] #page-progress::before,
 [data-season="autumn"] #page-favorites::before,
 [data-season="autumn"] #page-reflections::before,
-[data-season="autumn"] #page-intro::before {
+[data-season="autumn"] #page-intro::before,
+[data-season="autumn"] #page-search::before,
+[data-season="autumn"] #page-settings::before,
+[data-season="autumn"] #page-privacy::before {
   content: '';
   position: absolute;
   inset: 0;
