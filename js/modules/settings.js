@@ -128,6 +128,22 @@ const Settings = (() => {
             </div>
           </div>
 
+          <div class="settings-item">
+            <div class="settings-item-info">
+              <div class="settings-item-label">Season Colors</div>
+              <div class="settings-item-description">Color theme for your current season</div>
+            </div>
+            <div class="select-wrapper">
+              <select class="select" id="setting-season-theme">
+                <option value="auto" ${settings.seasonTheme === 'auto' ? 'selected' : ''}>Auto (Follow Journey)</option>
+                <option value="winter" ${settings.seasonTheme === 'winter' ? 'selected' : ''}>Winter</option>
+                <option value="spring" ${settings.seasonTheme === 'spring' ? 'selected' : ''}>Spring</option>
+                <option value="summer" ${settings.seasonTheme === 'summer' ? 'selected' : ''}>Summer</option>
+                <option value="autumn" ${settings.seasonTheme === 'autumn' ? 'selected' : ''}>Autumn</option>
+              </select>
+            </div>
+          </div>
+
           ${AudioSupported ? `
           <div class="settings-item">
             <div class="settings-item-info">
@@ -192,12 +208,15 @@ const Settings = (() => {
           <div class="settings-item">
             <div class="settings-item-info">
               <div class="settings-item-label">Daily Reminders</div>
-              <div class="settings-item-description">Get notified for your devotional</div>
+              <div class="settings-item-description">Receive in-app reminders while the app is open</div>
             </div>
             <label class="toggle">
               <input type="checkbox" id="setting-notifications" ${settings.notificationsEnabled ? 'checked' : ''}>
               <span class="toggle-slider"></span>
             </label>
+          </div>
+          <div class="settings-item" style="padding-top: 0; padding-bottom: var(--space-2);">
+            <p class="settings-item-description" style="font-size: var(--text-xs); color: var(--color-text-muted); font-style: italic; margin: 0;">Reminders appear while the app is open in your browser or when installed as a standalone app.</p>
           </div>
 
           <div class="settings-item" id="reminder-time-setting" style="display: ${settings.notificationsEnabled ? 'flex' : 'none'}">
@@ -286,16 +305,6 @@ const Settings = (() => {
           </div>
         </div>
         
-        <script>
-          // Only show keyboard shortcuts view on desktop/keyboard devices
-          (function() {
-            const isTouchDevice = 'ontouchstart' in window || navigator.maxTouchPoints > 0;
-            if (!isTouchDevice) {
-              const item = document.getElementById('shortcuts-view-item');
-              if (item) item.style.display = '';
-            }
-          })();
-        </script>
       </div>
 
       <!-- Data Management -->
@@ -359,17 +368,6 @@ const Settings = (() => {
 
           <div class="settings-item">
             <div class="settings-item-info">
-              <div class="settings-item-label">Privacy & Storage</div>
-              <div class="settings-item-description">Manage your data privacy and storage usage</div>
-            </div>
-            <button class="btn btn-secondary btn-sm" data-route="privacy">
-              ${Utils.getIcon('shield', 16)}
-              Manage
-            </button>
-          </div>
-
-          <div class="settings-item">
-            <div class="settings-item-info">
               <div class="settings-item-label">Retake Quiz</div>
               <div class="settings-item-description">Discover your season again</div>
             </div>
@@ -392,12 +390,17 @@ const Settings = (() => {
       <div class="settings-group">
         <h3 class="settings-group-title">About & Legal</h3>
         <div class="settings-list">
+          <div class="settings-item" style="background: var(--color-surface-alt, var(--color-surface)); border-radius: var(--radius-md); padding: var(--space-3);">
+            <p class="settings-item-description" style="font-size: var(--text-sm); color: var(--color-text-secondary); margin: 0;">
+              ${Utils.getIcon('shield', 14)} All your data is stored only on this device. Nothing is sent to any server.
+            </p>
+          </div>
           <button class="settings-item" data-route="intro" data-page="author" style="width: 100%; text-align: left; border: none; background: transparent;">
             <div class="settings-item-info">
               <div class="settings-item-label">Spiritual Seasons</div>
               <div class="settings-item-description">
                 Daily Devotional Workbook by Dr. Jacqueline Ghee<br>
-                Version 1.0.0
+                Version ${CONFIG.APP_VERSION}
               </div>
             </div>
             <div class="settings-item-control">
@@ -417,6 +420,15 @@ const Settings = (() => {
   }
 
   function attachListeners(container, currentSettings) {
+    // Show keyboard shortcuts item only on non-touch (desktop/keyboard) devices
+    const shortcutsItem = container.querySelector('#shortcuts-view-item');
+    if (shortcutsItem) {
+      const isTouchDevice = 'ontouchstart' in window || navigator.maxTouchPoints > 0;
+      if (!isTouchDevice) {
+        shortcutsItem.style.display = '';
+      }
+    }
+
     // Dark mode
     const darkMode = container.querySelector('#setting-dark-mode');
     if (darkMode) {

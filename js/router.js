@@ -152,7 +152,9 @@ const Router = (() => {
   function updateNav(path) {
     document.querySelectorAll('.nav-item').forEach(item => {
       const itemPath = item.getAttribute('data-route');
-      item.classList.toggle('active', itemPath === path);
+      const isActive = itemPath === path;
+      item.classList.toggle('active', isActive);
+      item.setAttribute('aria-current', isActive ? 'page' : 'false');
     });
   }
 

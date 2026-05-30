@@ -105,11 +105,29 @@ const Search = (() => {
     const searchTerm = query.toLowerCase().trim();
     const results = [];
 
+    // Preload filter sets once (avoids per-item IDB reads)
+    const needsDayFilters = filters.hasJournal || filters.hasAudio || filters.isFavorite || filters.isComplete;
+    let journalDays = null, audioDays = null, favDays = null, completedDays = null;
+
+    if (needsDayFilters) {
+      const [journals, audioNotes, favorites, progress] = await Promise.all([
+        filters.hasJournal ? Store.getAllJournalEntries() : Promise.resolve([]),
+        filters.hasAudio ? Store.getAllAudioNotes() : Promise.resolve([]),
+        filters.isFavorite ? Store.getAllFavorites() : Promise.resolve([]),
+        filters.isComplete ? Store.getAllProgress() : Promise.resolve([])
+      ]);
+      if (filters.hasJournal) journalDays = new Set(journals.filter(e => e && e.content).map(e => e.day));
+      if (filters.hasAudio) audioDays = new Set(audioNotes.map(n => n.day));
+      if (filters.isFavorite) favDays = new Set(favorites.map(f => f.day));
+      if (filters.isComplete) completedDays = new Set(progress.filter(p => p.completed).map(p => p.day));
+    }
+
+    const filterSets = { journalDays, audioDays, favDays, completedDays };
+
     // Search devotions
     if (filters.type === 'all' || filters.type === 'devotions') {
       for (const item of searchIndex.devotions) {
-        const matches = await matchesFilters(item, filters); 
-        if (matches) {
+        if (matchesFilters(item, filters, filterSets)) {
           const score = calculateRelevanceScore(item.content, searchTerm);
           if (score > 0) {
             results.push({ ...item, score, query: searchTerm });
@@ -121,8 +139,7 @@ const Search = (() => {
     // Search journal entries
     if (filters.type === 'all' || filters.type === 'journal') {
       for (const item of searchIndex.journal) {
-        const matches = await matchesFilters(item, filters); 
-        if (matches) {
+        if (matchesFilters(item, filters, filterSets)) {
           const score = calculateRelevanceScore(item.content, searchTerm);
           if (score > 0) {
             results.push({ ...item, score, query: searchTerm });
@@ -134,8 +151,7 @@ const Search = (() => {
     // Search reflections
     if (filters.type === 'all' || filters.type === 'reflections') {
       for (const item of searchIndex.reflections) {
-        const matches = await matchesFilters(item, filters);  
-        if (matches) {
+        if (matchesFilters(item, filters, filterSets)) {
           const score = calculateRelevanceScore(item.content, searchTerm);
           if (score > 0) {
             results.push({ ...item, score, query: searchTerm });
@@ -239,35 +255,20 @@ const Search = (() => {
 
   /**
    * Check if item matches current filters
-   * This function is async and must be awaited
+   * Synchronous version — preloaded Sets are passed in from performSearch.
    */
-  async function matchesFilters(item, filters) {
+  function matchesFilters(item, filters, filterSets = {}) {
     // Season filter
     if (filters.season !== 'all' && item.season !== filters.season) {
       return false;
     }
 
-    // Day-based filters (only for devotions/journal)
+    // Day-based filters — O(1) Set lookups using preloaded data
     if (item.day) {
-      if (filters.hasJournal) {
-        const journal = await Store.getJournalEntry(item.day);
-        if (!journal || !journal.content) return false;
-      }
-
-      if (filters.hasAudio) {
-        const hasAudio = await Store.hasAudioNote(item.day);
-        if (!hasAudio) return false;
-      }
-
-      if (filters.isFavorite) {
-        const isFav = await Store.isFavorite(item.day);
-        if (!isFav) return false;
-      }
-
-      if (filters.isComplete) {
-        const progress = await Store.getDayProgress(item.day);
-        if (!progress || !progress.completed) return false;
-      }
+      if (filters.hasJournal && filterSets.journalDays && !filterSets.journalDays.has(item.day)) return false;
+      if (filters.hasAudio && filterSets.audioDays && !filterSets.audioDays.has(item.day)) return false;
+      if (filters.isFavorite && filterSets.favDays && !filterSets.favDays.has(item.day)) return false;
+      if (filters.isComplete && filterSets.completedDays && !filterSets.completedDays.has(item.day)) return false;
     }
 
     return true;
