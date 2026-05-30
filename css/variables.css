@@ -133,6 +133,7 @@
 
   /* Bottom Navigation */
   --bottom-nav-height: 64px;
+  --app-header-height: 60px;
   --page-bottom-padding: calc(var(--bottom-nav-height) + var(--safe-bottom) + var(--space-6));
 }
 

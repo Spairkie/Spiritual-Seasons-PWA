@@ -407,8 +407,8 @@
    VIEWPORT FIT UTILITIES
    ============================================ */
 .vh-fit {
-  min-height: calc(100vh - 140px); /* Account for header + nav */
-  min-height: calc(100dvh - 140px);
+  min-height: calc(100vh - var(--app-header-height) - var(--bottom-nav-height));
+  min-height: calc(100dvh - var(--app-header-height) - var(--bottom-nav-height));
 }
 
 .flex-center-viewport {
@@ -416,8 +416,8 @@
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  min-height: calc(100vh - 140px);
-  min-height: calc(100dvh - 140px);
+  min-height: calc(100vh - var(--app-header-height) - var(--bottom-nav-height));
+  min-height: calc(100dvh - var(--app-header-height) - var(--bottom-nav-height));
 }
 
 /* ============================================
