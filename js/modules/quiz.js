@@ -225,11 +225,14 @@ const Quiz = (() => {
         <div class="quiz-question">
           <p class="quiz-question-text">"${question.text}"</p>
           
-          <div class="quiz-options">
+          <div class="quiz-options" role="radiogroup" aria-label="${Utils.escapeHtml(question.text)}">
             ${Object.entries(scaleLabels).map(([value, label]) => `
-              <div class="quiz-option ${currentAnswer === parseInt(value) ? 'selected' : ''}" 
-                   data-value="${value}">
-                <div class="quiz-option-radio"></div>
+              <div class="quiz-option ${currentAnswer === parseInt(value) ? 'selected' : ''}"
+                   data-value="${value}"
+                   role="radio"
+                   aria-checked="${currentAnswer === parseInt(value) ? 'true' : 'false'}"
+                   tabindex="${currentAnswer === parseInt(value) ? '0' : '-1'}">
+                <div class="quiz-option-radio" aria-hidden="true"></div>
                 <span class="quiz-option-label">${label}</span>
               </div>
             `).join('')}
@@ -271,12 +274,29 @@ const Quiz = (() => {
    * Attach event listeners
    */
   function attachListeners(container) {
-    // Option selection
-    container.querySelectorAll('.quiz-option').forEach(option => {
+    // Option selection — click and keyboard (arrow keys for radiogroup)
+    const options = [...container.querySelectorAll('.quiz-option')];
+    options.forEach((option, idx) => {
       option.addEventListener('click', () => {
         const value = parseInt(option.getAttribute('data-value'));
         answerQuestion(value);
         render(container.id);
+      });
+      option.addEventListener('keydown', (e) => {
+        if (e.key === ' ' || e.key === 'Enter') {
+          e.preventDefault();
+          option.click();
+        } else if (e.key === 'ArrowDown' || e.key === 'ArrowRight') {
+          e.preventDefault();
+          const next = options[(idx + 1) % options.length];
+          next.focus();
+          next.click();
+        } else if (e.key === 'ArrowUp' || e.key === 'ArrowLeft') {
+          e.preventDefault();
+          const prev = options[(idx - 1 + options.length) % options.length];
+          prev.focus();
+          prev.click();
+        }
       });
     });
 
