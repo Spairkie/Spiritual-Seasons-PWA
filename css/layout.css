@@ -72,7 +72,7 @@ html, body {
   transform: translateY(10px);
   transition: opacity var(--transition-base), transform var(--transition-base);
   min-height: 100%;
-  padding-bottom: calc(var(--space-8) + var(--safe-bottom)); /* Safe area for bottom nav */
+  padding-bottom: var(--page-bottom-padding); /* Clears fixed bottom nav (64px) + safe-area + breathing room */
 }
 
 .page.active {

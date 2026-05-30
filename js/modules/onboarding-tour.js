@@ -335,7 +335,7 @@ const OnboardingTour = (() => {
     const viewportHeight = window.innerHeight;
     const viewportWidth = window.innerWidth;
     const padding = 16;
-    const bottomNavHeight = 80; // Height of bottom navigation
+    const bottomNavHeight = 64; // Height of bottom navigation
     const headerHeight = 60; // Height of header
     
     // Get tooltip dimensions AFTER it's in DOM
