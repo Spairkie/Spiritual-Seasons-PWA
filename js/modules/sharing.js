@@ -486,7 +486,7 @@ Spiritual Seasons Daily Devotional
       Toast.success('Data exported successfully');
       return true;
     } catch (error) {
-      console.error('Export error:', error);
+      Utils.debug.error('Export error:', error);
       Toast.error('Failed to export data');
       return false;
     }
@@ -527,7 +527,7 @@ Spiritual Seasons Daily Devotional
 
       return true;
     } catch (error) {
-      console.error('Share progress error:', error);
+      Utils.debug.error('Share progress error:', error);
       Toast.error('Failed to share progress');
       return false;
     }
@@ -564,7 +564,7 @@ Spiritual Seasons Daily Devotional
       Toast.success('Progress report exported');
       return true;
     } catch (error) {
-      console.error('Export progress error:', error);
+      Utils.debug.error('Export progress error:', error);
       Toast.error('Failed to export progress');
       return false;
     }

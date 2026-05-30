@@ -21,12 +21,12 @@ const AudioNotes = (() => {
   async function init() {
     // Check browser support
     if (!navigator.mediaDevices || !navigator.mediaDevices.getUserMedia) {
-      console.warn('Audio recording not supported in this browser');
+      Utils.debug.warn('Audio recording not supported in this browser');
       return false;
     }
 
     if (!window.MediaRecorder) {
-      console.warn('MediaRecorder API not supported');
+      Utils.debug.warn('MediaRecorder API not supported');
       return false;
     }
 
@@ -38,11 +38,11 @@ const AudioNotes = (() => {
       // Listen for permission changes
       result.addEventListener('change', () => {
         hasPermission = result.state === 'granted';
-        console.log('[AudioNotes] Permission status changed:', result.state);
+        Utils.debug.log('[AudioNotes] Permission status changed:', result.state);
       });
     } catch (e) {
       // Permissions API not supported, will check on first use
-      console.log('[AudioNotes] Permissions API not supported, will request on first use');
+      Utils.debug.log('[AudioNotes] Permissions API not supported, will request on first use');
     }
 
     return true;
@@ -75,7 +75,7 @@ const AudioNotes = (() => {
       hasPermission = true;
       return true;
     } catch (error) {
-      console.error('Microphone permission denied:', error);
+      Utils.debug.error('Microphone permission denied:', error);
       hasPermission = false;
       if (error.name === 'NotAllowedError') {
         Toast.error('Microphone access denied. Please enable it in your browser settings.');
@@ -92,13 +92,19 @@ const AudioNotes = (() => {
    * Start recording audio note
    */
   async function startRecording(day) {
+    const validDay = Utils.validateDay(day);
+    if (!validDay) {
+      Utils.debug.error('Invalid day parameter:', day);
+      return false;
+    }
+    
     if (isRecording) {
-      console.warn('Already recording');
+      Utils.debug.warn('Already recording');
       return false;
     }
 
     try {
-      currentDay = day;
+      currentDay = validDay;
       const stream = await navigator.mediaDevices.getUserMedia({ 
         audio: {
           echoCancellation: true,
@@ -132,7 +138,7 @@ const AudioNotes = (() => {
       };
 
       mediaRecorder.onerror = (error) => {
-        console.error('MediaRecorder error:', error);
+        Utils.debug.error('MediaRecorder error:', error);
         Toast.error('Recording error occurred');
         cleanupRecording();
       };
@@ -155,7 +161,7 @@ const AudioNotes = (() => {
       
       return true;
     } catch (error) {
-      console.error('Error starting recording:', error);
+      Utils.debug.error('Error starting recording:', error);
       
       if (error.name === 'NotAllowedError') {
         Toast.error('Microphone access denied. Please enable it in your browser settings.');
@@ -174,7 +180,7 @@ const AudioNotes = (() => {
    */
   async function stopRecording() {
     if (!mediaRecorder || !isRecording) {
-      console.warn('Not currently recording');
+      Utils.debug.warn('Not currently recording');
       return false;
     }
 
@@ -188,7 +194,7 @@ const AudioNotes = (() => {
       
       return true;
     } catch (error) {
-      console.error('Error stopping recording:', error);
+      Utils.debug.error('Error stopping recording:', error);
       cleanupRecording();
       return false;
     }
@@ -297,9 +303,15 @@ const AudioNotes = (() => {
    * Save audio note to IndexedDB
    */
   async function saveAudioNote(day, audioBlob, duration) {
+    const validDay = Utils.validateDay(day);
+    if (!validDay) {
+      Utils.debug.error('Invalid day parameter:', day);
+      return false;
+    }
+    
     try {
       const audioData = {
-        day: day,
+        day: validDay,
         blob: audioBlob,
         duration: duration || 0,
         size: audioBlob.size,
@@ -310,7 +322,7 @@ const AudioNotes = (() => {
       await Store.saveAudioNote(audioData);
       return true;
     } catch (error) {
-      console.error('Error saving audio note:', error);
+      Utils.debug.error('Error saving audio note:', error);
       return false;
     }
   }
@@ -319,10 +331,16 @@ const AudioNotes = (() => {
    * Get audio note for a specific day
    */
   async function getAudioNote(day) {
+    const validDay = Utils.validateDay(day);
+    if (!validDay) {
+      Utils.debug.error('Invalid day parameter:', day);
+      return null;
+    }
+    
     try {
-      return await Store.getAudioNote(day);
+      return await Store.getAudioNote(validDay);
     } catch (error) {
-      console.error('Error getting audio note:', error);
+      Utils.debug.error('Error getting audio note:', error);
       return null;
     }
   }
@@ -331,13 +349,19 @@ const AudioNotes = (() => {
    * Delete audio note
    */
   async function deleteAudioNote(day) {
+    const validDay = Utils.validateDay(day);
+    if (!validDay) {
+      Utils.debug.error('Invalid day parameter:', day);
+      return false;
+    }
+    
     try {
-      await Store.deleteAudioNote(day);
+      await Store.deleteAudioNote(validDay);
       Toast.success('Audio note deleted');
-      updateUI('deleted', { day });
+      updateUI('deleted', { day: validDay });
       return true;
     } catch (error) {
-      console.error('Error deleting audio note:', error);
+      Utils.debug.error('Error deleting audio note:', error);
       Toast.error('Failed to delete audio note');
       return false;
     }
@@ -398,8 +422,19 @@ const AudioNotes = (() => {
    * Render audio controls for a specific day
    */
   async function renderAudioControls(containerId, day) {
+    const validDay = Utils.validateDay(day);
+    if (!validDay) {
+      Utils.debug.error('Invalid day parameter:', day);
+      return;
+    }
+    
     const container = document.getElementById(containerId);
-    if (!container) return;
+    if (!container) {
+      Utils.debug.error('Container not found:', containerId);
+      return;
+    }
+
+    const audioNote = await getAudioNote(validDay);
 
     if (!isSupported()) {
       container.innerHTML = `
@@ -416,13 +451,11 @@ const AudioNotes = (() => {
       `;
       return;
     }
-
-    const audioNote = await getAudioNote(day);
     
     if (audioNote) {
-      renderPlaybackControls(container, audioNote, day);
+      renderPlaybackControls(container, audioNote, validDay);
     } else {
-      renderRecordingControls(container, day);
+      renderRecordingControls(container, validDay);
     }
   }
 

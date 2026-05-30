@@ -90,7 +90,7 @@ const StateManager = (() => {
       persistKey(key, value);
     }
 
-    console.log(`[State] ${key}:`, oldValue, '→', value);
+    Utils.debug.log(`[State] ${key}:`, oldValue, '→', value);
   }
 
   /**
@@ -125,7 +125,7 @@ const StateManager = (() => {
       });
     }
 
-    console.log(`[State] Batch update:`, batch.length, 'keys');
+    Utils.debug.log(`[State] Batch update:`, batch.length, 'keys');
   }
 
   /**
@@ -184,7 +184,7 @@ const StateManager = (() => {
       try {
         callback(newValue, oldValue);
       } catch (error) {
-        console.error(`[State] Subscriber error for ${key}:`, error);
+        Utils.debug.error(`[State] Subscriber error for ${key}:`, error);
       }
     });
   }
@@ -263,7 +263,7 @@ const StateManager = (() => {
       localStorage.setItem(storageKey, JSON.stringify(value));
     } catch (error) {
       if (error.name === 'QuotaExceededError') {
-        console.error('[State] Storage quota exceeded:', key);
+        Utils.debug.error('[State] Storage quota exceeded:', key);
         
         // Notify user about storage issue
         if (typeof Toast !== 'undefined') {
@@ -275,7 +275,7 @@ const StateManager = (() => {
           EventManager.emit('storage:quota-exceeded', { key, value });
         }
       } else {
-        console.warn(`[State] Failed to persist ${key}:`, error);
+        Utils.debug.warn(`[State] Failed to persist ${key}:`, error);
       }
     }
   }
@@ -293,10 +293,10 @@ const StateManager = (() => {
         
         if (stored !== null) {
           state[key] = JSON.parse(stored);
-          console.log(`[State] Loaded ${key} from storage`);
+          Utils.debug.log(`[State] Loaded ${key} from storage`);
         }
       } catch (error) {
-        console.warn(`[State] Failed to load ${key}:`, error);
+        Utils.debug.warn(`[State] Failed to load ${key}:`, error);
       }
     });
   }
@@ -318,7 +318,7 @@ const StateManager = (() => {
     });
 
     history.clear();
-    console.log('[State] Reset to initial values');
+    Utils.debug.log('[State] Reset to initial values');
   }
 
   /**
@@ -388,7 +388,7 @@ const StateManager = (() => {
       set('isOnline', false);
     });
 
-    console.log('[State] State manager initialized');
+    Utils.debug.log('[State] State manager initialized');
   }
 
   // Public API

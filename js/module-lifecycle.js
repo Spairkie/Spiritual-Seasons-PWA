@@ -76,7 +76,7 @@ const ModuleLifecycle = (() => {
     setState(newState) {
       const oldState = this.state;
       this.state = newState;
-      console.log(`[Module:${this.name}] ${oldState} → ${newState}`);
+      Utils.debug.log(`[Module:${this.name}] ${oldState} → ${newState}`);
     }
 
     /**
@@ -103,7 +103,7 @@ const ModuleLifecycle = (() => {
    */
   function register(name, module) {
     if (modules.has(name)) {
-      console.warn(`[Lifecycle] Module ${name} already registered`);
+      Utils.debug.warn(`[Lifecycle] Module ${name} already registered`);
       return;
     }
 
@@ -114,7 +114,7 @@ const ModuleLifecycle = (() => {
       initPromise: null
     });
 
-    console.log(`[Lifecycle] Registered module: ${name}`);
+    Utils.debug.log(`[Lifecycle] Registered module: ${name}`);
   }
 
   /**
@@ -161,10 +161,10 @@ const ModuleLifecycle = (() => {
         entry.module.setState(STATE.READY);
       }
 
-      console.log(`[Lifecycle] Initialized: ${name}`);
+      Utils.debug.log(`[Lifecycle] Initialized: ${name}`);
     } catch (error) {
       entry.state = STATE.ERROR;
-      console.error(`[Lifecycle] Failed to initialize ${name}:`, error);
+      Utils.debug.error(`[Lifecycle] Failed to initialize ${name}:`, error);
       throw error;
     }
   }
@@ -175,18 +175,18 @@ const ModuleLifecycle = (() => {
    * @returns {Promise<void>}
    */
   async function initializeAll(moduleList) {
-    console.log(`[Lifecycle] Initializing ${moduleList.length} modules`);
+    Utils.debug.log(`[Lifecycle] Initializing ${moduleList.length} modules`);
     
     for (const { name, data } of moduleList) {
       try {
         await initialize(name, data);
       } catch (error) {
-        console.error(`[Lifecycle] Failed to initialize ${name}:`, error);
+        Utils.debug.error(`[Lifecycle] Failed to initialize ${name}:`, error);
         // Continue with other modules
       }
     }
 
-    console.log('[Lifecycle] All modules initialized');
+    Utils.debug.log('[Lifecycle] All modules initialized');
   }
 
   /**
@@ -232,10 +232,10 @@ const ModuleLifecycle = (() => {
         entry.module.setState(STATE.ACTIVE);
       }
 
-      console.log(`[Lifecycle] Rendered: ${name}`);
+      Utils.debug.log(`[Lifecycle] Rendered: ${name}`);
     } catch (error) {
       entry.state = STATE.ERROR;
-      console.error(`[Lifecycle] Failed to render ${name}:`, error);
+      Utils.debug.error(`[Lifecycle] Failed to render ${name}:`, error);
       throw error;
     }
   }
@@ -247,7 +247,7 @@ const ModuleLifecycle = (() => {
    */
   async function cleanup(name) {
     if (!modules.has(name)) {
-      console.warn(`[Lifecycle] Module ${name} not registered`);
+      Utils.debug.warn(`[Lifecycle] Module ${name} not registered`);
       return;
     }
 
@@ -279,9 +279,9 @@ const ModuleLifecycle = (() => {
         entry.module.setState(STATE.READY);
       }
 
-      console.log(`[Lifecycle] Cleaned up: ${name}`);
+      Utils.debug.log(`[Lifecycle] Cleaned up: ${name}`);
     } catch (error) {
-      console.error(`[Lifecycle] Failed to cleanup ${name}:`, error);
+      Utils.debug.error(`[Lifecycle] Failed to cleanup ${name}:`, error);
       throw error;
     }
   }
@@ -291,17 +291,17 @@ const ModuleLifecycle = (() => {
    * @returns {Promise<void>}
    */
   async function cleanupAll() {
-    console.log('[Lifecycle] Cleaning up all modules');
+    Utils.debug.log('[Lifecycle] Cleaning up all modules');
 
     for (const [name, entry] of modules) {
       try {
         await cleanup(name);
       } catch (error) {
-        console.error(`[Lifecycle] Failed to cleanup ${name}:`, error);
+        Utils.debug.error(`[Lifecycle] Failed to cleanup ${name}:`, error);
       }
     }
 
-    console.log('[Lifecycle] All modules cleaned up');
+    Utils.debug.log('[Lifecycle] All modules cleaned up');
   }
 
   /**
@@ -367,12 +367,12 @@ const ModuleLifecycle = (() => {
    * Debug - log all module states
    */
   function debug() {
-    console.group('[Lifecycle] Module States');
+    Utils.debug.group('[Lifecycle] Module States');
     modules.forEach((entry, name) => {
-      console.log(`${name}: ${entry.state}`);
+      Utils.debug.log(`${name}: ${entry.state}`);
     });
-    console.log('Stats:', getStats());
-    console.groupEnd();
+    Utils.debug.log('Stats:', getStats());
+    Utils.debug.groupEnd();
   }
 
   // Public API

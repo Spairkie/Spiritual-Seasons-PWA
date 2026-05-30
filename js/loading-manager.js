@@ -179,7 +179,7 @@ const LoadingManager = (() => {
 
     loadingStates.delete(key);
 
-    console.log(`[LoadingManager] Hid ${state.type} after ${duration}ms`);
+    Utils.debug.log(`[LoadingManager] Hid ${state.type} after ${duration}ms`);
   }
 
   /**
@@ -285,10 +285,10 @@ const OptimisticUI = (() => {
       // Apply update immediately
       await update();
       
-      console.log(`[OptimisticUI] Applied update: ${key}`);
+      Utils.debug.log(`[OptimisticUI] Applied update: ${key}`);
       
     } catch (error) {
-      console.error(`[OptimisticUI] Update failed: ${key}`, error);
+      Utils.debug.error(`[OptimisticUI] Update failed: ${key}`, error);
       // Rollback handled in commit/rollback methods
       throw error;
     }
@@ -302,7 +302,7 @@ const OptimisticUI = (() => {
     if (!pendingUpdates.has(key)) return;
 
     pendingUpdates.delete(key);
-    console.log(`[OptimisticUI] Committed: ${key}`);
+    Utils.debug.log(`[OptimisticUI] Committed: ${key}`);
   }
 
   /**
@@ -321,7 +321,7 @@ const OptimisticUI = (() => {
       try {
         await update.rollback();
       } catch (error) {
-        console.error(`[OptimisticUI] Custom rollback failed: ${key}`, error);
+        Utils.debug.error(`[OptimisticUI] Custom rollback failed: ${key}`, error);
       }
     }
 
@@ -330,7 +330,7 @@ const OptimisticUI = (() => {
     update.element.className = update.originalState.classList.join(' ');
 
     pendingUpdates.delete(key);
-    console.log(`[OptimisticUI] Rolled back: ${key}`);
+    Utils.debug.log(`[OptimisticUI] Rolled back: ${key}`);
   }
 
   /**
@@ -343,7 +343,7 @@ const OptimisticUI = (() => {
       await rollback(key, true);
     }
 
-    console.log(`[OptimisticUI] Rolled back all ${keys.length} updates`);
+    Utils.debug.log(`[OptimisticUI] Rolled back all ${keys.length} updates`);
   }
 
   /**
@@ -368,7 +368,7 @@ const OptimisticUI = (() => {
    */
   function clear() {
     pendingUpdates.clear();
-    console.log('[OptimisticUI] Cleared all pending updates');
+    Utils.debug.log('[OptimisticUI] Cleared all pending updates');
   }
 
   // Public API

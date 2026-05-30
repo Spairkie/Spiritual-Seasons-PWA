@@ -86,6 +86,10 @@ const VerseImages = (() => {
     const ctx = canvas.getContext('2d');
     
     const ratio = ASPECT_RATIOS.find(r => r.value === aspectRatio) || ASPECT_RATIOS[0];
+    if (!ratio) {
+      throw new Error('No aspect ratios available');
+    }
+    
     canvas.width = ratio.width;
     canvas.height = ratio.height;
     

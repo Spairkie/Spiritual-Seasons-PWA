@@ -8,9 +8,109 @@ const Devotional = (() => {
   let saveTimeout = null;
   let listenerManager = null;
   
-  // Async save queue to prevent race conditions
-  let saveQueue = Promise.resolve();
-  let pendingSave = null;
+  // Improved async save queue to prevent race conditions
+  let activeSavePromise = null;
+  let pendingSaveData = null;
+
+  /**
+   * Queue a journal save operation with proper race condition handling
+   * @param {number} day - Day number
+   * @param {string} content - Journal content
+   * @param {string} seasonId - Season ID
+   * @returns {Promise<void>}
+   */
+  async function queueJournalSave(day, content, seasonId) {
+    // Validate content length
+    if (content.length > CONFIG.LIMITS.MAX_JOURNAL_LENGTH) {
+      Toast.error(`Journal entry too long (max ${CONFIG.LIMITS.MAX_JOURNAL_LENGTH.toLocaleString()} characters)`);
+      return;
+    }
+    
+    // Store the latest data
+    pendingSaveData = { day, content, seasonId };
+    
+    // If there's already a save in progress, it will pick up the latest data
+    if (activeSavePromise) {
+      return activeSavePromise;
+    }
+    
+    // Start new save operation
+    activeSavePromise = (async () => {
+      while (pendingSaveData) {
+        const dataToSave = pendingSaveData;
+        pendingSaveData = null;
+        
+        try {
+          await Store.saveJournalEntry(dataToSave.day, dataToSave.content, dataToSave.seasonId);
+          
+          // Update UI indicators
+          const saveIndicator = document.getElementById('save-indicator');
+          const lastSaved = document.getElementById('last-saved');
+          
+          if (saveIndicator) {
+            saveIndicator.classList.remove('saving');
+            saveIndicator.classList.add('saved');
+            
+            if (lastSaved) {
+              lastSaved.textContent = `Last saved ${formatTimeAgo(new Date())}`;
+            }
+            
+            setTimeout(() => {
+              if (saveIndicator) {
+                saveIndicator.classList.remove('saved');
+              }
+            }, 3000);
+          }
+          
+          // Update progress if content exists
+          if (dataToSave.content && dataToSave.content.trim().length > 0) {
+            await Progress.updateStreaks();
+          }
+          
+          // Rebuild search index after saving
+          if (typeof Search !== 'undefined' && Search.rebuildIndex) {
+            Search.rebuildIndex().catch(err => 
+              Utils.debug.error('Failed to rebuild search index:', err)
+            );
+          }
+          
+        } catch (error) {
+          Utils.debug.error('Failed to save journal entry:', error);
+          Toast.error('Failed to save entry');
+          
+          const saveIndicator = document.getElementById('save-indicator');
+          if (saveIndicator) {
+            saveIndicator.classList.remove('saving', 'saved');
+          }
+        }
+      }
+      
+      activeSavePromise = null;
+    })();
+    
+    return activeSavePromise;
+  }
+  
+  /**
+   * Format time ago helper
+   * @param {Date} date
+   * @returns {string}
+   */
+  function formatTimeAgo(date) {
+    const now = new Date();
+    const seconds = Math.floor((now - date) / 1000);
+    
+    if (seconds < 10) return 'just now';
+    if (seconds < 60) return `${seconds}s ago`;
+    
+    const minutes = Math.floor(seconds / 60);
+    if (minutes < 60) return `${minutes}m ago`;
+    
+    const hours = Math.floor(minutes / 60);
+    if (hours < 24) return `${hours}h ago`;
+    
+    return 'a while ago';
+  }
 
   /**
    * Create a link to Bible Gateway for a scripture reference
@@ -132,8 +232,6 @@ const Devotional = (() => {
     Utils.clearElement(container);
 
     const devotionalContent = document.createElement('div');
-    devotionalContent.className = 'season-bg';
-    devotionalContent.style.minHeight = '100vh';
 
     devotionalContent.innerHTML = `
       <div class="devotional-header">
@@ -191,6 +289,7 @@ const Devotional = (() => {
         <textarea 
           class="journal-textarea" 
           id="journal-entry"
+          maxlength="50000"
           placeholder="Write your reflections here... Your entries are automatically saved as you type."
           aria-label="Journal entry"
         >${Utils.escapeHtml(journalEntry?.content || '')}</textarea>
@@ -295,66 +394,11 @@ const Devotional = (() => {
           saveIndicator.classList.add('saving');
         }
         
-        // Debounced save with proper queuing
+        // Debounced save with race-condition-free queuing
         clearTimeout(saveTimeout);
         saveTimeout = setTimeout(() => {
-          // Store the pending save data
-          pendingSave = { day, content, seasonId: season.id };
-          
-          // Queue the save operation
-          saveQueue = saveQueue.then(async () => {
-            // Check if there's still a pending save (might have been superseded)
-            if (!pendingSave) return;
-            
-            const saveData = pendingSave;
-            pendingSave = null;
-            
-            try {
-              await Store.saveJournalEntry(saveData.day, saveData.content, saveData.seasonId);
-              
-              // Show saved indicator
-              if (saveIndicator) {
-                saveIndicator.classList.remove('saving');
-                saveIndicator.classList.add('saved');
-                
-                // Update last saved time
-                if (lastSaved) {
-                  lastSaved.textContent = `Last saved ${formatTimeAgo(new Date())}`;
-                }
-                
-                // Hide saved indicator after 3 seconds
-                setTimeout(() => {
-                  if (saveIndicator) {
-                    saveIndicator.classList.remove('saved');
-                  }
-                }, 3000);
-              }
-              
-              // Check for weekly reflection trigger
-              if (saveData.day % 7 === 0) {
-                const isDue = await WeeklyReflection.isReflectionDue(saveData.day);
-                if (isDue) {
-                  setTimeout(() => {
-                    WeeklyReflection.promptReflection(saveData.day);
-                  }, 2000);
-                }
-              }
-              
-              // Update progress if content exists
-              if (saveData.content && saveData.content.trim().length > 0) {
-                await Progress.updateStreaks();
-              }
-              
-            } catch (error) {
-              console.error('Failed to save journal entry:', error);
-              Toast.error('Failed to save entry');
-              
-              if (saveIndicator) {
-                saveIndicator.classList.remove('saving', 'saved');
-              }
-            }
-          }).catch(error => {
-            console.error('Save queue error:', error);
+          queueJournalSave(day, content, season.id).catch(error => {
+            Utils.debug.error('Save error:', error);
           });
         }, CONFIG.JOURNAL.AUTOSAVE_DELAY_MS);
       });
@@ -382,23 +426,6 @@ const Devotional = (() => {
       if (charCount) {
         charCount.textContent = `${chars} ${chars === 1 ? 'character' : 'characters'}`;
       }
-    }
-
-    // Helper function to format time ago
-    function formatTimeAgo(date) {
-      const now = new Date();
-      const seconds = Math.floor((now - date) / 1000);
-
-      if (seconds < 10) return 'just now';
-      if (seconds < 60) return `${seconds}s ago`;
-      
-      const minutes = Math.floor(seconds / 60);
-      if (minutes < 60) return `${minutes}m ago`;
-      
-      const hours = Math.floor(minutes / 60);
-      if (hours < 24) return `${hours}h ago`;
-      
-      return 'today';
     }
 
     // Initialize audio controls
@@ -467,7 +494,7 @@ const Devotional = (() => {
         try {
           await VerseImages.showGenerator(dayData.scriptureText, dayData.scriptureRef, season.id);
         } catch (error) {
-          console.error('Image creation error:', error);
+          Utils.debug.error('Image creation error:', error);
           Toast.error('Failed to create image');
         }
       });
@@ -483,7 +510,7 @@ const Devotional = (() => {
           });
           Toast.show('Image downloaded!', 'success');
         } catch (error) {
-          console.error('Image creation error:', error);
+          Utils.debug.error('Image creation error:', error);
           Toast.show('Failed to create image', 'error');
         }
       });
@@ -537,7 +564,7 @@ const Devotional = (() => {
           
           Toast.show(isNowFavorite ? 'Added to favorites' : 'Removed from favorites', 'success');
         } catch (error) {
-          console.error('Toggle favorite error:', error);
+          Utils.debug.error('Toggle favorite error:', error);
           Toast.show('Failed to update favorite', 'error');
         }
       });
@@ -565,7 +592,7 @@ const Devotional = (() => {
             Toast.show('Day completed! Keep up the great work.', 'success');
           }
         } catch (error) {
-          console.error('Complete toggle error:', error);
+          Utils.debug.error('Complete toggle error:', error);
           Toast.show('Failed to update progress', 'error');
         }
       });

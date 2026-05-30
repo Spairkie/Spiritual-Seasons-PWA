@@ -141,7 +141,7 @@ const SearchEngine = (() => {
       });
     });
 
-    console.log(`[Search] Indexed document ${id} (fields: ${fields.join(', ')})`);
+    Utils.debug.log(`[Search] Indexed document ${id} (fields: ${fields.join(', ')})`);
   }
 
   /**
@@ -166,7 +166,7 @@ const SearchEngine = (() => {
     // Remove document
     documents.delete(id);
 
-    console.log(`[Search] Removed document ${id}`);
+    Utils.debug.log(`[Search] Removed document ${id}`);
   }
 
   /**
@@ -239,7 +239,7 @@ const SearchEngine = (() => {
     // Apply pagination
     const paginated = results.slice(offset, offset + limit);
 
-    console.log(`[Search] Query "${query}" found ${results.length} results`);
+    Utils.debug.log(`[Search] Query "${query}" found ${results.length} results`);
 
     return paginated;
   }
@@ -306,7 +306,7 @@ const SearchEngine = (() => {
   function clear() {
     indexes.clear();
     documents.clear();
-    console.log('[Search] Cleared all indexes');
+    Utils.debug.log('[Search] Cleared all indexes');
   }
 
   /**
@@ -325,7 +325,7 @@ const SearchEngine = (() => {
       }
     });
 
-    console.log(`[Search] Rebuilt index with ${docs.length} documents`);
+    Utils.debug.log(`[Search] Rebuilt index with ${docs.length} documents`);
   }
 
   /**
@@ -363,17 +363,17 @@ const SearchEngine = (() => {
    * Debug - log index info
    */
   function debug() {
-    console.group('[Search] Index Info');
-    console.log('Stats:', getStats());
-    console.log('Fields:', Array.from(indexes.keys()));
-    console.log('Sample terms per field:');
+    Utils.debug.group('[Search] Index Info');
+    Utils.debug.log('Stats:', getStats());
+    Utils.debug.log('Fields:', Array.from(indexes.keys()));
+    Utils.debug.log('Sample terms per field:');
     
     indexes.forEach((fieldIndex, field) => {
       const sampleTerms = Array.from(fieldIndex.keys()).slice(0, 10);
-      console.log(`  ${field}:`, sampleTerms.join(', '));
+      Utils.debug.log(`  ${field}:`, sampleTerms.join(', '));
     });
     
-    console.groupEnd();
+    Utils.debug.groupEnd();
   }
 
   /**
@@ -420,7 +420,7 @@ const SearchEngine = (() => {
       indexes.set(field, fieldIndex);
     });
 
-    console.log('[Search] Imported index');
+    Utils.debug.log('[Search] Imported index');
   }
 
   // Public API

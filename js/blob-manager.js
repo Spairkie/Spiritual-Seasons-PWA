@@ -37,7 +37,7 @@ const BlobManager = (() => {
 
     totalCreated++;
 
-    console.log(`[BlobManager] Created: ${url.substring(0, 50)}... (Scope: ${scope}, Total: ${activeBlobUrls.size})`);
+    Utils.debug.log(`[BlobManager] Created: ${url.substring(0, 50)}... (Scope: ${scope}, Total: ${activeBlobUrls.size})`);
 
     return url;
   }
@@ -49,7 +49,7 @@ const BlobManager = (() => {
    */
   function revoke(url) {
     if (!activeBlobUrls.has(url)) {
-      console.warn(`[BlobManager] URL not tracked: ${url.substring(0, 50)}...`);
+      Utils.debug.warn(`[BlobManager] URL not tracked: ${url.substring(0, 50)}...`);
       return false;
     }
 
@@ -60,10 +60,10 @@ const BlobManager = (() => {
       activeBlobUrls.delete(url);
       totalRevoked++;
 
-      console.log(`[BlobManager] Revoked: ${url.substring(0, 50)}... (Scope: ${data.scope}, Total: ${activeBlobUrls.size})`);
+      Utils.debug.log(`[BlobManager] Revoked: ${url.substring(0, 50)}... (Scope: ${data.scope}, Total: ${activeBlobUrls.size})`);
       return true;
     } catch (error) {
-      console.error(`[BlobManager] Failed to revoke URL:`, error);
+      Utils.debug.error(`[BlobManager] Failed to revoke URL:`, error);
       return false;
     }
   }
@@ -85,7 +85,7 @@ const BlobManager = (() => {
     });
 
     if (count > 0) {
-      console.log(`[BlobManager] Revoked ${count} URLs for scope: ${scope}`);
+      Utils.debug.log(`[BlobManager] Revoked ${count} URLs for scope: ${scope}`);
     }
 
     return count;
@@ -102,14 +102,14 @@ const BlobManager = (() => {
       try {
         URL.revokeObjectURL(url);
       } catch (error) {
-        console.error(`[BlobManager] Failed to revoke URL:`, error);
+        Utils.debug.error(`[BlobManager] Failed to revoke URL:`, error);
       }
     });
 
     activeBlobUrls.clear();
     totalRevoked += count;
 
-    console.log(`[BlobManager] Revoked all ${count} blob URLs`);
+    Utils.debug.log(`[BlobManager] Revoked all ${count} blob URLs`);
 
     return count;
   }
@@ -132,7 +132,7 @@ const BlobManager = (() => {
     });
 
     if (count > 0) {
-      console.log(`[BlobManager] Revoked ${count} old URLs (older than ${maxAgeMs}ms)`);
+      Utils.debug.log(`[BlobManager] Revoked ${count} old URLs (older than ${maxAgeMs}ms)`);
     }
 
     return count;
@@ -192,18 +192,18 @@ const BlobManager = (() => {
    * Debug - log all blob URLs
    */
   function debug() {
-    console.group('[BlobManager] Debug Info');
-    console.log('Active URLs:', activeBlobUrls.size);
-    console.log('Total created:', totalCreated);
-    console.log('Total revoked:', totalRevoked);
-    console.log('Stats:', getStats());
+    Utils.debug.group('[BlobManager] Debug Info');
+    Utils.debug.log('Active URLs:', activeBlobUrls.size);
+    Utils.debug.log('Total created:', totalCreated);
+    Utils.debug.log('Total revoked:', totalRevoked);
+    Utils.debug.log('Stats:', getStats());
     
     activeBlobUrls.forEach((data, url) => {
       const age = ((Date.now() - data.createdAt) / 1000).toFixed(1);
-      console.log(`- ${url.substring(0, 50)}... (${data.scope}, ${(data.size / 1024).toFixed(2)}KB, ${age}s old)`);
+      Utils.debug.log(`- ${url.substring(0, 50)}... (${data.scope}, ${(data.size / 1024).toFixed(2)}KB, ${age}s old)`);
     });
     
-    console.groupEnd();
+    Utils.debug.groupEnd();
   }
 
   /**
@@ -215,12 +215,12 @@ const BlobManager = (() => {
     const intervalId = setInterval(() => {
       const count = revokeOld(5 * 60 * 1000); // 5 minutes
       if (count > 0) {
-        console.log(`[BlobManager] Auto-cleanup: revoked ${count} old URLs`);
+        Utils.debug.log(`[BlobManager] Auto-cleanup: revoked ${count} old URLs`);
       }
 
       // Warn if too many active
       if (activeBlobUrls.size > 20) {
-        console.warn(`[BlobManager] ${activeBlobUrls.size} active blob URLs - consider cleanup`);
+        Utils.debug.warn(`[BlobManager] ${activeBlobUrls.size} active blob URLs - consider cleanup`);
       }
     }, 5 * 60 * 1000);
 

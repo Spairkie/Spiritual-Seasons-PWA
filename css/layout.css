@@ -5,18 +5,34 @@
    ============================================ */
 
 /* ============================================
-   APP SHELL
+   APP SHELL - LOCKED NATIVE LAYOUT
+   Fixed header, scrollable content, fixed footer
    ============================================ */
+
+/* Prevent body scroll - only content scrolls */
+html, body {
+  overflow: hidden;
+  height: 100%;
+  position: fixed;
+  width: 100%;
+}
+
 .app-shell {
   display: flex;
   flex-direction: column;
-  min-height: 100vh;
-  min-height: 100dvh;
+  height: 100vh; /* Fallback */
+  height: 100dvh; /* Dynamic viewport height */
+  overflow: hidden;
+  position: relative;
 }
 
 .app-main {
   flex: 1;
-  padding-bottom: calc(var(--space-20) + var(--safe-bottom));
+  overflow-y: auto;
+  overflow-x: hidden;
+  -webkit-overflow-scrolling: touch; /* Smooth scrolling on iOS */
+  position: relative;
+  /* No padding-bottom - pages handle their own spacing */
 }
 
 /* ============================================
@@ -48,16 +64,20 @@
 
 /* ============================================
    SECTIONS & PAGES
+   Each page is a full-height container within app-main
    ============================================ */
 .page {
   display: none;
   opacity: 0;
   transform: translateY(10px);
   transition: opacity var(--transition-base), transform var(--transition-base);
+  min-height: 100%;
+  padding-bottom: calc(var(--space-8) + var(--safe-bottom)); /* Safe area for bottom nav */
 }
 
 .page.active {
-  display: block;
+  display: flex;
+  flex-direction: column;
   opacity: 1;
   transform: translateY(0);
   animation: pageEnter 0.3s ease-out;

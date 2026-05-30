@@ -160,7 +160,7 @@ const OnboardingTour = (() => {
     // Find target element
     const target = document.querySelector(step.target);
     if (!target) {
-      console.warn('Tour target not found:', step.target);
+      Utils.debug.warn('Tour target not found:', step.target);
       // Skip to next step
       setTimeout(() => showStep(stepIndex + 1), 100);
       return;

@@ -40,7 +40,7 @@ const ThemeManager = (() => {
     }
     
     initialized = true;
-    console.log('ThemeManager initialized:', { mode: currentMode, season: currentSeason });
+    Utils.debug.log('ThemeManager initialized:', { mode: currentMode, season: currentSeason });
   }
 
   /**
@@ -49,7 +49,7 @@ const ThemeManager = (() => {
    */
   function setMode(mode) {
     if (mode !== 'light' && mode !== 'dark' && mode !== 'system') {
-      console.warn('Invalid theme mode:', mode);
+      Utils.debug.warn('Invalid theme mode:', mode);
       return;
     }
 
@@ -78,7 +78,7 @@ const ThemeManager = (() => {
   function setSeason(season) {
     const validSeasons = ['winter', 'spring', 'summer', 'autumn'];
     if (!validSeasons.includes(season)) {
-      console.warn('Invalid season:', season);
+      Utils.debug.warn('Invalid season:', season);
       return;
     }
 

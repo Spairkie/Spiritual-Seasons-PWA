@@ -26,7 +26,7 @@ const EventManager = (() => {
    */
   function on(scope, element, event, handler, options) {
     if (!element || !handler) {
-      console.warn('[EventManager] Invalid element or handler');
+      Utils.debug.warn('[EventManager] Invalid element or handler');
       return () => {};
     }
 
@@ -53,7 +53,7 @@ const EventManager = (() => {
 
     // Check for duplicate
     if (handlers.has(handler)) {
-      console.warn(`[EventManager] Duplicate listener: ${scope}.${event}`);
+      Utils.debug.warn(`[EventManager] Duplicate listener: ${scope}.${event}`);
       return () => {};
     }
 
@@ -61,7 +61,7 @@ const EventManager = (() => {
     element.addEventListener(event, handler, options);
     handlers.add(handler);
 
-    console.log(`[EventManager] Added: ${scope}.${event}`);
+    Utils.debug.log(`[EventManager] Added: ${scope}.${event}`);
 
     // Return remove function
     return () => {
@@ -93,7 +93,7 @@ const EventManager = (() => {
     element.removeEventListener(event, handler, options);
     handlers.delete(handler);
 
-    console.log(`[EventManager] Removed: ${scope}.${event}`);
+    Utils.debug.log(`[EventManager] Removed: ${scope}.${event}`);
 
     // Cleanup empty sets
     if (handlers.size === 0) {
@@ -128,7 +128,7 @@ const EventManager = (() => {
     });
 
     registry.delete(scope);
-    console.log(`[EventManager] Cleaned up ${count} listeners for ${scope}`);
+    Utils.debug.log(`[EventManager] Cleaned up ${count} listeners for ${scope}`);
 
     // Also cleanup timeouts/intervals for this scope
     cleanupTimeouts(scope);
@@ -164,7 +164,7 @@ const EventManager = (() => {
     // Attach to document
     document.addEventListener(event, delegateHandler, true);
 
-    console.log(`[EventManager] Delegated: ${scope}.${event} on ${selector}`);
+    Utils.debug.log(`[EventManager] Delegated: ${scope}.${event} on ${selector}`);
 
     // Return remove function
     return () => {
@@ -191,7 +191,7 @@ const EventManager = (() => {
       cleanup: () => window.clearTimeout(timerId)
     });
 
-    console.log(`[EventManager] Timeout registered: ${scope} (${timerId})`);
+    Utils.debug.log(`[EventManager] Timeout registered: ${scope} (${timerId})`);
     return timerId;
   }
 
@@ -210,7 +210,7 @@ const EventManager = (() => {
       cleanup: () => window.clearInterval(intervalId)
     });
 
-    console.log(`[EventManager] Interval registered: ${scope} (${intervalId})`);
+    Utils.debug.log(`[EventManager] Interval registered: ${scope} (${intervalId})`);
     return intervalId;
   }
 
@@ -222,7 +222,7 @@ const EventManager = (() => {
     if (timeouts.has(timerId)) {
       timeouts.get(timerId).cleanup();
       timeouts.delete(timerId);
-      console.log(`[EventManager] Timeout cleared: ${timerId}`);
+      Utils.debug.log(`[EventManager] Timeout cleared: ${timerId}`);
     }
   }
 
@@ -234,7 +234,7 @@ const EventManager = (() => {
     if (intervals.has(intervalId)) {
       intervals.get(intervalId).cleanup();
       intervals.delete(intervalId);
-      console.log(`[EventManager] Interval cleared: ${intervalId}`);
+      Utils.debug.log(`[EventManager] Interval cleared: ${intervalId}`);
     }
   }
 
@@ -252,7 +252,7 @@ const EventManager = (() => {
       }
     });
     if (count > 0) {
-      console.log(`[EventManager] Cleared ${count} timeouts for ${scope}`);
+      Utils.debug.log(`[EventManager] Cleared ${count} timeouts for ${scope}`);
     }
   }
 
@@ -270,7 +270,7 @@ const EventManager = (() => {
       }
     });
     if (count > 0) {
-      console.log(`[EventManager] Cleared ${count} intervals for ${scope}`);
+      Utils.debug.log(`[EventManager] Cleared ${count} intervals for ${scope}`);
     }
   }
 
@@ -325,19 +325,19 @@ const EventManager = (() => {
    * Log current registrations for debugging
    */
   function debug() {
-    console.group('[EventManager] Debug Info');
-    console.log('Scopes:', Array.from(registry.keys()));
-    console.log('Active timeouts:', timeouts.size);
-    console.log('Active intervals:', intervals.size);
-    console.log('Stats:', getStats());
-    console.groupEnd();
+    Utils.debug.group('[EventManager] Debug Info');
+    Utils.debug.log('Scopes:', Array.from(registry.keys()));
+    Utils.debug.log('Active timeouts:', timeouts.size);
+    Utils.debug.log('Active intervals:', intervals.size);
+    Utils.debug.log('Stats:', getStats());
+    Utils.debug.groupEnd();
   }
 
   /**
    * Global cleanup - remove everything
    */
   function cleanupAll() {
-    console.log('[EventManager] Global cleanup');
+    Utils.debug.log('[EventManager] Global cleanup');
     
     // Cleanup all scopes
     Array.from(registry.keys()).forEach(scope => cleanup(scope));

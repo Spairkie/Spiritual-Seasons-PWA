@@ -59,7 +59,7 @@ const Quiz = (() => {
    * Get current progress percentage
    */
   function getProgress() {
-    return ((currentQuestionIndex) / flatQuestions.length) * 100;
+    return ((currentQuestionIndex + 1) / flatQuestions.length) * 100;
   }
 
   /**
@@ -168,6 +168,7 @@ const Quiz = (() => {
 
     // Get result message
     const resultData = quizData.results[winningSeason];
+    const seasonInfo = quizData.seasons.find(s => s.id === winningSeason);
 
     return {
       scores,
@@ -176,7 +177,7 @@ const Quiz = (() => {
       ties,
       maxScore,
       result: resultData,
-      seasonInfo: quizData.seasons.find(s => s.id === winningSeason)
+      seasonInfo: seasonInfo || { id: winningSeason, title: winningSeason, emoji: '🌟' }
     };
   }
 
@@ -351,7 +352,7 @@ const Quiz = (() => {
     const startDay = seasonStartDays[results.winningSeason] || 1;
     await Store.setCurrentDay(startDay);
     
-    console.log(`[Quiz] Set season to ${results.winningSeason}, starting at day ${startDay}`);
+    Utils.debug.log(`[Quiz] Set season to ${results.winningSeason}, starting at day ${startDay}`);
     
     // Update theme
     if (typeof ThemeManager !== 'undefined') {
@@ -430,11 +431,12 @@ const Quiz = (() => {
     container.querySelectorAll('.choose-season-btn').forEach(btn => {
       btn.addEventListener('click', async () => {
         const selectedSeason = btn.getAttribute('data-season');
+        const seasonInfo = quizData.seasons.find(s => s.id === selectedSeason);
         const customResults = {
           ...results,
           winningSeason: selectedSeason,
           result: quizData.results[selectedSeason],
-          seasonInfo: quizData.seasons.find(s => s.id === selectedSeason),
+          seasonInfo: seasonInfo || { id: selectedSeason, title: selectedSeason, emoji: '🌟' },
           tieResolution: 'user_choice'
         };
         await saveResultsAndSetSeason(customResults);
@@ -536,12 +538,13 @@ const Quiz = (() => {
             });
             
             const winner = Object.entries(counts).sort((a, b) => b[1] - a[1])[0][0];
+            const seasonInfo = quizData.seasons.find(s => s.id === winner);
             
             const finalResults = {
               ...results,
               winningSeason: winner,
               result: quizData.results[winner],
-              seasonInfo: quizData.seasons.find(s => s.id === winner),
+              seasonInfo: seasonInfo || { id: winner, title: winner, emoji: '🌟' },
               tieResolution: 'tiebreaker'
             };
             

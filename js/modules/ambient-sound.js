@@ -100,7 +100,7 @@ const AmbientSound = (() => {
       setupSeasonChangeListener();
       return true;
     } catch (error) {
-      console.error('Ambient sound init error:', error);
+      Utils.debug.error('Ambient sound init error:', error);
       return false;
     }
   }
@@ -327,6 +327,13 @@ const AmbientSound = (() => {
 
   async function play(presetName = currentPreset, isAutoChange = false) {
     try {
+      // Validate preset name
+      const validPresets = Object.keys(PRESETS);
+      if (presetName && !validPresets.includes(presetName)) {
+        Utils.debug.warn('Invalid ambient sound preset:', presetName, '- falling back to silence');
+        presetName = 'silence';
+      }
+
       await stop();
 
       if (!audioContext || audioContext.state === 'closed') {
@@ -358,6 +365,7 @@ const AmbientSound = (() => {
 
       const preset = PRESETS[presetName];
       if (!preset || !preset.sounds || preset.sounds.length === 0) {
+        Utils.debug.warn('Empty or invalid preset:', presetName);
         return;
       }
 
@@ -374,7 +382,8 @@ const AmbientSound = (() => {
       fadeIn();
       
     } catch (error) {
-      console.error('Play error:', error);
+      Utils.debug.error('Play error:', error);
+      Toast.error('Failed to play ambient sound');
     }
   }
 
@@ -396,7 +405,7 @@ const AmbientSound = (() => {
       currentSounds.clear();
       isPlaying = false;
     } catch (error) {
-      console.error('Stop error:', error);
+      Utils.debug.error('Stop error:', error);
     }
   }
 

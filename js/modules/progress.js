@@ -28,7 +28,7 @@ const Progress = (() => {
       await Store.updateStreakData(calculated);
       return calculated;
     } catch (error) {
-      console.error('Error updating streaks:', error);
+      Utils.debug.error('Error updating streaks:', error);
       return null;
     }
   }
@@ -46,7 +46,7 @@ const Progress = (() => {
         milestones: streakData.milestones || []
       };
     } catch (error) {
-      console.error('Error getting streak:', error);
+      Utils.debug.error('Error getting streak:', error);
       return { current: 0, longest: 0, lastCompleted: null, milestones: [] };
     }
   }
@@ -59,7 +59,7 @@ const Progress = (() => {
       const progress = await Store.getDayProgress(day);
       return progress && progress.completed;
     } catch (error) {
-      console.error('Error checking day completion:', error);
+      Utils.debug.error('Error checking day completion:', error);
       return false;
     }
   }
@@ -79,10 +79,21 @@ const Progress = (() => {
       if (updated) {
         await checkMilestones(updated.currentStreak);
       }
+      
+      // Check if weekly reflection is due (after marking complete)
+      if (typeof WeeklyReflection !== 'undefined') {
+        const isDue = await WeeklyReflection.isReflectionDue(day);
+        if (isDue) {
+          // Delay showing the reflection to let the completion animation finish
+          setTimeout(() => {
+            WeeklyReflection.promptReflection(day);
+          }, 1500);
+        }
+      }
 
       return updated;
     } catch (error) {
-      console.error('Error completing day:', error);
+      Utils.debug.error('Error completing day:', error);
       return null;
     }
   }
@@ -110,7 +121,7 @@ const Progress = (() => {
 
       return achievedMilestones;
     } catch (error) {
-      console.error('Error checking milestones:', error);
+      Utils.debug.error('Error checking milestones:', error);
       return [];
     }
   }
@@ -187,7 +198,7 @@ const Progress = (() => {
         favorites: favorites.length
       };
     } catch (error) {
-      console.error('Error getting progress stats:', error);
+      Utils.debug.error('Error getting progress stats:', error);
       return {
         completedDays: 0,
         totalDays: 120,
@@ -237,7 +248,7 @@ const Progress = (() => {
 
       return progress;
     } catch (error) {
-      console.error('Error getting season progress:', error);
+      Utils.debug.error('Error getting season progress:', error);
       return null;
     }
   }
@@ -425,7 +436,7 @@ const Progress = (() => {
         }
       }, 100);
     } catch (error) {
-      console.error('Error rendering progress dashboard:', error);
+      Utils.debug.error('Error rendering progress dashboard:', error);
       container.innerHTML = `
         <div class="page-content">
           <div class="error-message">
@@ -480,7 +491,7 @@ const Progress = (() => {
         </div>
       `;
     } catch (error) {
-      console.error('Error rendering streak widget:', error);
+      Utils.debug.error('Error rendering streak widget:', error);
     }
   }
 

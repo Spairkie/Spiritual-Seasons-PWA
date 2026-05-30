@@ -43,7 +43,7 @@ const GuidedBreathing = (() => {
    * Initialize guided breathing
    */
   async function init() {
-    console.log('✓ Guided breathing initialized');
+    Utils.debug.log('✓ Guided breathing initialized');
   }
 
   /**

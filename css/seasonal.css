@@ -9,7 +9,7 @@
    SEASONAL BACKGROUNDS & GRADIENTS
    ============================================ */
 
-/* Season background wrapper */
+/* Season background wrapper (for backwards compatibility) */
 .season-bg {
   position: relative;
   min-height: 100vh;
@@ -20,8 +20,44 @@
   );
 }
 
+/* Apply seasonal backgrounds to full page containers */
+#page-home,
+#page-devotional,
+#page-contents,
+#page-progress,
+#page-favorites,
+#page-reflections,
+#page-intro {
+  position: relative;
+  min-height: 100vh;
+  background: linear-gradient(
+    180deg,
+    color-mix(in srgb, var(--season-light) 20%, var(--bg-cream)),
+    var(--bg-cream)
+  );
+}
+
+/* Ensure content has proper z-index above background effects */
+#page-home > *,
+#page-devotional > *,
+#page-contents > *,
+#page-progress > *,
+#page-favorites > *,
+#page-reflections > *,
+#page-intro > * {
+  position: relative;
+  z-index: 1;
+}
+
 /* Winter Season - Snowflakes */
-[data-season="winter"] .season-bg::before {
+[data-season="winter"] .season-bg::before,
+[data-season="winter"] #page-home::before,
+[data-season="winter"] #page-devotional::before,
+[data-season="winter"] #page-contents::before,
+[data-season="winter"] #page-progress::before,
+[data-season="winter"] #page-favorites::before,
+[data-season="winter"] #page-reflections::before,
+[data-season="winter"] #page-intro::before {
   content: '';
   position: absolute;
   inset: 0;
@@ -35,6 +71,7 @@
   pointer-events: none;
   opacity: 0.4;
   animation: snowfall 20s linear infinite;
+  z-index: 0;
 }
 
 @keyframes snowfall {
@@ -43,7 +80,14 @@
 }
 
 /* Spring Season - Bloom Effect */
-[data-season="spring"] .season-bg::before {
+[data-season="spring"] .season-bg::before,
+[data-season="spring"] #page-home::before,
+[data-season="spring"] #page-devotional::before,
+[data-season="spring"] #page-contents::before,
+[data-season="spring"] #page-progress::before,
+[data-season="spring"] #page-favorites::before,
+[data-season="spring"] #page-reflections::before,
+[data-season="spring"] #page-intro::before {
   content: '';
   position: absolute;
   inset: 0;
@@ -53,10 +97,18 @@
     radial-gradient(ellipse at 50% 80%, rgba(255, 245, 157, 0.2) 0%, transparent 40%);
   pointer-events: none;
   opacity: 0.6;
+  z-index: 0;
 }
 
 /* Summer Season - Sun Glow */
-[data-season="summer"] .season-bg::before {
+[data-season="summer"] .season-bg::before,
+[data-season="summer"] #page-home::before,
+[data-season="summer"] #page-devotional::before,
+[data-season="summer"] #page-contents::before,
+[data-season="summer"] #page-progress::before,
+[data-season="summer"] #page-favorites::before,
+[data-season="summer"] #page-reflections::before,
+[data-season="summer"] #page-intro::before {
   content: '';
   position: absolute;
   top: -50%;
@@ -71,6 +123,7 @@
   );
   pointer-events: none;
   animation: sunGlow 8s ease-in-out infinite;
+  z-index: 0;
 }
 
 @keyframes sunGlow {
@@ -85,7 +138,14 @@
 }
 
 /* Autumn Season - Warm Gradient */
-[data-season="autumn"] .season-bg::before {
+[data-season="autumn"] .season-bg::before,
+[data-season="autumn"] #page-home::before,
+[data-season="autumn"] #page-devotional::before,
+[data-season="autumn"] #page-contents::before,
+[data-season="autumn"] #page-progress::before,
+[data-season="autumn"] #page-favorites::before,
+[data-season="autumn"] #page-reflections::before,
+[data-season="autumn"] #page-intro::before {
   content: '';
   position: absolute;
   inset: 0;
@@ -95,6 +155,7 @@
     radial-gradient(ellipse at 50% 90%, rgba(230, 81, 0, 0.08) 0%, transparent 35%);
   pointer-events: none;
   opacity: 0.7;
+  z-index: 0;
 }
 
 /* ============================================
@@ -330,7 +391,14 @@
    DARK MODE ADJUSTMENTS
    ============================================ */
 
-[data-theme="dark"] .season-bg {
+[data-theme="dark"] .season-bg,
+[data-theme="dark"] #page-home,
+[data-theme="dark"] #page-devotional,
+[data-theme="dark"] #page-contents,
+[data-theme="dark"] #page-progress,
+[data-theme="dark"] #page-favorites,
+[data-theme="dark"] #page-reflections,
+[data-theme="dark"] #page-intro {
   background: linear-gradient(
     180deg,
     color-mix(in srgb, var(--season-primary) 8%, var(--bg-cream)),
@@ -340,11 +408,39 @@
 
 [data-theme="dark"] [data-season="winter"] .season-bg::before,
 [data-theme="dark"] [data-season="spring"] .season-bg::before,
-[data-theme="dark"] [data-season="autumn"] .season-bg::before {
+[data-theme="dark"] [data-season="autumn"] .season-bg::before,
+[data-theme="dark"] [data-season="winter"] #page-home::before,
+[data-theme="dark"] [data-season="winter"] #page-devotional::before,
+[data-theme="dark"] [data-season="winter"] #page-contents::before,
+[data-theme="dark"] [data-season="winter"] #page-progress::before,
+[data-theme="dark"] [data-season="winter"] #page-favorites::before,
+[data-theme="dark"] [data-season="winter"] #page-reflections::before,
+[data-theme="dark"] [data-season="winter"] #page-intro::before,
+[data-theme="dark"] [data-season="spring"] #page-home::before,
+[data-theme="dark"] [data-season="spring"] #page-devotional::before,
+[data-theme="dark"] [data-season="spring"] #page-contents::before,
+[data-theme="dark"] [data-season="spring"] #page-progress::before,
+[data-theme="dark"] [data-season="spring"] #page-favorites::before,
+[data-theme="dark"] [data-season="spring"] #page-reflections::before,
+[data-theme="dark"] [data-season="spring"] #page-intro::before,
+[data-theme="dark"] [data-season="autumn"] #page-home::before,
+[data-theme="dark"] [data-season="autumn"] #page-devotional::before,
+[data-theme="dark"] [data-season="autumn"] #page-contents::before,
+[data-theme="dark"] [data-season="autumn"] #page-progress::before,
+[data-theme="dark"] [data-season="autumn"] #page-favorites::before,
+[data-theme="dark"] [data-season="autumn"] #page-reflections::before,
+[data-theme="dark"] [data-season="autumn"] #page-intro::before {
   opacity: 0.2;
 }
 
-[data-theme="dark"] [data-season="summer"] .season-bg::before {
+[data-theme="dark"] [data-season="summer"] .season-bg::before,
+[data-theme="dark"] [data-season="summer"] #page-home::before,
+[data-theme="dark"] [data-season="summer"] #page-devotional::before,
+[data-theme="dark"] [data-season="summer"] #page-contents::before,
+[data-theme="dark"] [data-season="summer"] #page-progress::before,
+[data-theme="dark"] [data-season="summer"] #page-favorites::before,
+[data-theme="dark"] [data-season="summer"] #page-reflections::before,
+[data-theme="dark"] [data-season="summer"] #page-intro::before {
   opacity: 0.3;
 }
 
@@ -372,6 +468,20 @@
 @media (prefers-reduced-motion: reduce) {
   [data-season="winter"] .season-bg::before,
   [data-season="summer"] .season-bg::before,
+  [data-season="winter"] #page-home::before,
+  [data-season="winter"] #page-devotional::before,
+  [data-season="winter"] #page-contents::before,
+  [data-season="winter"] #page-progress::before,
+  [data-season="winter"] #page-favorites::before,
+  [data-season="winter"] #page-reflections::before,
+  [data-season="winter"] #page-intro::before,
+  [data-season="summer"] #page-home::before,
+  [data-season="summer"] #page-devotional::before,
+  [data-season="summer"] #page-contents::before,
+  [data-season="summer"] #page-progress::before,
+  [data-season="summer"] #page-favorites::before,
+  [data-season="summer"] #page-reflections::before,
+  [data-season="summer"] #page-intro::before,
   .season-accent-bar,
   .season-transition {
     animation: none;

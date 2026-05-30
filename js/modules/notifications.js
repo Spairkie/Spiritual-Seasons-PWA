@@ -74,7 +74,7 @@ const Notifications = (() => {
       
       return false;
     } catch (error) {
-      console.error('Error requesting notification permission:', error);
+      Utils.debug.error('Error requesting notification permission:', error);
       Toast.error('Failed to request notification permission');
       return false;
     }
@@ -150,7 +150,7 @@ const Notifications = (() => {
       await scheduleReminder();
     }, delay);
 
-    console.log(`✓ Reminder scheduled for ${next.toLocaleString()}`);
+    Utils.debug.log(`✓ Reminder scheduled for ${next.toLocaleString()}`);
   }
 
   /**
@@ -171,7 +171,7 @@ const Notifications = (() => {
 
     // Check quiet hours
     if (await isQuietHours()) {
-      console.log('Skipping notification - quiet hours active');
+      Utils.debug.log('Skipping notification - quiet hours active');
       return;
     }
 
@@ -217,7 +217,7 @@ const Notifications = (() => {
       await Store.saveSetting('lastNotificationTime', new Date().toISOString());
       
     } catch (error) {
-      console.error('Error showing notification:', error);
+      Utils.debug.error('Error showing notification:', error);
     }
   }
 
@@ -237,7 +237,7 @@ const Notifications = (() => {
     }, delay);
 
     Toast.success(`Reminder snoozed for ${minutes} minutes`);
-    console.log(`Reminder snoozed for ${minutes} minutes`);
+    Utils.debug.log(`Reminder snoozed for ${minutes} minutes`);
   }
 
   /**
@@ -263,7 +263,7 @@ const Notifications = (() => {
 
       Toast.success('Test notification sent');
     } catch (error) {
-      console.error('Error sending test notification:', error);
+      Utils.debug.error('Error sending test notification:', error);
       Toast.error('Failed to send test notification');
     }
   }

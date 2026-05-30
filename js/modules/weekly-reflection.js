@@ -164,12 +164,23 @@ const WeeklyReflection = (() => {
    * Check if reflection is due for a given day
    */
   async function isReflectionDue(day) {
-    // Reflection is due on days 7, 14, 21, 28, etc.
-    if (day % REFLECTION_FREQUENCY !== 0) {
+    // Get the total number of completed days
+    const completedDaysCount = await Store.getCompletedDaysCount();
+    
+    // Don't show reflection if user hasn't completed at least 7 days
+    if (completedDaysCount < REFLECTION_FREQUENCY) {
       return false;
     }
-
-    const week = getWeekNumber(day);
+    
+    // Check if this is a multiple of 7 days completed (not day number)
+    if (completedDaysCount % REFLECTION_FREQUENCY !== 0) {
+      return false;
+    }
+    
+    // Calculate which week this represents based on completed days
+    const week = Math.floor(completedDaysCount / REFLECTION_FREQUENCY);
+    
+    // Check if reflection already exists for this week
     const existing = await Store.getWeeklyReflection(week);
     
     return !existing; // Due if doesn't exist yet
@@ -181,12 +192,13 @@ const WeeklyReflection = (() => {
   function getReflectionQuestions(week) {
     const reflection = REFLECTION_QUESTIONS.find(r => r.week === week);
     
-    if (reflection) {
+    if (reflection?.questions) {
       return reflection.questions;
     }
 
     // If specific week not found, use a rotating pattern
     const index = (week - 1) % REFLECTION_QUESTIONS.length;
+    return REFLECTION_QUESTIONS[index]?.questions || REFLECTION_QUESTIONS[0].questions;
     return REFLECTION_QUESTIONS[index].questions;
   }
 
@@ -206,7 +218,7 @@ const WeeklyReflection = (() => {
       Toast.success('Weekly reflection saved ✓');
       return true;
     } catch (error) {
-      console.error('Error saving reflection:', error);
+      Utils.debug.error('Error saving reflection:', error);
       Toast.error('Failed to save reflection');
       return false;
     }
@@ -219,7 +231,7 @@ const WeeklyReflection = (() => {
     try {
       return await Store.getAllWeeklyReflections();
     } catch (error) {
-      console.error('Error getting reflections:', error);
+      Utils.debug.error('Error getting reflections:', error);
       return [];
     }
   }
@@ -276,6 +288,7 @@ const WeeklyReflection = (() => {
             }
 
             await saveReflection(week, responses);
+            Toast.success('Reflection saved!');
             return true; // Close modal
           }
         },
@@ -283,12 +296,14 @@ const WeeklyReflection = (() => {
           text: 'Skip for Now',
           className: 'btn-secondary',
           onClick: () => {
+            Toast.info('You can complete this reflection later from the Reflections page');
             return true; // Just close
           }
         }
       ],
-      closeOnOverlay: false,
-      closeOnEscape: false
+      closeOnOverlay: true,  // Allow clicking outside to close
+      closeOnEscape: true,   // Allow Escape key to close
+      showCloseButton: true  // Show X button in corner
     });
   }
 
@@ -315,27 +330,64 @@ const WeeklyReflection = (() => {
             </svg>
             <h3>No Reflections Yet</h3>
             <p>Weekly reflections will appear here as you complete each week of devotions.</p>
+            <p style="margin-top: var(--space-2); font-size: var(--text-sm); color: var(--text-tertiary);">
+              You'll be prompted to reflect after every 7 days you complete.
+            </p>
           </div>
         `;
         return;
       }
 
-      // Sort by week
+      // Sort by week (newest first)
       reflections.sort((a, b) => b.week - a.week);
+      
+      // Helper to get season emoji
+      const getSeasonInfo = (week) => {
+        // Each week represents 7 completed days
+        const approximateDay = week * 7;
+        let season, emoji;
+        if (approximateDay <= 30) {
+          season = 'Winter';
+          emoji = '❄️';
+        } else if (approximateDay <= 60) {
+          season = 'Spring';
+          emoji = '🌸';
+        } else if (approximateDay <= 90) {
+          season = 'Summer';
+          emoji = '☀️';
+        } else {
+          season = 'Autumn';
+          emoji = '🍂';
+        }
+        return { season, emoji };
+      };
 
       container.innerHTML = `
         <div class="reflections-view">
-          <h1 class="page-title">Weekly Reflections</h1>
-          <p class="page-subtitle">Review your spiritual journey week by week</p>
+          <div class="page-header">
+            <h1 class="page-title">Weekly Reflections</h1>
+            <p class="page-subtitle">Review your spiritual journey week by week</p>
+          </div>
 
           <div class="reflections-list">
-            ${reflections.map(reflection => `
+            ${reflections.map(reflection => {
+              const { season, emoji } = getSeasonInfo(reflection.week);
+              return `
               <div class="reflection-card">
                 <div class="reflection-header">
-                  <h3>Week ${reflection.week} Reflection</h3>
-                  <span class="reflection-date">
-                    ${new Date(reflection.createdAt).toLocaleDateString()}
-                  </span>
+                  <div>
+                    <div style="display: flex; align-items: center; gap: var(--space-2); margin-bottom: var(--space-1);">
+                      <span style="font-size: var(--text-lg);">${emoji}</span>
+                      <h3>Week ${reflection.week}</h3>
+                    </div>
+                    <span class="reflection-date">
+                      ${season} • ${new Date(reflection.createdAt).toLocaleDateString('en-US', { 
+                        month: 'long', 
+                        day: 'numeric', 
+                        year: 'numeric' 
+                      })}
+                    </span>
+                  </div>
                 </div>
                 
                 <div class="reflection-content">
@@ -350,29 +402,30 @@ const WeeklyReflection = (() => {
                 </div>
                 
                 <div class="reflection-actions">
-                  <button class="btn btn-link btn-sm" onclick="WeeklyReflection.editReflection(${reflection.week})">
+                  <button class="btn btn-ghost btn-sm" onclick="WeeklyReflection.editReflection(${reflection.week})">
                     <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                       <path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/>
                       <path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/>
                     </svg>
-                    Edit
+                    <span>Edit</span>
                   </button>
-                  <button class="btn btn-link btn-sm" onclick="WeeklyReflection.exportReflection(${reflection.week})">
+                  <button class="btn btn-ghost btn-sm" onclick="WeeklyReflection.exportReflection(${reflection.week})">
                     <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                       <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/>
                       <polyline points="7 10 12 15 17 10"/>
                       <line x1="12" y1="15" x2="12" y2="3"/>
                     </svg>
-                    Export
+                    <span>Export</span>
                   </button>
                 </div>
               </div>
-            `).join('')}
+            `;
+            }).join('')}
           </div>
         </div>
       `;
     } catch (error) {
-      console.error('Error rendering reflections:', error);
+      Utils.debug.error('Error rendering reflections:', error);
       container.innerHTML = `
         <div class="error-message">
           <p>Unable to load reflections</p>

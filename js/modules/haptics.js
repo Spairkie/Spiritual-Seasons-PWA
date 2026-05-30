@@ -21,7 +21,7 @@ const Haptics = (() => {
       }
     });
 
-    console.log(`[Haptics] ${isSupported ? 'Supported' : 'Not supported'}`);
+    Utils.debug.log(`[Haptics] ${isSupported ? 'Supported' : 'Not supported'}`);
     return isSupported;
   }
 
@@ -61,7 +61,7 @@ const Haptics = (() => {
         navigator.vibration(pattern);
       }
     } catch (error) {
-      console.warn('[Haptics] Vibration failed:', error);
+      Utils.debug.warn('[Haptics] Vibration failed:', error);
     }
   }
 

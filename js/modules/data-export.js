@@ -111,7 +111,7 @@ const DataExport = (() => {
       
       return true;
     } catch (error) {
-      console.error('Export error:', error);
+      Utils.debug.error('Export error:', error);
       return false;
     }
   }
@@ -223,7 +223,7 @@ Completed: ${new Date(data.data.quizResults.completedAt).toLocaleString()}
       
       return true;
     } catch (error) {
-      console.error('Export error:', error);
+      Utils.debug.error('Export error:', error);
       return false;
     }
   }
@@ -419,7 +419,7 @@ Completed: ${new Date(data.data.quizResults.completedAt).toLocaleString()}
 
           resolve(true);
         } catch (error) {
-          console.error('Import error:', error);
+          Utils.debug.error('Import error:', error);
           reject(error);
         }
       };

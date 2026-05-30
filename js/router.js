@@ -1,7 +1,6 @@
 /**
  * Spiritual Seasons PWA - Router Module
  * Simple client-side router for SPA navigation
- * FIXED: Added hashchange listener, removed duplicate validation
  */
 
 const Router = (() => {
@@ -34,7 +33,7 @@ const Router = (() => {
     if (params.day !== undefined) {
       const validDay = Utils.validateDay(params.day);
       if (validDay === null) {
-        console.warn('Invalid day parameter:', params.day);
+        Utils.debug.warn('Invalid day parameter:', params.day);
         params.day = 1;
       } else {
         params.day = validDay;
@@ -101,7 +100,7 @@ const Router = (() => {
           await routeResult;
         }
       } catch (error) {
-        console.error('Route handler error:', error);
+        Utils.debug.error('Route handler error:', error);
         
         // Always show error to user
         if (typeof Toast !== 'undefined') {
@@ -139,13 +138,13 @@ const Router = (() => {
         try {
           listener(cleanPath, params, previousRoute);
         } catch (e) {
-          console.error('Route listener error:', e);
+          Utils.debug.error('Route listener error:', e);
         }
       });
 
       window.scrollTo(0, 0);
     } else {
-      console.warn(`Route not found: ${cleanPath}`);
+      Utils.debug.warn(`Route not found: ${cleanPath}`);
       navigate(defaultRoute);
     }
   }

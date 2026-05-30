@@ -73,6 +73,11 @@ const Search = (() => {
     // Index weekly reflections
     const reflections = await WeeklyReflection.getAllReflections();
     for (const reflection of reflections) {
+      // Safety check for responses property
+      if (!reflection || !reflection.responses || !Array.isArray(reflection.responses)) {
+        continue;
+      }
+      
       const content = reflection.responses.join(' ').toLowerCase();
       
       searchIndex.reflections.push({
@@ -588,7 +593,8 @@ const Search = (() => {
     clearFilters,
     renderSearchInterface,
     highlightMatches,
-    getExcerpt
+    getExcerpt,
+    rebuildIndex: buildSearchIndex  // Expose for manual rebuilds
   };
 })();
 

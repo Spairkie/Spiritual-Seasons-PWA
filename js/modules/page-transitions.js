@@ -34,7 +34,7 @@ const PageTransitions = (() => {
       handleRouteChange(newRoute, previousRoute);
     });
 
-    console.log('✓ Page transitions initialized');
+    Utils.debug.log('✓ Page transitions initialized');
   }
 
   /**

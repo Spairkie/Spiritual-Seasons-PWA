@@ -19,7 +19,7 @@ const ErrorHandler = (() => {
     // Unhandled promise rejection handler
     window.addEventListener('unhandledrejection', handleUnhandledRejection);
 
-    console.log('✓ Error handling initialized');
+    Utils.debug.log('✓ Error handling initialized');
     return true;
   }
 
@@ -38,7 +38,7 @@ const ErrorHandler = (() => {
     });
 
     // Don't show UI for every error, just log it
-    console.error('Global error:', event.error);
+    Utils.debug.error('Global error:', event.error);
     
     // Prevent default browser error handling
     event.preventDefault();
@@ -55,7 +55,7 @@ const ErrorHandler = (() => {
       timestamp: new Date().toISOString()
     });
 
-    console.error('Unhandled rejection:', event.reason);
+    Utils.debug.error('Unhandled rejection:', event.reason);
     
     // Prevent default browser handling
     event.preventDefault();
@@ -115,7 +115,7 @@ const ErrorHandler = (() => {
             onRetry(attempt, retryDelay, error);
           }
 
-          console.log(`Retry attempt ${attempt}/${maxRetries} in ${retryDelay}ms`);
+          Utils.debug.log(`Retry attempt ${attempt}/${maxRetries} in ${retryDelay}ms`);
           await sleep(retryDelay);
         }
       }
@@ -148,7 +148,7 @@ const ErrorHandler = (() => {
       {
         maxRetries: 3,
         onRetry: (attempt) => {
-          console.log(`Retrying fetch to ${url}, attempt ${attempt}`);
+          Utils.debug.log(`Retrying fetch to ${url}, attempt ${attempt}`);
         }
       }
     );
@@ -163,11 +163,11 @@ const ErrorHandler = (() => {
         maxRetries: 2,
         delay: 500,
         onRetry: (attempt) => {
-          console.log(`Retrying ${operationName}, attempt ${attempt}`);
+          Utils.debug.log(`Retrying ${operationName}, attempt ${attempt}`);
         }
       });
     } catch (error) {
-      console.error(`${operationName} failed after retries:`, error);
+      Utils.debug.error(`${operationName} failed after retries:`, error);
       showUserFriendlyError({
         title: 'Database Error',
         message: 'We\'re having trouble saving your data. Please try again.',
@@ -245,7 +245,7 @@ const ErrorHandler = (() => {
       try {
         return await operation(...args);
       } catch (error) {
-        console.error('Error in bounded operation:', error);
+        Utils.debug.error('Error in bounded operation:', error);
         logError({
           type: 'bounded_operation',
           message: error.message,
@@ -274,7 +274,7 @@ const ErrorHandler = (() => {
       try {
         return await operation(...args);
       } catch (error) {
-        console.warn(errorMessage || 'Operation failed, using fallback:', error);
+        Utils.debug.warn(errorMessage || 'Operation failed, using fallback:', error);
         logError({
           type: 'graceful_degradation',
           message: errorMessage || 'Operation failed',
@@ -335,7 +335,7 @@ const ErrorHandler = (() => {
   function handleError(error, context = '') {
     const errorInfo = categorizeError(error);
     
-    console.error(`Error in ${context}:`, error);
+    Utils.debug.error(`Error in ${context}:`, error);
     logError({
       type: errorInfo.category,
       context,

@@ -4,8 +4,8 @@
  */
 
 // VERSION CONFIGURATION
-const VERSION = '1.0.0';
-const BUILD_TIME = '20241230-fixed';
+const VERSION = '1.0.1';
+const BUILD_TIME = '20260101';
 const CACHE_NAME = `spiritual-seasons-v${VERSION}-${BUILD_TIME}`;
 const FONT_CACHE = `spiritual-seasons-fonts-v${VERSION}`;
 
@@ -22,6 +22,7 @@ const STATIC_ASSETS = [
   './css/app.css',
   './css/seasonal.css',
   './css/utilities.css',
+  './css/ui-polish.css',
   // Core Infrastructure
   './js/state-manager.js',
   './js/event-manager.js',
@@ -42,6 +43,8 @@ const STATIC_ASSETS = [
   './js/ui/theme-manager.js',
   // Feature Modules - ALL modules now included
   './js/modules/error-handler.js',
+  './js/modules/error-boundary.js',
+  './js/modules/haptics.js',
   './js/modules/keyboard-shortcuts.js',
   './js/modules/tts.js',
   './js/modules/ambient-sound.js',

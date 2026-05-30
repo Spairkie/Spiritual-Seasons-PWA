@@ -321,32 +321,25 @@ hr {
 }
 
 /* ============================================
-   SCROLLBAR
+   SCROLLBAR - Completely Hidden
    ============================================ */
+/* Hide scrollbar for Chrome, Safari and Opera */
 ::-webkit-scrollbar {
-  width: 10px;
-  height: 10px;
+  width: 0;
+  height: 0;
+  display: none;
 }
 
-::-webkit-scrollbar-track {
-  background: var(--bg-secondary);
-  border-radius: var(--radius-full);
-}
-
-::-webkit-scrollbar-thumb {
-  background: var(--gray-400);
-  border-radius: var(--radius-full);
-  border: 2px solid var(--bg-secondary);
-}
-
-::-webkit-scrollbar-thumb:hover {
-  background: var(--gray-500);
-}
-
-/* Firefox scrollbar */
+/* Hide scrollbar for IE, Edge and Firefox */
 * {
-  scrollbar-width: thin;
-  scrollbar-color: var(--gray-400) var(--bg-secondary);
+  -ms-overflow-style: none;  /* IE and Edge */
+  scrollbar-width: none;  /* Firefox */
+}
+
+/* Ensure scroll functionality is preserved */
+body,
+html {
+  overflow: auto;
 }
 
 /* ============================================

@@ -251,7 +251,7 @@ const CalendarIntegration = (() => {
               
               return true; // Close the export dialog
             } catch (error) {
-              console.error('Calendar export error:', error);
+              Utils.debug.error('Calendar export error:', error);
               Toast.error('Failed to export calendar');
               return false;
             }

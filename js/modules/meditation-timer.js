@@ -24,7 +24,7 @@ const MeditationTimer = (() => {
     // Load saved preferences
     const settings = await Store.getSetting('meditationTimer') || {};
     chimeEnabled = settings.chimeEnabled !== false;
-    console.log('✓ Meditation timer initialized');
+    Utils.debug.log('✓ Meditation timer initialized');
   }
 
   /**
@@ -168,9 +168,12 @@ const MeditationTimer = (() => {
         </div>
         
         <div style="margin-bottom: var(--space-4);">
-          <label style="display: flex; align-items: center; gap: var(--space-2); justify-content: center; cursor: pointer;">
-            <input type="checkbox" id="chime-enabled" ${chimeEnabled ? 'checked' : ''}>
+          <label class="toggle-label" style="display: flex; align-items: center; gap: var(--space-3); justify-content: center; cursor: pointer;">
             <span>Play chime sounds</span>
+            <label class="toggle">
+              <input type="checkbox" id="chime-enabled" ${chimeEnabled ? 'checked' : ''}>
+              <span class="toggle-slider"></span>
+            </label>
           </label>
         </div>
       </div>

@@ -24,13 +24,13 @@ const Store = (() => {
       const request = indexedDB.open(DB_NAME, DB_VERSION);
 
       request.onerror = () => {
-        console.error('Failed to open database:', request.error);
+        Utils.debug.error('Failed to open database:', request.error);
         reject(request.error);
       };
 
       request.onsuccess = () => {
         db = request.result;
-        console.log('Database initialized successfully');
+        Utils.debug.log('Database initialized successfully');
         resolve(db);
       };
 
@@ -39,7 +39,7 @@ const Store = (() => {
         const oldVersion = event.oldVersion;
         const transaction = event.target.transaction;
         
-        console.log(`Upgrading database from version ${oldVersion} to ${DB_VERSION}`);
+        Utils.debug.log(`Upgrading database from version ${oldVersion} to ${DB_VERSION}`);
         
         // Version 1: Initial schema
         if (oldVersion < 1) {
@@ -89,15 +89,8 @@ const Store = (() => {
             db.createObjectStore(STORES.STREAKS, { keyPath: 'id' });
           }
         }
-        
-        // Version 2: Future schema changes (example)
-        // if (oldVersion < 2) {
-        //   // Add new store or index
-        //   const journalStore = transaction.objectStore(STORES.JOURNAL);
-        //   journalStore.createIndex('tags', 'tags', { unique: false, multiEntry: true });
-        // }
-        
-        console.log(`Database upgraded to version ${DB_VERSION}`);
+               
+        Utils.debug.log(`Database upgraded to version ${DB_VERSION}`);
       };
     });
   }
@@ -246,10 +239,13 @@ const Store = (() => {
   }
 
   async function saveJournalEntry(day, content, season) {
+    // Get existing entry to preserve createdAt
+    const existing = await getJournalEntry(day);
     return put(STORES.JOURNAL, {
       day,
       content,
       season,
+      createdAt: existing?.createdAt || new Date().toISOString(),
       updatedAt: new Date().toISOString()
     });
   }
@@ -316,98 +312,34 @@ const Store = (() => {
     return allProgress.filter(p => p.season === season && p.completed);
   }
 
-  // Streak Methods 
+  // Streak Methods - CONSOLIDATED TO USE STREAKS STORE
   async function getStreak() {
-    const user = await getUser();
+    const streakData = await getStreakData();
     return {
-      current: user?.currentStreak || 0,
-      longest: user?.longestStreak || 0,
-      lastCompletedDate: user?.lastCompletedDate || null
+      current: streakData.currentStreak || 0,
+      longest: streakData.longestStreak || 0,
+      lastCompletedDate: streakData.lastCompletedDate || null
     };
   }
 
   async function updateStreak() {
-    const user = await getUser() || {};
-    const today = new Date();
-    const todayStr = today.toDateString();
-    const lastDate = user.lastCompletedDate;
-
-    let currentStreak = user.currentStreak || 0;
-    let longestStreak = user.longestStreak || 0;
-
-    if (lastDate === todayStr) {
-      return { current: currentStreak, longest: longestStreak };
-    }
-
-    if (lastDate) {
-      const lastDateObj = new Date(lastDate);
-      const yesterday = new Date(today);
-      yesterday.setDate(yesterday.getDate() - 1);
-      const yesterdayStr = yesterday.toDateString();
-      
-      if (lastDateObj.toDateString() === yesterdayStr) {
-        currentStreak += 1;
-      } else {
-        const daysDiff = Math.floor((today - lastDateObj) / (1000 * 60 * 60 * 24));
-        currentStreak = daysDiff > 1 ? 1 : currentStreak + 1;
-      }
-    } else {
-      currentStreak = 1;
-    }
-
-    if (currentStreak > longestStreak) {
-      longestStreak = currentStreak;
-    }
-
-    await saveUser({
-      ...user,
-      currentStreak,
-      longestStreak,
-      lastCompletedDate: todayStr
-    });
-
-    return { current: currentStreak, longest: longestStreak };
+    // Use the new calculateStreak method which is more accurate
+    const calculated = await calculateStreak();
+    await updateStreakData(calculated);
+    return {
+      current: calculated.currentStreak,
+      longest: calculated.longestStreak
+    };
   }
 
   async function recomputeStreak() {
-    const allProgress = await getAllProgress();
-    const user = await getUser() || {};
-    
-    if (allProgress.length === 0) {
-      await saveUser({ ...user, currentStreak: 0, lastCompletedDate: null });
-      return { current: 0, longest: user.longestStreak || 0 };
-    }
-
-    const sorted = allProgress
-      .filter(p => p.completed && p.completedAt)
-      .sort((a, b) => new Date(b.completedAt) - new Date(a.completedAt));
-
-    if (sorted.length === 0) {
-      await saveUser({ ...user, currentStreak: 0, lastCompletedDate: null });
-      return { current: 0, longest: user.longestStreak || 0 };
-    }
-
-    const uniqueDates = [...new Set(sorted.map(p => new Date(p.completedAt).toDateString()))];
-    let currentStreak = 0;
-    const today = new Date();
-    
-    for (let i = 0; i < uniqueDates.length; i++) {
-      const checkDate = new Date(today);
-      checkDate.setDate(checkDate.getDate() - i);
-      if (uniqueDates.includes(checkDate.toDateString())) {
-        currentStreak++;
-      } else if (i > 0) {
-        break;
-      }
-    }
-
-    await saveUser({
-      ...user,
-      currentStreak,
-      lastCompletedDate: uniqueDates[0] || null
-    });
-
-    return { current: currentStreak, longest: user.longestStreak || 0 };
+    // Use the new calculateStreak method
+    const calculated = await calculateStreak();
+    await updateStreakData(calculated);
+    return {
+      current: calculated.currentStreak,
+      longest: calculated.longestStreak
+    };
   }
 
   // Favorites Methods
@@ -419,7 +351,7 @@ const Store = (() => {
     }
   }
 
-  async function toggleFavorite(day, season, scriptureRef) {
+  async function toggleFavorite(day, season, scriptureRef, note = '') {
     const existing = await getFavorite(day);
     if (existing) {
       await remove(STORES.FAVORITES, day);
@@ -429,10 +361,23 @@ const Store = (() => {
         day,
         season,
         scriptureRef,
+        note: note || '',
         addedAt: new Date().toISOString()
       });
       return true;
     }
+  }
+  
+  async function updateFavoriteNote(day, note) {
+    const existing = await getFavorite(day);
+    if (!existing) return false;
+    
+    await put(STORES.FAVORITES, {
+      ...existing,
+      note: note || '',
+      updatedAt: new Date().toISOString()
+    });
+    return true;
   }
 
   async function getAllFavorites() {
@@ -672,7 +617,8 @@ const Store = (() => {
       if (data.journal && Array.isArray(data.journal)) {
         for (const entry of data.journal) {
           if (entry.day >= 1 && entry.day <= 120) {
-            await put(STORES.JOURNAL, entry);
+            // Use saveJournalEntry to ensure proper schema
+            await saveJournalEntry(entry.day, entry.content || '', entry.season);
             counts.journal++;
           }
         }
@@ -681,16 +627,21 @@ const Store = (() => {
       // Import progress
       if (data.progress && Array.isArray(data.progress)) {
         for (const prog of data.progress) {
-          await put(STORES.PROGRESS, prog);
-          counts.progress++;
+          // Use markDayComplete to ensure proper schema
+          if (prog.completed && prog.day >= 1 && prog.day <= 120) {
+            await markDayComplete(prog.day, prog.season);
+            counts.progress++;
+          }
         }
       }
 
       // Import favorites
       if (data.favorites && Array.isArray(data.favorites)) {
         for (const fav of data.favorites) {
-          await put(STORES.FAVORITES, fav);
-          counts.favorites++;
+          if (fav.day >= 1 && fav.day <= 120) {
+            await put(STORES.FAVORITES, fav);
+            counts.favorites++;
+          }
         }
       }
 
@@ -699,14 +650,16 @@ const Store = (() => {
 
       if (data.audioNotes && Array.isArray(data.audioNotes)) {
         for (const note of data.audioNotes) {
-          await put(STORES.AUDIO_NOTES, note);
-          counts.audioNotes++;
+          if (note.day >= 1 && note.day <= 120) {
+            await saveAudioNote(note);
+            counts.audioNotes++;
+          }
         }
       }
 
       if (data.weeklyReflections && Array.isArray(data.weeklyReflections)) {
         for (const reflection of data.weeklyReflections) {
-          await put(STORES.WEEKLY_REFLECTIONS, reflection);
+          await saveWeeklyReflection(reflection);
           counts.reflections++;
         }
       }
@@ -730,7 +683,7 @@ const Store = (() => {
         message: `Imported: ${parts.join(', ')}`
       };
     } catch (error) {
-      console.error('Import error:', error);
+      Utils.debug.error('Import error:', error);
       return { 
         success: false, 
         errors: [error.message],
@@ -795,8 +748,8 @@ const Store = (() => {
     if (!reflection.week) throw new Error('Week number is required');
     return await put(STORES.WEEKLY_REFLECTIONS, {
       week: reflection.week,
-      content: reflection.content || '',
       questions: reflection.questions || [],
+      responses: reflection.responses || [],
       createdAt: reflection.createdAt || new Date().toISOString(),
       updatedAt: new Date().toISOString()
     });
@@ -972,7 +925,7 @@ const Store = (() => {
     getDayProgress, markDayComplete, markDayIncomplete,
     getAllProgress, getCompletedDays, getCompletedDaysCount, getSeasonProgress,
     getStreak, updateStreak, recomputeStreak,
-    getFavorite, toggleFavorite, getAllFavorites, isFavorite,
+    getFavorite, toggleFavorite, updateFavoriteNote, getAllFavorites, isFavorite,
     getSettings, getSetting, saveSetting, saveSettings, resetSettings, DEFAULT_SETTINGS,
     exportAllData, validateImportData, importData, resetAllData,
     searchJournal,saveAudioNote, getAudioNote, deleteAudioNote, getAllAudioNotes, hasAudioNote,

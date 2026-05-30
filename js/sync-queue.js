@@ -47,7 +47,7 @@ const SyncQueue = (() => {
       processQueue();
     }
 
-    console.log('[SyncQueue] Initialized (queue size: ' + queue.length + ')');
+    Utils.debug.log('[SyncQueue] Initialized (queue size: ' + queue.length + ')');
   }
 
   /**
@@ -57,7 +57,7 @@ const SyncQueue = (() => {
    */
   function registerHandler(type, handler) {
     handlers.set(type, handler);
-    console.log(`[SyncQueue] Registered handler: ${type}`);
+    Utils.debug.log(`[SyncQueue] Registered handler: ${type}`);
   }
 
   /**
@@ -82,7 +82,7 @@ const SyncQueue = (() => {
     queue.push(operation);
     persistQueue();
 
-    console.log(`[SyncQueue] Enqueued ${type} (ID: ${operation.id})`);
+    Utils.debug.log(`[SyncQueue] Enqueued ${type} (ID: ${operation.id})`);
 
     // Try to process if online
     if (isOnline && !isProcessing) {
@@ -102,7 +102,7 @@ const SyncQueue = (() => {
     }
 
     isProcessing = true;
-    console.log(`[SyncQueue] Processing ${queue.length} operations`);
+    Utils.debug.log(`[SyncQueue] Processing ${queue.length} operations`);
 
     // Get pending operations (batch size)
     const pending = queue
@@ -113,7 +113,7 @@ const SyncQueue = (() => {
       try {
         await processOperation(operation);
       } catch (error) {
-        console.error(`[SyncQueue] Failed to process ${operation.id}:`, error);
+        Utils.debug.error(`[SyncQueue] Failed to process ${operation.id}:`, error);
       }
     }
 
@@ -141,7 +141,7 @@ const SyncQueue = (() => {
     const handler = handlers.get(operation.type);
     
     if (!handler) {
-      console.error(`[SyncQueue] No handler for ${operation.type}`);
+      Utils.debug.error(`[SyncQueue] No handler for ${operation.type}`);
       operation.status = STATUS.FAILED;
       return;
     }
@@ -151,7 +151,7 @@ const SyncQueue = (() => {
       await handler(operation.data);
       
       operation.status = STATUS.SUCCESS;
-      console.log(`[SyncQueue] Success: ${operation.id}`);
+      Utils.debug.log(`[SyncQueue] Success: ${operation.id}`);
       
       // Notify listeners
       notifyListeners('success', operation);
@@ -161,15 +161,15 @@ const SyncQueue = (() => {
       
       if (operation.retries >= config.maxRetries) {
         operation.status = STATUS.FAILED;
-        console.error(`[SyncQueue] Failed after ${config.maxRetries} retries: ${operation.id}`, error);
+        Utils.debug.error(`[SyncQueue] Failed after ${config.maxRetries} retries: ${operation.id}`, error);
         
         // Rollback optimistic update if applicable
         if (operation.optimistic && operation.rollback) {
           try {
             await operation.rollback();
-            console.log(`[SyncQueue] Rolled back: ${operation.id}`);
+            Utils.debug.log(`[SyncQueue] Rolled back: ${operation.id}`);
           } catch (rollbackError) {
-            console.error(`[SyncQueue] Rollback failed: ${operation.id}`, rollbackError);
+            Utils.debug.error(`[SyncQueue] Rollback failed: ${operation.id}`, rollbackError);
           }
         }
         
@@ -178,7 +178,7 @@ const SyncQueue = (() => {
         
       } else {
         operation.status = STATUS.PENDING;
-        console.log(`[SyncQueue] Retry ${operation.retries}/${config.maxRetries}: ${operation.id}`);
+        Utils.debug.log(`[SyncQueue] Retry ${operation.retries}/${config.maxRetries}: ${operation.id}`);
         
         // Wait before retry
         await new Promise(resolve => 
@@ -194,7 +194,7 @@ const SyncQueue = (() => {
    */
   function handleOnline() {
     isOnline = true;
-    console.log('[SyncQueue] Connection restored');
+    Utils.debug.log('[SyncQueue] Connection restored');
     
     notifyListeners('online');
     
@@ -208,7 +208,7 @@ const SyncQueue = (() => {
    */
   function handleOffline() {
     isOnline = false;
-    console.log('[SyncQueue] Connection lost');
+    Utils.debug.log('[SyncQueue] Connection lost');
     
     notifyListeners('offline');
   }
@@ -230,7 +230,7 @@ const SyncQueue = (() => {
     try {
       localStorage.setItem(config.storageKey, JSON.stringify(queue));
     } catch (error) {
-      console.error('[SyncQueue] Failed to persist queue:', error);
+      Utils.debug.error('[SyncQueue] Failed to persist queue:', error);
     }
   }
 
@@ -243,10 +243,10 @@ const SyncQueue = (() => {
       const stored = localStorage.getItem(config.storageKey);
       if (stored) {
         queue = JSON.parse(stored);
-        console.log(`[SyncQueue] Loaded ${queue.length} operations from storage`);
+        Utils.debug.log(`[SyncQueue] Loaded ${queue.length} operations from storage`);
       }
     } catch (error) {
-      console.error('[SyncQueue] Failed to load queue:', error);
+      Utils.debug.error('[SyncQueue] Failed to load queue:', error);
       queue = [];
     }
   }
@@ -295,10 +295,10 @@ const SyncQueue = (() => {
       const before = queue.length;
       queue = queue.filter(op => op.status !== status);
       const removed = before - queue.length;
-      console.log(`[SyncQueue] Cleared ${removed} ${status} operations`);
+      Utils.debug.log(`[SyncQueue] Cleared ${removed} ${status} operations`);
     } else {
       queue = [];
-      console.log('[SyncQueue] Cleared all operations');
+      Utils.debug.log('[SyncQueue] Cleared all operations');
     }
     
     persistQueue();
@@ -311,7 +311,7 @@ const SyncQueue = (() => {
   async function retryFailed() {
     const failed = queue.filter(op => op.status === STATUS.FAILED);
     
-    console.log(`[SyncQueue] Retrying ${failed.length} failed operations`);
+    Utils.debug.log(`[SyncQueue] Retrying ${failed.length} failed operations`);
     
     // Reset status and retries
     failed.forEach(op => {
@@ -351,7 +351,7 @@ const SyncQueue = (() => {
       try {
         callback(event, data);
       } catch (error) {
-        console.error('[SyncQueue] Listener error:', error);
+        Utils.debug.error('[SyncQueue] Listener error:', error);
       }
     });
   }
@@ -382,12 +382,12 @@ const SyncQueue = (() => {
    * Debug - log queue info
    */
   function debug() {
-    console.group('[SyncQueue] Debug Info');
-    console.log('Status:', getStatus());
-    console.log('Stats:', getStats());
-    console.log('Handlers:', Array.from(handlers.keys()));
-    console.log('Queue:', queue);
-    console.groupEnd();
+    Utils.debug.group('[SyncQueue] Debug Info');
+    Utils.debug.log('Status:', getStatus());
+    Utils.debug.log('Stats:', getStats());
+    Utils.debug.log('Handlers:', Array.from(handlers.keys()));
+    Utils.debug.log('Queue:', queue);
+    Utils.debug.groupEnd();
   }
 
   // Public API

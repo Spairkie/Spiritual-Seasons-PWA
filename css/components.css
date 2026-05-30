@@ -22,6 +22,7 @@
   background: var(--bg-primary);
   border-bottom: 1px solid var(--border-primary);
   padding-top: var(--safe-top);
+  flex-shrink: 0; /* Don't shrink in flex layout */
 }
 
 .header-content {
@@ -71,6 +72,7 @@
   background: var(--bg-primary);
   border-top: 1px solid var(--border-primary);
   padding-bottom: var(--safe-bottom);
+  flex-shrink: 0; /* Don't shrink in flex layout */
 }
 
 .bottom-nav-content {
@@ -216,6 +218,10 @@
   height: 40px;
   padding: 0;
   border-radius: var(--radius-md);
+
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
 }
 
 .btn-icon svg {
@@ -4921,6 +4927,31 @@ textarea:focus-visible {
   border-radius: 2px;
 }
 
+.toast-action {
+  flex-shrink: 0;
+  margin-left: var(--space-2);
+  padding: var(--space-1) var(--space-3);
+  font-size: var(--text-sm);
+  font-weight: var(--font-medium);
+  background: rgba(255, 255, 255, 0.2);
+  color: inherit;
+  border: 1px solid rgba(255, 255, 255, 0.3);
+  border-radius: var(--radius-sm);
+  cursor: pointer;
+  transition: all var(--transition-fast);
+  white-space: nowrap;
+}
+
+.toast-action:hover {
+  background: rgba(255, 255, 255, 0.3);
+  border-color: rgba(255, 255, 255, 0.5);
+}
+
+.toast-action:focus-visible {
+  outline: 2px solid currentColor;
+  outline-offset: 2px;
+}
+
 /* Toast Types */
 .toast-success {
   border-left: 4px solid var(--success);
@@ -4998,6 +5029,7 @@ textarea:focus-visible {
   transition: opacity 0.3s ease;
   padding: var(--space-4);
   overflow-y: auto;
+  -webkit-overflow-scrolling: touch;
 }
 
 .modal-show {
@@ -5014,7 +5046,7 @@ textarea:focus-visible {
   box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 
               0 10px 10px -5px rgba(0, 0, 0, 0.04);
   width: 100%;
-  max-height: calc(100vh - var(--space-8));
+  max-height: min(90vh, 90dvh); /* Ensure modal never exceeds viewport */
   overflow: hidden;
   display: flex;
   flex-direction: column;
@@ -5226,5 +5258,80 @@ textarea:focus-visible {
   50% {
     opacity: 0.7;
     transform: scale(1.05);
+  }
+}
+
+/* ============================================
+   OFFLINE INDICATOR
+   ============================================ */
+.offline-indicator {
+  position: fixed;
+  bottom: calc(var(--safe-bottom) + 80px);
+  left: 50%;
+  transform: translateX(-50%);
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+  background: var(--gray-900);
+  color: white;
+  padding: var(--space-3) var(--space-5);
+  border-radius: var(--radius-full);
+  font-size: var(--text-sm);
+  font-weight: var(--font-medium);
+  box-shadow: var(--shadow-xl);
+  z-index: var(--z-toast);
+  animation: slideUp 0.3s ease-out;
+  max-width: calc(100vw - var(--space-8));
+}
+
+.offline-indicator svg {
+  flex-shrink: 0;
+}
+
+.offline-indicator.fade-out {
+  animation: slideDown 0.3s ease-out forwards;
+}
+
+@keyframes slideUp {
+  from {
+    opacity: 0;
+    transform: translateX(-50%) translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(-50%) translateY(0);
+  }
+}
+
+@keyframes slideDown {
+  from {
+    opacity: 1;
+    transform: translateX(-50%) translateY(0);
+  }
+  to {
+    opacity: 0;
+    transform: translateX(-50%) translateY(20px);
+  }
+}
+
+/* Dark mode adjustments */
+[data-theme="dark"] .offline-indicator {
+  background: var(--gray-800);
+  border: 1px solid var(--border-primary);
+}
+
+/* Mobile adjustments */
+@media (max-width: 640px) {
+  .offline-indicator {
+    bottom: calc(var(--safe-bottom) + 70px);
+    font-size: var(--text-xs);
+    padding: var(--space-2) var(--space-4);
+  }
+  
+  .offline-indicator span {
+    max-width: 200px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
   }
 }

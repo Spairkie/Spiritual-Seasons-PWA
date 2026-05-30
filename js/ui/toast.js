@@ -27,14 +27,21 @@ const Toast = (() => {
     }
   }
 
-  function show(message, type = 'info', duration = DURATION.normal) {
+  function show(message, options = {}) {
     init();
 
+    // Support both old (type, duration) and new (options) API
+    const type = typeof options === 'string' ? options : (options.type || 'info');
+    const duration = typeof options === 'number' ? options : (options.duration || DURATION.normal);
+    
     const toast = {
       id: Date.now(),
       message,
       type, // 'success', 'error', 'warning', 'info'
-      duration
+      duration,
+      action: options.action || null, // { text, onClick }
+      dismissButton: options.dismissButton !== false, // Default true
+      onDismiss: options.onDismiss || null
     };
 
     toastQueue.push(toast);
@@ -59,21 +66,39 @@ const Toast = (() => {
     const toastElement = document.createElement('div');
     toastElement.className = `toast toast-${toast.type}`;
     toastElement.setAttribute('role', 'alert');
+    toastElement.setAttribute('aria-live', toast.type === 'error' ? 'assertive' : 'polite');
     
     // Get icon based on type
     const icon = getIcon(toast.type);
     
-    toastElement.innerHTML = `
+    // Build toast content
+    let toastHTML = `
       <div class="toast-icon">${icon}</div>
       <div class="toast-message">${escapeHtml(toast.message)}</div>
-      <button class="toast-close" aria-label="Close notification">
-        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-          <line x1="18" y1="6" x2="6" y2="18"></line>
-          <line x1="6" y1="6" x2="18" y2="18"></line>
-        </svg>
-      </button>
     `;
-
+    
+    // Add action button if provided
+    if (toast.action) {
+      toastHTML += `
+        <button class="toast-action btn btn-sm btn-ghost">
+          ${escapeHtml(toast.action.text)}
+        </button>
+      `;
+    }
+    
+    // Add dismiss button if enabled
+    if (toast.dismissButton) {
+      toastHTML += `
+        <button class="toast-close" aria-label="Close notification">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <line x1="18" y1="6" x2="6" y2="18"></line>
+            <line x1="6" y1="6" x2="18" y2="18"></line>
+          </svg>
+        </button>
+      `;
+    }
+    
+    toastElement.innerHTML = toastHTML;
     container.appendChild(toastElement);
 
     // Trigger animation
@@ -81,19 +106,34 @@ const Toast = (() => {
       toastElement.classList.add('toast-show');
     }, 10);
 
-    // Close button
-    const closeBtn = toastElement.querySelector('.toast-close');
-    closeBtn.addEventListener('click', () => {
-      hideToast(toastElement);
-    });
+    // Action button handler
+    if (toast.action) {
+      const actionBtn = toastElement.querySelector('.toast-action');
+      actionBtn.addEventListener('click', () => {
+        if (toast.action.onClick) {
+          toast.action.onClick();
+        }
+        hideToast(toastElement, toast.onDismiss);
+      });
+    }
 
-    // Auto-hide
-    setTimeout(() => {
-      hideToast(toastElement);
-    }, toast.duration);
+    // Close button handler
+    if (toast.dismissButton) {
+      const closeBtn = toastElement.querySelector('.toast-close');
+      closeBtn.addEventListener('click', () => {
+        hideToast(toastElement, toast.onDismiss);
+      });
+    }
+
+    // Auto-hide (unless duration is 0)
+    if (toast.duration > 0) {
+      setTimeout(() => {
+        hideToast(toastElement, toast.onDismiss);
+      }, toast.duration);
+    }
   }
 
-  function hideToast(toastElement) {
+  function hideToast(toastElement, onDismiss) {
     toastElement.classList.remove('toast-show');
     toastElement.classList.add('toast-hide');
 
@@ -101,6 +141,12 @@ const Toast = (() => {
       if (toastElement.parentNode) {
         toastElement.parentNode.removeChild(toastElement);
       }
+      
+      // Call onDismiss callback if provided
+      if (onDismiss) {
+        onDismiss();
+      }
+      
       showNext();
     }, 300);
   }
@@ -137,20 +183,32 @@ const Toast = (() => {
   }
 
   // Convenience methods
-  function success(message, duration) {
-    show(message, 'success', duration);
+  function success(message, durationOrOptions) {
+    const options = typeof durationOrOptions === 'object' 
+      ? { ...durationOrOptions, type: 'success' }
+      : { type: 'success', duration: durationOrOptions };
+    show(message, options);
   }
 
-  function error(message, duration) {
-    show(message, 'error', duration);
+  function error(message, durationOrOptions) {
+    const options = typeof durationOrOptions === 'object' 
+      ? { ...durationOrOptions, type: 'error' }
+      : { type: 'error', duration: durationOrOptions };
+    show(message, options);
   }
 
-  function warning(message, duration) {
-    show(message, 'warning', duration);
+  function warning(message, durationOrOptions) {
+    const options = typeof durationOrOptions === 'object' 
+      ? { ...durationOrOptions, type: 'warning' }
+      : { type: 'warning', duration: durationOrOptions };
+    show(message, options);
   }
 
-  function info(message, duration) {
-    show(message, 'info', duration);
+  function info(message, durationOrOptions) {
+    const options = typeof durationOrOptions === 'object' 
+      ? { ...durationOrOptions, type: 'info' }
+      : { type: 'info', duration: durationOrOptions };
+    show(message, options);
   }
 
   return {

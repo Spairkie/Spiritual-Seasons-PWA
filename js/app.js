@@ -50,11 +50,11 @@ const App = (() => {
     } catch (error) {
       // Check if request was aborted
       if (error.name === 'AbortError') {
-        console.log('Data loading was cancelled');
+        Utils.debug.log('Data loading was cancelled');
         return false;
       }
       
-      console.error('Failed to load data:', error);
+      Utils.debug.error('Failed to load data:', error);
       
       // More specific error messages
       if (error.message.includes('timeout')) {
@@ -70,14 +70,18 @@ const App = (() => {
   }
 
   function setupRoutes() {
-    // Intro Pages Route (NEW)
+    // Intro Pages Route
     Router.register('intro', async (params) => {
+      const container = document.getElementById('intro-content');
       try {
         const page = params.page || 'toc';
         await IntroPages.init();
         IntroPages.render('intro-content', page);
       } catch (error) {
-        console.error('Intro pages render error:', error);
+        Utils.debug.error('Intro pages render error:', error);
+        if (ErrorHandler && ErrorHandler.handleError) {
+          ErrorHandler.handleError(error, 'Intro pages route');
+        }
         showErrorInContainer('intro-content', 'Failed to load introductory pages');
       }
     });
@@ -87,7 +91,7 @@ const App = (() => {
       try {
         await Progress.renderDashboard('progress-content');
       } catch (error) {
-        console.error('Progress render error:', error);
+        Utils.debug.error('Progress render error:', error);
         showErrorInContainer('progress-content', 'Failed to load progress dashboard');
       }
     });
@@ -97,7 +101,7 @@ const App = (() => {
       try {
         await WeeklyReflection.renderReflectionsView('reflections-content');
       } catch (error) {
-        console.error('Reflections render error:', error);
+        Utils.debug.error('Reflections render error:', error);
         showErrorInContainer('reflections-content', 'Failed to load reflections');
       }
     });
@@ -107,7 +111,7 @@ const App = (() => {
       try {
         await Search.renderSearchInterface('search-content');
       } catch (error) {
-        console.error('Search render error:', error);
+        Utils.debug.error('Search render error:', error);
         showErrorInContainer('search-content', 'Failed to load search');
       }
     });
@@ -117,7 +121,7 @@ const App = (() => {
       try {
         await Privacy.renderPrivacyDashboard('privacy-content');
       } catch (error) {
-        console.error('Privacy render error:', error);
+        Utils.debug.error('Privacy render error:', error);
         showErrorInContainer('privacy-content', 'Failed to load privacy dashboard');
       }
     });
@@ -126,7 +130,7 @@ const App = (() => {
       try {
         await renderHome();
       } catch (error) {
-        console.error('Home render error:', error);
+        Utils.debug.error('Home render error:', error);
         showErrorInContainer('home-content', 'Failed to load home page');
       }
     });
@@ -135,7 +139,7 @@ const App = (() => {
       try {
         Quiz.renderWelcome('quiz-content');
       } catch (error) {
-        console.error('Quiz render error:', error);
+        Utils.debug.error('Quiz render error:', error);
         showErrorInContainer('quiz-content', 'Failed to load quiz');
       }
     });
@@ -145,7 +149,7 @@ const App = (() => {
         const day = Utils.validateDay(params.day) || await Store.getCurrentDay() || 1;
         await Devotional.render('devotional-content', day);
       } catch (error) {
-        console.error('Devotional render error:', error);
+        Utils.debug.error('Devotional render error:', error);
         showErrorInContainer('devotional-content', 'Failed to load devotional');
       }
     });
@@ -154,7 +158,7 @@ const App = (() => {
       try {
         await TOC.render('contents-content');
       } catch (error) {
-        console.error('Contents render error:', error);
+        Utils.debug.error('Contents render error:', error);
         showErrorInContainer('contents-content', 'Failed to load contents');
       }
     });
@@ -163,7 +167,7 @@ const App = (() => {
       try {
         await renderFavorites();
       } catch (error) {
-        console.error('Favorites render error:', error);
+        Utils.debug.error('Favorites render error:', error);
         showErrorInContainer('favorites-content', 'Failed to load favorites');
       }
     });
@@ -172,7 +176,7 @@ const App = (() => {
       try {
         await Settings.render('settings-content');
       } catch (error) {
-        console.error('Settings render error:', error);
+        Utils.debug.error('Settings render error:', error);
         showErrorInContainer('settings-content', 'Failed to load settings');
       }
     });
@@ -181,8 +185,36 @@ const App = (() => {
   function showErrorInContainer(containerId, message) {
     const container = document.getElementById(containerId);
     if (!container) return;
+    
     Utils.clearElement(container);
-    container.appendChild(Utils.showErrorBoundary(new Error(message), message));
+    
+    const errorBoundary = Utils.createElement('div', { className: 'error-boundary' });
+    errorBoundary.innerHTML = `
+      <svg width="64" height="64" viewBox="0 0 24 24" fill="none" stroke="var(--autumn-primary)" stroke-width="1.5" style="margin: 0 auto var(--space-4);">
+        <circle cx="12" cy="12" r="10"/>
+        <path d="M12 8v4M12 16h.01"/>
+      </svg>
+      <h3 style="color: var(--text-primary); margin-bottom: var(--space-2);">${Utils.escapeHtml(message)}</h3>
+      <p style="color: var(--text-secondary); margin-bottom: var(--space-6);">
+        We encountered an issue loading this page. You can try refreshing or return to the home page.
+      </p>
+      <div style="display: flex; gap: var(--space-3); justify-content: center; flex-wrap: wrap;">
+        <button class="btn btn-primary" onclick="location.reload()">
+          ${Utils.getIcon('undo', 16)}
+          <span>Refresh Page</span>
+        </button>
+        <button class="btn btn-secondary" data-route="home">
+          ${Utils.getIcon('home', 16)}
+          <span>Go Home</span>
+        </button>
+        <button class="btn btn-ghost" data-route="settings">
+          ${Utils.getIcon('settings', 16)}
+          <span>Settings</span>
+        </button>
+      </div>
+    `;
+    
+    container.appendChild(errorBoundary);
   }
 
   async function renderFavorites() {
@@ -246,10 +278,22 @@ const App = (() => {
             ${Utils.escapeHtml(dayData.scriptureRef)}
           </h3>
           <p class="card-description">"${Utils.escapeHtml(dayData.scriptureText)}"</p>
-          <button class="btn btn-ghost btn-sm" style="margin-top: var(--space-3);" data-route="devotional" data-day="${fav.day}">
-            Read Devotional
-            ${Utils.getIcon('arrowRight', 16)}
-          </button>
+          ${fav.note ? `
+            <div class="favorite-note" style="margin-top: var(--space-3); padding: var(--space-3); background: var(--season-light); border-radius: var(--radius-md); border-left: 3px solid var(--season-primary);">
+              <div style="font-size: var(--text-xs); font-weight: 600; color: var(--season-dark); margin-bottom: var(--space-1);">WHY I SAVED THIS</div>
+              <div style="font-size: var(--text-sm); color: var(--text-secondary); line-height: var(--leading-relaxed);">${Utils.escapeHtml(fav.note)}</div>
+            </div>
+          ` : ''}
+          <div style="display: flex; gap: var(--space-2); margin-top: var(--space-3); flex-wrap: wrap;">
+            <button class="btn btn-ghost btn-sm" data-route="devotional" data-day="${fav.day}">
+              Read Devotional
+              ${Utils.getIcon('arrowRight', 16)}
+            </button>
+            <button class="btn btn-ghost btn-sm" data-edit-note="${fav.day}">
+              ${Utils.getIcon('edit', 16)}
+              ${fav.note ? 'Edit' : 'Add'} Note
+            </button>
+          </div>
         `;
         
         // Add unfavorite handler
@@ -261,6 +305,13 @@ const App = (() => {
           renderFavorites(); // Refresh the list
         });
         
+        // Add edit note handler
+        const editNoteBtn = card.querySelector('[data-edit-note]');
+        editNoteBtn.addEventListener('click', (e) => {
+          e.stopPropagation();
+          showEditNoteModal(fav.day, fav.note || '', dayData.scriptureRef);
+        });
+        
         favList.appendChild(card);
       }
       
@@ -269,6 +320,60 @@ const App = (() => {
 
     container.appendChild(pageHeader);
     container.appendChild(pageContent);
+  }
+  
+  // Helper function to show edit note modal for favorites
+  function showEditNoteModal(day, currentNote, scriptureRef) {
+    const modalContent = document.createElement('div');
+    modalContent.innerHTML = `
+      <div style="margin-bottom: var(--space-4);">
+        <label for="favorite-note" style="display: block; font-weight: 600; margin-bottom: var(--space-2); color: var(--text-primary);">
+          Why did you save ${scriptureRef}?
+        </label>
+        <textarea 
+          id="favorite-note" 
+          class="reflection-textarea"
+          rows="4"
+          maxlength="500"
+          placeholder="Add a personal note to help you remember why this devotional is meaningful to you..."
+          style="width: 100%;"
+        >${Utils.escapeHtml(currentNote)}</textarea>
+        <div style="font-size: var(--text-xs); color: var(--text-tertiary); margin-top: var(--space-1);">
+          <span id="note-char-count">${currentNote.length}</span>/500 characters
+        </div>
+      </div>
+    `;
+    
+    const textarea = modalContent.querySelector('#favorite-note');
+    const charCount = modalContent.querySelector('#note-char-count');
+    
+    textarea.addEventListener('input', () => {
+      charCount.textContent = textarea.value.length;
+    });
+    
+    Modal.create({
+      title: 'Edit Favorite Note',
+      content: modalContent,
+      size: 'medium',
+      buttons: [
+        {
+          text: 'Save Note',
+          className: 'btn-primary',
+          onClick: async () => {
+            const note = textarea.value.trim();
+            await Store.updateFavoriteNote(day, note);
+            Toast.success(note ? 'Note saved' : 'Note removed');
+            renderFavorites();
+            return true;
+          }
+        },
+        {
+          text: 'Cancel',
+          className: 'btn-secondary',
+          onClick: () => true
+        }
+      ]
+    });
   }
 
   /**
@@ -302,7 +407,7 @@ const App = (() => {
     // Set theme based on current day's season, ensuring consistency
     if (season) {
       document.documentElement.setAttribute('data-season', season.id);
-      console.log(`[Home] Setting season to: ${season.id} (day ${currentDay})`);
+      Utils.debug.log(`[Home] Setting season to: ${season.id} (day ${currentDay})`);
     }
 
     const dateStr = Utils.formatDate(new Date());
@@ -314,7 +419,7 @@ const App = (() => {
     // Wrapper with max-width for consistent layout
     const contentWrapper = Utils.createElement('div', { className: 'page-content' });
 
-    const homeContent = Utils.createElement('div', { className: 'season-bg' });
+    const homeContent = Utils.createElement('div');
 
     // Hero section with greeting and seasonal badge
     const hero = Utils.createElement('div', { className: 'home-hero' },
@@ -534,7 +639,7 @@ const App = (() => {
           Toast.success(`Playing: ${presetName}`);
           modal.close();
         } catch (error) {
-          console.error('Failed to play ambient sound:', error);
+          Utils.debug.error('Failed to play ambient sound:', error);
           Toast.error('Failed to play sound');
         }
       });
@@ -553,13 +658,13 @@ const App = (() => {
   }
 
   async function init() {
-    console.log('%c✨ Spiritual Seasons v' + CONFIG.APP_VERSION + ' ✨', 
+    Utils.debug.log('%c✨ Spiritual Seasons v' + CONFIG.APP_VERSION + ' ✨', 
       'font-size: 20px; font-weight: bold; color: #4A90A4; text-shadow: 2px 2px 4px rgba(0,0,0,0.1);'
     );
-    console.log('%cBy Dr. Jacqueline Ghee • Built with ❤️', 
+    Utils.debug.log('%cBy Dr. Jacqueline Ghee • Built with ❤️', 
       'font-size: 12px; color: #5D6D7E;'
     );
-    console.log('Initializing Spiritual Seasons PWA...');
+    Utils.debug.log('Initializing Spiritual Seasons PWA...');
 
     document.body.innerHTML = `
       <div style="display: flex; align-items: center; justify-content: center; min-height: 100vh; flex-direction: column; gap: var(--space-4);">
@@ -571,17 +676,17 @@ const App = (() => {
     try {
       // Initialize error handling FIRST
       ErrorHandler.init();
-      console.log('✓ Error handling initialized');
+      Utils.debug.log('✓ Error handling initialized');
       
       // Initialize core infrastructure
       if (typeof StateManager !== 'undefined') {
         StateManager.init();
-        console.log('✓ State manager initialized');
+        Utils.debug.log('✓ State manager initialized');
       }
       
       if (typeof BlobManager !== 'undefined') {
         BlobManager.setupAutoCleanup();
-        console.log('✓ Blob manager initialized');
+        Utils.debug.log('✓ Blob manager initialized');
       }
       
       if (typeof SyncQueue !== 'undefined') {
@@ -603,7 +708,7 @@ const App = (() => {
         // Listen to sync events
         SyncQueue.on((event, operation) => {
           if (event === 'success') {
-            console.log('✓ Synced:', operation?.type);
+            Utils.debug.log('✓ Synced:', operation?.type);
           } else if (event === 'failed') {
             Toast.error(`Failed to sync ${operation?.type}`);
           } else if (event === 'online') {
@@ -611,23 +716,23 @@ const App = (() => {
           }
         });
         
-        console.log('✓ Sync queue initialized');
+        Utils.debug.log('✓ Sync queue initialized');
       }
 
       // Initialize database
       await Store.init();
-      console.log('✓ Store initialized (v' + CONFIG.DB.VERSION + ')');
+      Utils.debug.log('✓ Store initialized (v' + CONFIG.DB.VERSION + ')');
 
       // Initialize theme system (light mode default)
       ThemeManager.init();
-      console.log('✓ ThemeManager initialized (light mode default)');
+      Utils.debug.log('✓ ThemeManager initialized (light mode default)');
 
       // Load content data
       const dataLoaded = await loadData();
       if (!dataLoaded) {
         throw new Error('Failed to load content data');
       }
-      console.log('✓ Content loaded');
+      Utils.debug.log('✓ Content loaded');
 
       // Initialize modules
       TTS.init();
@@ -656,7 +761,7 @@ const App = (() => {
       // Initialize blob cleanup
       BlobManager.setupAutoCleanup();
       
-      console.log('✓ Modules initialized');
+      Utils.debug.log('✓ Modules initialized');
 
       // Apply saved settings
       await Settings.applySettings();
@@ -682,19 +787,55 @@ const App = (() => {
       }
       Router.init();
 
-      // Add online/offline detection
+      // Add online/offline detection with persistent indicator
+      function showOfflineIndicator() {
+        if (document.getElementById('offline-indicator')) return; // Already showing
+        
+        const indicator = document.createElement('div');
+        indicator.id = 'offline-indicator';
+        indicator.className = 'offline-indicator';
+        indicator.innerHTML = `
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <line x1="1" y1="1" x2="23" y2="23"/>
+            <path d="M16.72 11.06A10.94 10.94 0 0 1 19 12.55"/>
+            <path d="M5 12.55a10.94 10.94 0 0 1 5.17-2.39"/>
+            <path d="M10.71 5.05A16 16 0 0 1 22.58 9"/>
+            <path d="M1.42 9a15.91 15.91 0 0 1 4.7-2.88"/>
+            <path d="M8.53 16.11a6 6 0 0 1 6.95 0"/>
+            <line x1="12" y1="20" x2="12.01" y2="20"/>
+          </svg>
+          <span>You're offline. Changes will sync when online.</span>
+        `;
+        document.body.appendChild(indicator);
+      }
+
+      function hideOfflineIndicator() {
+        const indicator = document.getElementById('offline-indicator');
+        if (indicator) {
+          indicator.classList.add('fade-out');
+          setTimeout(() => indicator.remove(), 300);
+        }
+      }
+
       window.addEventListener('online', () => {
-        Toast.success('Connection restored');
-        console.log('📶 Online');
+        hideOfflineIndicator();
+        Toast.success('Connection restored - syncing...');
+        Utils.debug.log('📶 Online');
       });
 
       window.addEventListener('offline', () => {
-        Toast.warning('You are offline. Changes will be saved locally.');
-        console.log('📵 Offline');
+        showOfflineIndicator();
+        Toast.warning('You are offline');
+        Utils.debug.log('📵 Offline');
       });
 
-      console.log('✅ App initialized successfully (v' + CONFIG.APP_VERSION + ')');
-      console.log('Current status: ' + (navigator.onLine ? '📶 Online' : '📵 Offline'));
+      // Show offline indicator on load if already offline
+      if (!navigator.onLine) {
+        showOfflineIndicator();
+      }
+
+      Utils.debug.log('✅ App initialized successfully (v' + CONFIG.APP_VERSION + ')');
+      Utils.debug.log('Current status: ' + (navigator.onLine ? '📶 Online' : '📵 Offline'));
       
       // Show onboarding tour for new users
       setTimeout(() => {
@@ -702,7 +843,7 @@ const App = (() => {
       }, 1000);
 
     } catch (error) {
-      console.error('Failed to initialize app:', error);
+      Utils.debug.error('Failed to initialize app:', error);
       document.body.innerHTML = `
         <div style="display: flex; align-items: center; justify-content: center; min-height: 100vh; flex-direction: column; gap: var(--space-4); padding: var(--space-4); text-align: center;">
           <svg width="64" height="64" viewBox="0 0 24 24" fill="none" stroke="var(--autumn-primary)" stroke-width="1.5">
@@ -794,6 +935,11 @@ const App = (() => {
     }
     Router.cleanup();
     
+    // Cleanup PWA listeners (if service worker is supported)
+    if (typeof pwaListenerManager !== 'undefined' && pwaListenerManager) {
+      pwaListenerManager.removeAll();
+    }
+    
     // Cleanup audio if recording
     if (typeof AudioNotes !== 'undefined') {
       if (AudioNotes.isRecording()) {
@@ -811,7 +957,7 @@ const App = (() => {
       EventManager.cleanupAll();
     }
     
-    console.log('✓ App cleanup complete');
+    Utils.debug.log('✓ App cleanup complete');
   }
 
   return {
@@ -831,15 +977,109 @@ window.addEventListener('beforeunload', () => {
   App.cleanup();
 });
 
-// Register service worker
+// Register service worker with update detection
 if ('serviceWorker' in navigator) {
+  let deferredPrompt = null;
+  let pwaListenerManager = null;
+
+  // Capture PWA install prompt
+  const handleBeforeInstallPrompt = (e) => {
+    e.preventDefault();
+    deferredPrompt = e;
+    
+    // Show install promotion after user engages with app
+    setTimeout(() => {
+      showPWAInstallPromotion();
+    }, 60000); // After 1 minute
+  };
+
+  // Listen for successful installation
+  const handleAppInstalled = () => {
+    Utils.debug.log('PWA installed successfully');
+    Toast.success('App installed! You can now launch it from your home screen.');
+    deferredPrompt = null;
+  };
+
+  // Initialize PWA event listeners
+  pwaListenerManager = Utils.createListenerManager();
+  pwaListenerManager.add(window, 'beforeinstallprompt', handleBeforeInstallPrompt);
+  pwaListenerManager.add(window, 'appinstalled', handleAppInstalled);
+
+  // Show PWA install promotion
+  function showPWAInstallPromotion() {
+    if (!deferredPrompt) return;
+    
+    // Check if user has previously dismissed
+    const dismissed = localStorage.getItem('pwa-install-dismissed');
+    if (dismissed) return;
+    
+    const toast = Toast.info(
+      'Install Spiritual Seasons for a better experience!',
+      {
+        duration: 0, // Don't auto-dismiss
+        action: {
+          text: 'Install',
+          onClick: async () => {
+            if (!deferredPrompt) return;
+            
+            deferredPrompt.prompt();
+            const { outcome } = await deferredPrompt.userChoice;
+            
+            Utils.debug.log(`User ${outcome} the install prompt`);
+            
+            if (outcome === 'accepted') {
+              Toast.success('Thanks for installing!');
+            }
+            
+            deferredPrompt = null;
+          }
+        },
+        dismissButton: true,
+        onDismiss: () => {
+          localStorage.setItem('pwa-install-dismissed', 'true');
+        }
+      }
+    );
+  }
+
+  // Register service worker
   window.addEventListener('load', () => {
     navigator.serviceWorker.register('./sw.js')
       .then(registration => {
-        console.log('ServiceWorker registered:', registration.scope);
+        Utils.debug.log('ServiceWorker registered:', registration.scope);
+        
+        // Check for updates every hour
+        setInterval(() => {
+          registration.update();
+        }, 60 * 60 * 1000);
+        
+        // Detect new version available
+        registration.addEventListener('updatefound', () => {
+          const newWorker = registration.installing;
+          
+          newWorker.addEventListener('statechange', () => {
+            if (newWorker.state === 'installed' && navigator.serviceWorker.controller) {
+              // New version available
+              Utils.debug.log('New version available');
+              
+              Toast.info(
+                'A new version is available!',
+                {
+                  duration: 0, // Don't auto-dismiss
+                  action: {
+                    text: 'Update',
+                    onClick: () => {
+                      window.location.reload();
+                    }
+                  }
+                }
+              );
+            }
+          });
+        });
       })
       .catch(error => {
-        console.log('ServiceWorker registration failed:', error);
+        Utils.debug.error('ServiceWorker registration failed:', error);
       });
   });
 }

@@ -1,0 +1,511 @@
+/* ============================================
+   SPIRITUAL SEASONS - UI/UX POLISH
+   Additional styles for production completion
+   ============================================ */
+
+/* ============================================
+   DEVOTIONAL MOBILE KEYBOARD FIX
+   Ensure inputs stay visible when keyboard appears
+   ============================================ */
+.journal-section {
+  position: relative;
+  scroll-margin-top: 100px; /* Ensure it's visible when scrolled */
+}
+
+.journal-textarea:focus {
+  scroll-margin-top: 100px;
+}
+
+/* iOS keyboard handling */
+@supports (-webkit-touch-callout: none) {
+  .journal-textarea {
+    font-size: 16px; /* Prevent zoom on iOS */
+  }
+}
+
+/* ============================================
+   VERSE IMAGE MODAL FIX
+   Ensure modal fits viewport and doesn't scroll
+   ============================================ */
+.verse-image-modal .modal-body {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  max-height: 100%;
+  padding: var(--space-4);
+}
+
+.verse-image-modal img {
+  max-width: 100%;
+  max-height: calc(90dvh - 200px);
+  object-fit: contain;
+  border-radius: var(--radius-lg);
+}
+
+/* ============================================
+   TOC / CONTENTS INDICATORS
+   Improved visual hierarchy for day indicators
+   ============================================ */
+.toc-day-btn {
+  position: relative;
+  padding: var(--space-3);
+  border: 1px solid var(--border-color);
+  background: var(--bg-primary);
+  border-radius: var(--radius-lg);
+  transition: all var(--transition-fast);
+}
+
+.toc-day-btn.completed {
+  background: var(--season-lightest, var(--bg-secondary));
+  border-color: var(--season-primary);
+}
+
+.toc-day-btn.current {
+  border-color: var(--season-primary);
+  border-width: 2px;
+  box-shadow: 0 0 0 3px var(--season-light);
+}
+
+.day-indicators {
+  display: flex;
+  gap: var(--space-1);
+  margin-top: var(--space-2);
+  flex-wrap: wrap;
+}
+
+.indicator {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  font-size: var(--text-xs);
+  padding: 2px 6px;
+  border-radius: var(--radius-sm);
+  background: var(--bg-secondary);
+}
+
+.indicator.check {
+  background: var(--season-light);
+  color: var(--season-dark);
+}
+
+.indicator.favorite {
+  background: #fee;
+  color: #c00;
+}
+
+.indicator.journal {
+  background: #eff6ff;
+  color: #1e40af;
+}
+
+.indicator.audio {
+  background: #f0fdf4;
+  color: #166534;
+}
+
+/* ============================================
+   PROGRESS SCREEN LAYOUT
+   Centered, responsive progress dashboard
+   ============================================ */
+.progress-dashboard {
+  max-width: 900px;
+  margin: 0 auto;
+}
+
+.progress-dashboard .page-title {
+  text-align: center;
+  margin-bottom: var(--space-2);
+}
+
+.progress-dashboard .page-header {
+  text-align: center;
+  border-bottom: none;
+  margin-bottom: var(--space-8);
+}
+
+.progress-card {
+  margin-bottom: var(--space-6);
+}
+
+.progress-card.featured {
+  background: linear-gradient(135deg, var(--season-lightest) 0%, var(--bg-primary) 100%);
+  border: 1px solid var(--season-primary);
+}
+
+/* ============================================
+   GUIDED BREATHING UI
+   Clean, consistent breathing exercise interface
+   ============================================ */
+.breathing-pattern-selector {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: var(--space-3);
+  margin-bottom: var(--space-6);
+}
+
+.pattern-btn {
+  text-align: left;
+  padding: var(--space-4);
+  border: 2px solid var(--border-color);
+  background: var(--bg-primary);
+  border-radius: var(--radius-lg);
+  transition: all var(--transition-fast);
+  cursor: pointer;
+}
+
+.pattern-btn:hover {
+  border-color: var(--season-primary);
+  background: var(--season-lightest);
+}
+
+.pattern-btn.active {
+  border-color: var(--season-primary);
+  background: var(--season-light);
+  box-shadow: 0 0 0 3px var(--season-lightest);
+}
+
+.breathing-animation-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  min-height: 400px;
+  position: relative;
+}
+
+.breathing-circle {
+  width: 200px;
+  height: 200px;
+  border-radius: 50%;
+  background: var(--season-primary);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: white;
+  font-size: var(--text-2xl);
+  font-weight: 600;
+  transition: transform 3s ease-in-out;
+}
+
+.breathing-circle.inhale {
+  transform: scale(1.5);
+}
+
+.breathing-circle.exhale {
+  transform: scale(1);
+}
+
+/* ============================================
+   MEDITATION TIMER
+   Clean toggle controls without nested labels
+   ============================================ */
+.meditation-controls {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-4);
+  margin-bottom: var(--space-6);
+}
+
+.duration-selector {
+  display: flex;
+  gap: var(--space-3);
+  flex-wrap: wrap;
+  justify-content: center;
+}
+
+.duration-btn {
+  min-width: 80px;
+  padding: var(--space-3) var(--space-4);
+}
+
+.meditation-toggle-group {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--space-3);
+}
+
+/* ============================================
+   SEARCH UI POLISH
+   Better readability and visual grouping
+   ============================================ */
+.search-results-group {
+  margin-bottom: var(--space-6);
+}
+
+.search-results-group:last-child {
+  margin-bottom: 0;
+}
+
+.search-group-header {
+  font-size: var(--text-sm);
+  font-weight: 600;
+  color: var(--text-tertiary);
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  margin-bottom: var(--space-3);
+  padding-bottom: var(--space-2);
+  border-bottom: 1px solid var(--border-color);
+}
+
+.search-result-card {
+  background: var(--bg-primary);
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius-lg);
+  padding: var(--space-4);
+  margin-bottom: var(--space-3);
+  transition: all var(--transition-fast);
+}
+
+.search-result-card:hover {
+  border-color: var(--season-primary);
+  box-shadow: var(--shadow-md);
+  transform: translateY(-1px);
+}
+
+.search-highlight {
+  background: var(--season-light);
+  color: var(--season-dark);
+  padding: 1px 3px;
+  border-radius: 3px;
+  font-weight: 600;
+}
+
+/* Empty search state */
+.search-empty-state {
+  text-align: center;
+  padding: var(--space-12) var(--space-4);
+  color: var(--text-secondary);
+}
+
+.search-empty-state svg {
+  margin: 0 auto var(--space-4);
+  opacity: 0.5;
+}
+
+/* ============================================
+   SETTINGS PAGE LAYOUT
+   Logical grouping and season background
+   ============================================ */
+.settings-section {
+  background: var(--bg-primary);
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius-xl);
+  padding: var(--space-6);
+  margin-bottom: var(--space-6);
+}
+
+.settings-section-title {
+  font-size: var(--text-lg);
+  font-weight: 600;
+  color: var(--text-primary);
+  margin-bottom: var(--space-4);
+  padding-bottom: var(--space-3);
+  border-bottom: 1px solid var(--border-color);
+}
+
+.settings-group {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-4);
+}
+
+.setting-item {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: var(--space-3);
+  gap: var(--space-4);
+}
+
+.setting-label {
+  flex: 1;
+}
+
+.setting-label-text {
+  display: block;
+  font-weight: 500;
+  color: var(--text-primary);
+  margin-bottom: var(--space-1);
+}
+
+.setting-label-description {
+  display: block;
+  font-size: var(--text-sm);
+  color: var(--text-secondary);
+}
+
+.setting-control {
+  flex-shrink: 0;
+}
+
+/* Ambient sound selector improvement */
+.ambient-sound-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
+  gap: var(--space-3);
+  margin-top: var(--space-3);
+}
+
+.ambient-sound-option {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: var(--space-4);
+  border: 2px solid var(--border-color);
+  border-radius: var(--radius-lg);
+  background: var(--bg-primary);
+  cursor: pointer;
+  transition: all var(--transition-fast);
+  text-align: center;
+  min-height: 100px;
+}
+
+.ambient-sound-option:hover {
+  border-color: var(--season-primary);
+  background: var(--season-lightest);
+}
+
+.ambient-sound-option.selected {
+  border-color: var(--season-primary);
+  background: var(--season-light);
+  box-shadow: 0 0 0 3px var(--season-lightest);
+}
+
+.ambient-sound-emoji {
+  font-size: 2rem;
+  margin-bottom: var(--space-2);
+}
+
+.ambient-sound-name {
+  font-size: var(--text-sm);
+  font-weight: 500;
+  color: var(--text-primary);
+}
+
+/* ============================================
+   FAVORITE NOTE STYLING
+   Enhance note display in favorites
+   ============================================ */
+.favorite-note {
+  position: relative;
+}
+
+.favorite-note::before {
+  content: '';
+  position: absolute;
+  left: 0;
+  top: 0;
+  bottom: 0;
+  width: 3px;
+  background: var(--season-primary);
+  border-radius: 3px 0 0 3px;
+}
+
+/* ============================================
+   MOBILE RESPONSIVENESS
+   Ensure all elements work on small screens
+   ============================================ */
+@media (max-width: 640px) {
+  .progress-circle-container svg {
+    width: 160px;
+    height: 160px;
+  }
+  
+  .progress-stats {
+    grid-template-columns: 1fr;
+  }
+  
+  .breathing-circle {
+    width: 150px;
+    height: 150px;
+  }
+  
+  .ambient-sound-grid {
+    grid-template-columns: repeat(auto-fill, minmax(100px, 1fr));
+  }
+  
+  .setting-item {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+  
+  .setting-control {
+    width: 100%;
+  }
+}
+
+/* ============================================
+   ACCESSIBILITY IMPROVEMENTS
+   ============================================ */
+.btn:focus-visible,
+.nav-item:focus-visible,
+button:focus-visible,
+a:focus-visible {
+  outline: 2px solid var(--season-primary);
+  outline-offset: 2px;
+}
+
+.toggle-switch input:focus-visible + .toggle-slider {
+  box-shadow: 0 0 0 3px var(--season-light);
+}
+
+/* Reduce motion for users who prefer it */
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+  
+  .breathing-circle {
+    transition: none;
+  }
+}
+
+/* ============================================
+   LOADING STATES
+   Consistent loading indicators
+   ============================================ */
+.loading {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  min-height: 200px;
+  color: var(--text-secondary);
+  gap: var(--space-3);
+}
+
+.loading-spinner {
+  width: 40px;
+  height: 40px;
+  border: 3px solid var(--border-color);
+  border-top-color: var(--season-primary);
+  border-radius: 50%;
+  animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+  to { transform: rotate(360deg); }
+}
+
+/* ============================================
+   ERROR STATES
+   Consistent error messaging
+   ============================================ */
+.error-message {
+  padding: var(--space-6);
+  text-align: center;
+  color: var(--text-secondary);
+}
+
+.error-message p {
+  margin-bottom: var(--space-4);
+  color: var(--text-primary);
+  font-weight: 500;
+}

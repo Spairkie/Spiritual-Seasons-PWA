@@ -1,6 +1,6 @@
----Future TODO list
+# ☁️ FUTURE FEATURES (PLATFORM)
 
-## ☁️ Sync, Notifications & Platform Features
+### Sync & Notifications
 
 * Firebase cloud sync:
 
@@ -9,4 +9,7 @@
   * App settings
   * Audio notes
 * Google-based sync
-* Real notifications (push / scheduled)
+* Real notifications:
+
+  * Push
+  * Scheduled reminders

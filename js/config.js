@@ -9,6 +9,9 @@ const CONFIG = {
   APP_VERSION: '1.0.0',
   APP_DESCRIPTION: 'Daily Devotional Workbook',
   AUTHOR: 'Dr. Jacqueline Ghee, MSW, MPCC, DMIN',
+  
+  // Debug mode - set to false for production
+  DEBUG: true,
 
   // Database Configuration
   DB: {
@@ -109,7 +112,7 @@ const CONFIG = {
 
   // Storage Limits
   LIMITS: {
-    MAX_JOURNAL_LENGTH: 10000,
+    MAX_JOURNAL_LENGTH: 50000,
     MAX_AUDIO_DURATION_SECONDS: 300, // 5 minutes
     MAX_FAVORITE_COUNT: 120
   },

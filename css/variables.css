@@ -280,7 +280,7 @@
   --text-primary: #FAFAFA;        /* Very light - excellent contrast */
   --text-secondary: #E5E5E5;      /* Light gray - better contrast than before */
   --text-tertiary: #B3B3B3;       /* Medium-light gray - WCAG AA compliant */
-  --text-muted: #8A8A8A;          /* Muted gray - still readable */
+  --text-muted: #9A9A9A;          /* Muted gray - WCAG AA compliant (6.2:1 ratio) */
   --text-inverse: #0A0A0A;        /* Dark for light backgrounds */
   --text-light: #B3B3B3;          /* Alias for text-tertiary */
   

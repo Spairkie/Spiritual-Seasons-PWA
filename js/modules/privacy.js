@@ -4,11 +4,13 @@
  */
 
 const Privacy = (() => {
+  let privacyListenerManager = null;
+
   /**
    * Initialize privacy module
    */
   async function init() {
-    console.log('✓ Privacy module initialized');
+    Utils.debug.log('✓ Privacy module initialized');
     return true;
   }
 
@@ -48,7 +50,7 @@ const Privacy = (() => {
             : 0
         };
       } catch (error) {
-        console.error('Error getting storage estimate:', error);
+        Utils.debug.error('Error getting storage estimate:', error);
       }
     }
 
@@ -115,7 +117,7 @@ const Privacy = (() => {
 
       return true;
     } catch (error) {
-      console.error('Error clearing data:', error);
+      Utils.debug.error('Error clearing data:', error);
       Toast.error('Failed to clear all data');
       return false;
     }
@@ -186,7 +188,7 @@ const Privacy = (() => {
       Toast.success(`${typeNames[type]} cleared successfully`);
       return true;
     } catch (error) {
-      console.error(`Error clearing ${type}:`, error);
+      Utils.debug.error(`Error clearing ${type}:`, error);
       Toast.error(`Failed to clear ${typeNames[type].toLowerCase()}`);
       return false;
     }
@@ -211,14 +213,86 @@ const Privacy = (() => {
       Toast.success('Data exported successfully');
       return true;
     } catch (error) {
-      console.error('Export error:', error);
+      Utils.debug.error('Export error:', error);
       Toast.error('Failed to export data');
       return false;
     }
   }
 
   /**
-   * Import data (restore from backup)
+   * Validate import data structure
+   * @param {any} data - The data to validate
+   * @returns {Object} - Validation result with {valid: boolean, error: string}
+   */
+  function validateImportData(data) {
+    // Check if data exists and is an object
+    if (!data || typeof data !== 'object') {
+      return { valid: false, error: 'Invalid data format: not an object' };
+    }
+
+    // Check required top-level keys
+    const requiredKeys = ['journal', 'progress', 'settings', 'favorites'];
+    for (const key of requiredKeys) {
+      if (!(key in data)) {
+        return { valid: false, error: `Missing required section: ${key}` };
+      }
+    }
+
+    // Validate journal entries structure
+    if (data.journal && Array.isArray(data.journal)) {
+      for (let i = 0; i < data.journal.length; i++) {
+        const entry = data.journal[i];
+        if (!entry.day || typeof entry.day !== 'number' || entry.day < 1 || entry.day > 120) {
+          return { valid: false, error: `Invalid journal entry at index ${i}: missing or invalid day` };
+        }
+        if (typeof entry.content !== 'string') {
+          return { valid: false, error: `Invalid journal entry at index ${i}: content must be string` };
+        }
+      }
+    } else if (data.journal && typeof data.journal === 'object') {
+      // Handle object format (legacy)
+      const keys = Object.keys(data.journal);
+      for (const key of keys) {
+        const entry = data.journal[key];
+        if (!entry.day || typeof entry.day !== 'number') {
+          return { valid: false, error: `Invalid journal entry for key ${key}` };
+        }
+      }
+    }
+
+    // Validate progress structure
+    if (data.progress && Array.isArray(data.progress)) {
+      for (let i = 0; i < data.progress.length; i++) {
+        const prog = data.progress[i];
+        if (!prog.day || typeof prog.day !== 'number' || prog.day < 1 || prog.day > 120) {
+          return { valid: false, error: `Invalid progress entry at index ${i}: missing or invalid day` };
+        }
+        if (typeof prog.completed !== 'boolean') {
+          return { valid: false, error: `Invalid progress entry at index ${i}: completed must be boolean` };
+        }
+      }
+    }
+
+    // Validate favorites structure
+    if (data.favorites && Array.isArray(data.favorites)) {
+      for (let i = 0; i < data.favorites.length; i++) {
+        const fav = data.favorites[i];
+        if (!fav.day || typeof fav.day !== 'number' || fav.day < 1 || fav.day > 120) {
+          return { valid: false, error: `Invalid favorites entry at index ${i}: missing or invalid day` };
+        }
+      }
+    }
+
+    // Validate settings structure
+    if (data.settings && typeof data.settings !== 'object') {
+      return { valid: false, error: 'Invalid settings format: must be an object' };
+    }
+
+    return { valid: true };
+  }
+
+  /**
+   * Import data (restore from backup) with validation
    */
   async function importData() {
     return new Promise((resolve) => {
@@ -237,9 +311,13 @@ const Privacy = (() => {
           const text = await file.text();
           const data = JSON.parse(text);
 
-          // Validate data structure
-          if (!data.journal || !data.progress || !data.settings) {
-            throw new Error('Invalid backup file format');
+          // Comprehensive validation
+          const validation = validateImportData(data);
+          if (!validation.valid) {
+            Toast.error(`Import failed: ${validation.error}`);
+            Utils.debug.error('Import validation error:', validation.error);
+            resolve(false);
+            return;
           }
 
           const confirmed = await Modal.confirm({
@@ -271,8 +349,12 @@ const Privacy = (() => {
             resolve(false);
           }
         } catch (error) {
-          console.error('Import error:', error);
-          Toast.error('Failed to import data. Please check the file format.');
+          Utils.debug.error('Import error:', error);
+          if (error instanceof SyntaxError) {
+            Toast.error('Invalid JSON file. Please check the file format.');
+          } else {
+            Toast.error('Failed to import data. Please check the file format.');
+          }
           resolve(false);
         }
       });
@@ -287,6 +369,12 @@ const Privacy = (() => {
   async function renderPrivacyDashboard(containerId) {
     const container = document.getElementById(containerId);
     if (!container) return;
+
+    // Cleanup previous listeners
+    if (privacyListenerManager) {
+      privacyListenerManager.removeAll();
+    }
+    privacyListenerManager = Utils.createListenerManager();
 
     const summary = await getPrivacySummary();
     const storage = await getStorageUsage();
@@ -412,20 +500,28 @@ const Privacy = (() => {
   }
 
   /**
-   * Attach event listeners
+   * Attach event listeners using listener manager
    */
   function attachPrivacyListeners() {
-    document.getElementById('export-all-btn')?.addEventListener('click', exportAllData);
-    document.getElementById('import-data-btn')?.addEventListener('click', importData);
-    
-    document.getElementById('clear-journal-btn')?.addEventListener('click', () => clearDataType('journal'));
-    document.getElementById('clear-audio-btn')?.addEventListener('click', () => clearDataType('audio'));
-    document.getElementById('clear-reflections-btn')?.addEventListener('click', () => clearDataType('reflections'));
-    document.getElementById('clear-progress-btn')?.addEventListener('click', () => clearDataType('progress'));
-    document.getElementById('clear-favorites-btn')?.addEventListener('click', () => clearDataType('favorites'));
-    document.getElementById('clear-settings-btn')?.addEventListener('click', () => clearDataType('settings'));
-    
-    document.getElementById('clear-all-btn')?.addEventListener('click', clearAllData);
+    const exportBtn = document.getElementById('export-all-btn');
+    const importBtn = document.getElementById('import-data-btn');
+    const clearJournalBtn = document.getElementById('clear-journal-btn');
+    const clearAudioBtn = document.getElementById('clear-audio-btn');
+    const clearReflectionsBtn = document.getElementById('clear-reflections-btn');
+    const clearProgressBtn = document.getElementById('clear-progress-btn');
+    const clearFavoritesBtn = document.getElementById('clear-favorites-btn');
+    const clearSettingsBtn = document.getElementById('clear-settings-btn');
+    const clearAllBtn = document.getElementById('clear-all-btn');
+
+    if (exportBtn) privacyListenerManager.add(exportBtn, 'click', exportAllData);
+    if (importBtn) privacyListenerManager.add(importBtn, 'click', importData);
+    if (clearJournalBtn) privacyListenerManager.add(clearJournalBtn, 'click', () => clearDataType('journal'));
+    if (clearAudioBtn) privacyListenerManager.add(clearAudioBtn, 'click', () => clearDataType('audio'));
+    if (clearReflectionsBtn) privacyListenerManager.add(clearReflectionsBtn, 'click', () => clearDataType('reflections'));
+    if (clearProgressBtn) privacyListenerManager.add(clearProgressBtn, 'click', () => clearDataType('progress'));
+    if (clearFavoritesBtn) privacyListenerManager.add(clearFavoritesBtn, 'click', () => clearDataType('favorites'));
+    if (clearSettingsBtn) privacyListenerManager.add(clearSettingsBtn, 'click', () => clearDataType('settings'));
+    if (clearAllBtn) privacyListenerManager.add(clearAllBtn, 'click', clearAllData);
   }
 
   return {

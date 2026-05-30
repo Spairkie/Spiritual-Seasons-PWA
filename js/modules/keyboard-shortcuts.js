@@ -23,6 +23,14 @@ const KeyboardShortcuts = (() => {
   let keydownHandler = null;
 
   async function init() {
+    // Disable keyboard shortcuts on mobile/touch devices
+    const isTouchDevice = 'ontouchstart' in window || navigator.maxTouchPoints > 0;
+    if (isTouchDevice) {
+      enabled = false;
+      Utils.debug.log('✓ Keyboard shortcuts disabled (touch device)');
+      return;
+    }
+    
     // Load preference
     try {
       const setting = await Store.getSetting('keyboardShortcuts');
@@ -32,9 +40,9 @@ const KeyboardShortcuts = (() => {
         attachListeners();
       }
       
-      console.log('✓ Keyboard shortcuts ' + (enabled ? 'enabled' : 'disabled'));
+      Utils.debug.log('✓ Keyboard shortcuts ' + (enabled ? 'enabled' : 'disabled'));
     } catch (error) {
-      console.warn('Failed to load keyboard shortcuts setting:', error);
+      Utils.debug.warn('Failed to load keyboard shortcuts setting:', error);
       // Default to enabled
       enabled = true;
       attachListeners();
@@ -79,7 +87,7 @@ const KeyboardShortcuts = (() => {
       try {
         shortcut.action();
       } catch (error) {
-        console.error('Keyboard shortcut error:', error);
+        Utils.debug.error('Keyboard shortcut error:', error);
       }
     }
   }
@@ -223,7 +231,7 @@ const KeyboardShortcuts = (() => {
     }
     
     Store.saveSetting('keyboardShortcuts', enabled).catch(error => {
-      console.error('Failed to save keyboard shortcuts setting:', error);
+      Utils.debug.error('Failed to save keyboard shortcuts setting:', error);
     });
     
     return enabled;

@@ -5,6 +5,38 @@
 
 const Utils = (() => {
   // ============================================
+  // Debug Logging Utility
+  // ============================================
+  
+  /**
+   * Debug logging wrapper - only logs in debug mode
+   */
+  const debug = {
+    log: (...args) => {
+      if (CONFIG.DEBUG) console.log(...args);
+    },
+    warn: (...args) => {
+      if (CONFIG.DEBUG) console.warn(...args);
+    },
+    error: (...args) => {
+      // Always log errors
+      console.error(...args);
+    },
+    info: (...args) => {
+      if (CONFIG.DEBUG) console.info(...args);
+    },
+    table: (...args) => {
+      if (CONFIG.DEBUG) console.table(...args);
+    },
+    group: (...args) => {
+      if (CONFIG.DEBUG) console.group(...args);
+    },
+    groupEnd: () => {
+      if (CONFIG.DEBUG) console.groupEnd();
+    }
+  };
+
+  // ============================================
   // XSS Prevention & Text Sanitization
   // ============================================
   
@@ -153,10 +185,14 @@ const Utils = (() => {
    * @returns {number|null} - Valid day number or null
    */
   function validateDay(day) {
-    const num = parseInt(day, 10);
-    if (isNaN(num) || num < 1 || num > 120) {
+    // Convert to number
+    const num = Number(day);
+    
+    // Check if it's a valid integer between 1 and 120
+    if (!Number.isInteger(num) || num < 1 || num > 120) {
       return null;
     }
+    
     return num;
   }
 
@@ -307,10 +343,13 @@ const Utils = (() => {
    * @returns {string|null}
    */
   function getSeasonForDay(day) {
-    if (day >= 1 && day <= 30) return 'winter';
-    if (day >= 31 && day <= 60) return 'spring';
-    if (day >= 61 && day <= 90) return 'summer';
-    if (day >= 91 && day <= 120) return 'autumn';
+    const validDay = validateDay(day);
+    if (!validDay) return null;
+    
+    if (validDay >= 1 && validDay <= 30) return 'winter';
+    if (validDay >= 31 && validDay <= 60) return 'spring';
+    if (validDay >= 61 && validDay <= 90) return 'summer';
+    if (validDay >= 91 && validDay <= 120) return 'autumn';
     return null;
   }
 
@@ -503,7 +542,12 @@ const Utils = (() => {
     undo: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 7v6h6"/><path d="M21 17a9 9 0 00-9-9 9 9 0 00-6 2.3L3 13"/></svg>',
     redo: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 7v6h-6"/><path d="M3 17a9 9 0 019-9 9 9 0 016 2.3L21 13"/></svg>',
     externalLink: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg>',
-    pause: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="6" y="4" width="4" height="16"/><rect x="14" y="4" width="4" height="16"/></svg>'
+    pause: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="6" y="4" width="4" height="16"/><rect x="14" y="4" width="4" height="16"/></svg>',
+    shield: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>',
+    clock: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>',
+    activity: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/></svg>',
+    calendar: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>',
+    help: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>'
   };
 
   /**
@@ -519,6 +563,9 @@ const Utils = (() => {
 
   // Public API
   return {
+    // Debug Logging
+    debug,
+    
     // XSS Prevention
     escapeHtml,
     highlightMatch,

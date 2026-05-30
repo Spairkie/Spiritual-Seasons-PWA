@@ -36,7 +36,7 @@ const IntroPages = (() => {
 
       return true;
     } catch (error) {
-      console.error('Failed to load book data:', error);
+      Utils.debug.error('Failed to load book data:', error);
       return false;
     }
   }
@@ -44,7 +44,7 @@ const IntroPages = (() => {
   function renderTableOfContents(containerId) {
     const container = document.getElementById(containerId);
     if (!container || !bookData) {
-      console.error('Container not found or data not loaded');
+      Utils.debug.error('Container not found or data not loaded');
       return;
     }
 
@@ -281,7 +281,7 @@ const IntroPages = (() => {
 
     const season = bookData.seasonalOverviews[seasonId];
     if (!season) {
-      console.error('Season not found:', seasonId);
+      Utils.debug.error('Season not found:', seasonId);
       renderError(container, `Season "${seasonId}" not found`);
       return;
     }
@@ -295,7 +295,7 @@ const IntroPages = (() => {
     
     // Also save the current season to store
     Store.setCurrentSeason(seasonId).catch(err => {
-      console.error('Failed to save current season:', err);
+      Utils.debug.error('Failed to save current season:', err);
     });
     
     container.innerHTML = `
@@ -421,7 +421,7 @@ const IntroPages = (() => {
   function render(containerId, page = 'toc') {
     const container = document.getElementById(containerId);
     if (!container) {
-      console.error('Container not found:', containerId);
+      Utils.debug.error('Container not found:', containerId);
       return;
     }
 
@@ -482,7 +482,7 @@ const IntroPages = (() => {
         renderSeasonOverview(containerId, 'autumn');
         break;
       default:
-        console.warn('Unknown page:', page);
+        Utils.debug.warn('Unknown page:', page);
         renderError(container, `Page "${page}" not found`);
     }
   }

@@ -13,7 +13,7 @@ const ErrorBoundary = (() => {
     const container = document.getElementById(containerId);
     
     if (!container) {
-      console.warn(`[ErrorBoundary] Container '${containerId}' not found`);
+      Utils.debug.warn(`[ErrorBoundary] Container '${containerId}' not found`);
       return null;
     }
 
@@ -35,14 +35,14 @@ const ErrorBoundary = (() => {
       try {
         return await fn();
       } catch (error) {
-        console.error(`[ErrorBoundary] Error in ${containerId}:`, error);
+        Utils.debug.error(`[ErrorBoundary] Error in ${containerId}:`, error);
         
         // Call custom error handler if provided
         if (onError) {
           try {
             await onError(error);
           } catch (handlerError) {
-            console.error('[ErrorBoundary] Error in error handler:', handlerError);
+            Utils.debug.error('[ErrorBoundary] Error in error handler:', handlerError);
           }
         }
 
@@ -163,7 +163,7 @@ const ErrorBoundary = (() => {
         try {
           return await handler(params);
         } catch (error) {
-          console.error(`[ErrorBoundary] Route error in ${containerId}:`, error);
+          Utils.debug.error(`[ErrorBoundary] Route error in ${containerId}:`, error);
           if (typeof ErrorHandler !== 'undefined') {
             ErrorHandler.handleError(error, `Route: ${containerId}`);
           }
@@ -187,7 +187,7 @@ const ErrorBoundary = (() => {
   function initGlobalHandlers() {
     // Catch unhandled promise rejections
     window.addEventListener('unhandledrejection', (event) => {
-      console.error('[ErrorBoundary] Unhandled promise rejection:', event.reason);
+      Utils.debug.error('[ErrorBoundary] Unhandled promise rejection:', event.reason);
       
       if (typeof ErrorHandler !== 'undefined') {
         ErrorHandler.handleError(event.reason, 'Unhandled Promise');
@@ -204,7 +204,7 @@ const ErrorBoundary = (() => {
 
     // Catch global errors
     window.addEventListener('error', (event) => {
-      console.error('[ErrorBoundary] Global error:', event.error);
+      Utils.debug.error('[ErrorBoundary] Global error:', event.error);
       
       if (typeof ErrorHandler !== 'undefined') {
         ErrorHandler.handleError(event.error, 'Global Error');

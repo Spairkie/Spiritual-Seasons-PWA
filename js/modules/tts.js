@@ -34,14 +34,14 @@ const TTS = (() => {
       document.addEventListener('visibilitychange', () => {
         if (document.hidden && isPlaying()) {
           pause();
-          console.log('[TTS] Paused due to tab hidden');
+          Utils.debug.log('[TTS] Paused due to tab hidden');
         }
       });
 
       return true;
     }
     
-    console.warn('Text-to-speech not supported in this browser');
+    Utils.debug.warn('Text-to-speech not supported in this browser');
     return false;
   }
 
@@ -65,6 +65,11 @@ const TTS = (() => {
   function selectBestVoice() {
     const voices = synth.getVoices();
     
+    if (!voices || voices.length === 0) {
+      currentVoice = null;
+      return;
+    }
+    
     // Prefer English voices
     const englishVoices = voices.filter(voice => voice.lang.startsWith('en'));
     
@@ -73,7 +78,35 @@ const TTS = (() => {
       voice.name.includes('Google') || voice.name.includes('Microsoft')
     );
 
-    currentVoice = highQuality || englishVoices[0] || voices[0];
+    currentVoice = highQuality || englishVoices[0] || voices[0] || null;
+  }
+
+  /**
+   * Preprocess text for better TTS readability
+   * @param {string} text - Raw text
+   * @returns {string} - Processed text
+   */
+  function preprocessText(text) {
+    return text
+      // Replace common abbreviations with full words
+      .replace(/\bvs\./gi, 'versus')
+      .replace(/\betc\./gi, 'etcetera')
+      .replace(/\be\.g\./gi, 'for example')
+      .replace(/\bi\.e\./gi, 'that is')
+      // Improve scripture references
+      .replace(/(\d+):(\d+)/g, '$1 verse $2')
+      // Add pauses for better readability
+      .replace(/;/g, ',')
+      .replace(/--/g, ',')
+      // Clean up excessive punctuation
+      .replace(/\.{3,}/g, '.')
+      .replace(/!{2,}/g, '!')
+      .replace(/\?{2,}/g, '?')
+      // Remove markdown/formatting
+      .replace(/\*\*/g, '')
+      .replace(/\*/g, '')
+      .replace(/_/g, '')
+      .trim();
   }
 
   /**
@@ -87,6 +120,9 @@ const TTS = (() => {
 
     // Stop any current reading
     stop();
+    
+    // Preprocess text for better speech
+    const processedText = preprocessText(text);
 
     const {
       rate = currentRate,
@@ -98,7 +134,7 @@ const TTS = (() => {
       onResume = null
     } = options;
 
-    currentUtterance = new SpeechSynthesisUtterance(text);
+    currentUtterance = new SpeechSynthesisUtterance(processedText);
     currentUtterance.rate = rate;
     currentUtterance.pitch = pitch;
     currentUtterance.volume = volume;
@@ -128,7 +164,7 @@ const TTS = (() => {
     };
 
     currentUtterance.onerror = (event) => {
-      console.error('TTS error:', event);
+      Utils.debug.error('TTS error:', event);
       isReading = false;
       isPaused = false;
       Toast.error('Error reading text aloud');

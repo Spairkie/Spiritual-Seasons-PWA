@@ -76,7 +76,7 @@ const UndoManager = (() => {
     // Update last edit
     lastEdits.set(key, { state, timestamp: now });
 
-    console.log(`[UndoManager] Pushed state for ${key} (undo: ${history.undo.length})`);
+    Utils.debug.log(`[UndoManager] Pushed state for ${key} (undo: ${history.undo.length})`);
   }
 
   /**
@@ -87,7 +87,7 @@ const UndoManager = (() => {
    */
   function undo(key, currentState) {
     if (!canUndo(key)) {
-      console.warn(`[UndoManager] Cannot undo: ${key}`);
+      Utils.debug.warn(`[UndoManager] Cannot undo: ${key}`);
       return null;
     }
 
@@ -102,7 +102,7 @@ const UndoManager = (() => {
     // Get previous state from undo stack
     const previous = history.undo.pop();
 
-    console.log(`[UndoManager] Undo for ${key} (undo: ${history.undo.length}, redo: ${history.redo.length})`);
+    Utils.debug.log(`[UndoManager] Undo for ${key} (undo: ${history.undo.length}, redo: ${history.redo.length})`);
 
     return previous.state;
   }
@@ -115,7 +115,7 @@ const UndoManager = (() => {
    */
   function redo(key, currentState) {
     if (!canRedo(key)) {
-      console.warn(`[UndoManager] Cannot redo: ${key}`);
+      Utils.debug.warn(`[UndoManager] Cannot redo: ${key}`);
       return null;
     }
 
@@ -130,7 +130,7 @@ const UndoManager = (() => {
     // Get next state from redo stack
     const next = history.redo.pop();
 
-    console.log(`[UndoManager] Redo for ${key} (undo: ${history.undo.length}, redo: ${history.redo.length})`);
+    Utils.debug.log(`[UndoManager] Redo for ${key} (undo: ${history.undo.length}, redo: ${history.redo.length})`);
 
     return next.state;
   }
@@ -183,7 +183,7 @@ const UndoManager = (() => {
     if (histories.has(key)) {
       histories.delete(key);
       lastEdits.delete(key);
-      console.log(`[UndoManager] Cleared history for ${key}`);
+      Utils.debug.log(`[UndoManager] Cleared history for ${key}`);
     }
   }
 
@@ -194,7 +194,7 @@ const UndoManager = (() => {
     const count = histories.size;
     histories.clear();
     lastEdits.clear();
-    console.log(`[UndoManager] Cleared all histories (${count})`);
+    Utils.debug.log(`[UndoManager] Cleared all histories (${count})`);
   }
 
   /**
@@ -205,7 +205,7 @@ const UndoManager = (() => {
   function markSaved(key) {
     if (histories.has(key)) {
       histories.get(key).lastSaved = Date.now();
-      console.log(`[UndoManager] Marked ${key} as saved`);
+      Utils.debug.log(`[UndoManager] Marked ${key} as saved`);
     }
   }
 
@@ -287,19 +287,19 @@ const UndoManager = (() => {
    * Debug - log all histories
    */
   function debug() {
-    console.group('[UndoManager] Debug Info');
-    console.log('Active histories:', histories.size);
-    console.log('Stats:', getStats());
+    Utils.debug.group('[UndoManager] Debug Info');
+    Utils.debug.log('Active histories:', histories.size);
+    Utils.debug.log('Stats:', getStats());
     
     histories.forEach((history, key) => {
-      console.log(`${key}:`, {
+      Utils.debug.log(`${key}:`, {
         undo: history.undo.length,
         redo: history.redo.length,
         unsaved: hasUnsavedChanges(key)
       });
     });
     
-    console.groupEnd();
+    Utils.debug.groupEnd();
   }
 
   /**

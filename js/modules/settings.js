@@ -62,9 +62,9 @@ const Settings = (() => {
     const pageContent = Utils.createElement('div', { className: 'page-content' });
 
     pageContent.innerHTML = `
-      <!-- Display Settings -->
+      <!-- Display & Reading Settings -->
       <div class="settings-group">
-        <h3 class="settings-group-title">Display</h3>
+        <h3 class="settings-group-title">Display & Reading</h3>
         <div class="settings-list">
           <div class="settings-item">
             <div class="settings-item-info">
@@ -109,14 +109,26 @@ const Settings = (() => {
               </select>
             </div>
           </div>
-        </div>
-      </div>
 
-      <!-- Audio Settings -->
-      ${AudioSupported ? `
-      <div class="settings-group">
-        <h3 class="settings-group-title">Audio</h3>
-        <div class="settings-list">
+          <div class="settings-item">
+            <div class="settings-item-info">
+              <div class="settings-item-label">Bible Translation</div>
+              <div class="settings-item-description">Preferred version for scripture</div>
+            </div>
+            <div class="select-wrapper">
+              <select class="select" id="setting-bible-translation">
+                <option value="NLT" ${settings.bibleTranslation === 'NLT' ? 'selected' : ''}>NLT</option>
+                <option value="NIV" ${settings.bibleTranslation === 'NIV' ? 'selected' : ''}>NIV</option>
+                <option value="KJV" ${settings.bibleTranslation === 'KJV' ? 'selected' : ''}>KJV</option>
+                <option value="NKJV" ${settings.bibleTranslation === 'NKJV' ? 'selected' : ''}>NKJV</option>
+                <option value="ESV" ${settings.bibleTranslation === 'ESV' ? 'selected' : ''}>ESV</option>
+                <option value="NASB" ${settings.bibleTranslation === 'NASB' ? 'selected' : ''}>NASB</option>
+                <option value="MSG" ${settings.bibleTranslation === 'MSG' ? 'selected' : ''}>MSG</option>
+              </select>
+            </div>
+          </div>
+
+          ${AudioSupported ? `
           <div class="settings-item">
             <div class="settings-item-info">
               <div class="settings-item-label">Reading Speed</div>
@@ -131,7 +143,15 @@ const Settings = (() => {
               </select>
             </div>
           </div>
+          ` : ''}
+        </div>
+      </div>
 
+      <!-- Audio & Sounds Settings -->
+      ${AudioSupported ? `
+      <div class="settings-group">
+        <h3 class="settings-group-title">Audio & Sounds</h3>
+        <div class="settings-list">
           <div class="settings-item">
             <div class="settings-item-info">
               <div class="settings-item-label">Ambient Sound</div>
@@ -165,33 +185,9 @@ const Settings = (() => {
       </div>
       ` : ''}
 
-      <!-- Bible Settings -->
+      <!-- Notifications & Reminders -->
       <div class="settings-group">
-        <h3 class="settings-group-title">Bible</h3>
-        <div class="settings-list">
-          <div class="settings-item">
-            <div class="settings-item-info">
-              <div class="settings-item-label">Bible Translation</div>
-              <div class="settings-item-description">Preferred version for scripture</div>
-            </div>
-            <div class="select-wrapper">
-              <select class="select" id="setting-bible-translation">
-                <option value="NLT" ${settings.bibleTranslation === 'NLT' ? 'selected' : ''}>NLT</option>
-                <option value="NIV" ${settings.bibleTranslation === 'NIV' ? 'selected' : ''}>NIV</option>
-                <option value="KJV" ${settings.bibleTranslation === 'KJV' ? 'selected' : ''}>KJV</option>
-                <option value="NKJV" ${settings.bibleTranslation === 'NKJV' ? 'selected' : ''}>NKJV</option>
-                <option value="ESV" ${settings.bibleTranslation === 'ESV' ? 'selected' : ''}>ESV</option>
-                <option value="NASB" ${settings.bibleTranslation === 'NASB' ? 'selected' : ''}>NASB</option>
-                <option value="MSG" ${settings.bibleTranslation === 'MSG' ? 'selected' : ''}>MSG</option>
-              </select>
-            </div>
-          </div>
-        </div>
-      </div>
-
-      <!-- Notifications -->
-      <div class="settings-group">
-        <h3 class="settings-group-title">Reminders</h3>
+        <h3 class="settings-group-title">Notifications & Reminders</h3>
         <div class="settings-list">
           <div class="settings-item">
             <div class="settings-item-info">
@@ -216,7 +212,7 @@ const Settings = (() => {
 
       <!-- Journal Settings -->
       <div class="settings-group">
-        <h3 class="settings-group-title">Journal</h3>
+        <h3 class="settings-group-title">Journal Settings</h3>
         <div class="settings-list">
           <div class="settings-item">
             <div class="settings-item-info">
@@ -231,36 +227,9 @@ const Settings = (() => {
         </div>
       </div>
 
-      <!-- Keyboard Shortcuts -->
+      <!-- Meditation & Practice Tools -->
       <div class="settings-group">
-        <h3 class="settings-group-title">Keyboard Shortcuts</h3>
-        <div class="settings-list">
-          <div class="settings-item">
-            <div class="settings-item-info">
-              <div class="settings-item-label">Enable Shortcuts</div>
-              <div class="settings-item-description">Navigate faster with keyboard</div>
-            </div>
-            <label class="toggle">
-              <input type="checkbox" id="setting-keyboard-shortcuts" ${settings.keyboardShortcuts !== false ? 'checked' : ''}>
-              <span class="toggle-slider"></span>
-            </label>
-          </div>
-
-          <div class="settings-item">
-            <div class="settings-item-info">
-              <div class="settings-item-label">View Shortcuts</div>
-              <div class="settings-item-description">See all available keyboard commands</div>
-            </div>
-            <button class="btn btn-secondary btn-sm" id="show-shortcuts">
-              View All
-            </button>
-          </div>
-        </div>
-      </div>
-
-      <!-- Tools & Practices -->
-      <div class="settings-group">
-        <h3 class="settings-group-title">Tools & Practices</h3>
+        <h3 class="settings-group-title">Meditation & Practice Tools</h3>
         <div class="settings-list">
           <div class="settings-item">
             <div class="settings-item-info">
@@ -281,6 +250,16 @@ const Settings = (() => {
             <button class="btn btn-secondary btn-sm" id="open-breathing">
               ${Utils.getIcon('activity', 16)}
               Start
+            </button>
+          </div>
+
+          <div class="settings-item" id="shortcuts-view-item" style="display: none;">
+            <div class="settings-item-info">
+              <div class="settings-item-label">Keyboard Shortcuts</div>
+              <div class="settings-item-description">View all available keyboard commands</div>
+            </div>
+            <button class="btn btn-secondary btn-sm" id="show-shortcuts">
+              View All
             </button>
           </div>
 
@@ -306,12 +285,34 @@ const Settings = (() => {
             </button>
           </div>
         </div>
+        
+        <script>
+          // Only show keyboard shortcuts view on desktop/keyboard devices
+          (function() {
+            const isTouchDevice = 'ontouchstart' in window || navigator.maxTouchPoints > 0;
+            if (!isTouchDevice) {
+              const item = document.getElementById('shortcuts-view-item');
+              if (item) item.style.display = '';
+            }
+          })();
+        </script>
       </div>
 
       <!-- Data Management -->
       <div class="settings-group">
-        <h3 class="settings-group-title">Your Data</h3>
+        <h3 class="settings-group-title">Data Management</h3>
         <div class="settings-list">
+          <div class="settings-item">
+            <div class="settings-item-info">
+              <div class="settings-item-label">Privacy & Data Dashboard</div>
+              <div class="settings-item-description">Manage your privacy, view storage usage, and control your data</div>
+            </div>
+            <button class="btn btn-secondary btn-sm" data-route="privacy">
+              ${Utils.getIcon('shield', 16)}
+              Manage
+            </button>
+          </div>
+          
           <div class="settings-item">
             <div class="settings-item-info">
               <div class="settings-item-label">Export Data</div>
@@ -358,6 +359,17 @@ const Settings = (() => {
 
           <div class="settings-item">
             <div class="settings-item-info">
+              <div class="settings-item-label">Privacy & Storage</div>
+              <div class="settings-item-description">Manage your data privacy and storage usage</div>
+            </div>
+            <button class="btn btn-secondary btn-sm" data-route="privacy">
+              ${Utils.getIcon('shield', 16)}
+              Manage
+            </button>
+          </div>
+
+          <div class="settings-item">
+            <div class="settings-item-info">
               <div class="settings-item-label">Retake Quiz</div>
               <div class="settings-item-description">Discover your season again</div>
             </div>
@@ -378,7 +390,7 @@ const Settings = (() => {
 
       <!-- About -->
       <div class="settings-group">
-        <h3 class="settings-group-title">About</h3>
+        <h3 class="settings-group-title">About & Legal</h3>
         <div class="settings-list">
           <button class="settings-item" data-route="intro" data-page="author" style="width: 100%; text-align: left; border: none; background: transparent;">
             <div class="settings-item-info">
@@ -459,8 +471,8 @@ const Settings = (() => {
     if (ambientSound) {
       listenerManager.add(ambientSound, 'change', async (e) => {
         await Store.saveSetting('ambientSound', e.target.value);
-        if (typeof AmbientSound !== 'undefined') {
-          await AmbientSound.changeSound(e.target.value);
+        if (typeof AmbientSound !== 'undefined' && AmbientSound.changePreset) {
+          await AmbientSound.changePreset(e.target.value);
         }
       });
     }
@@ -530,18 +542,7 @@ const Settings = (() => {
     }
 
     // Keyboard shortcuts toggle
-    const keyboardShortcuts = container.querySelector('#setting-keyboard-shortcuts');
-    if (keyboardShortcuts) {
-      listenerManager.add(keyboardShortcuts, 'change', async (e) => {
-        await Store.saveSetting('keyboardShortcuts', e.target.checked);
-        if (typeof KeyboardShortcuts !== 'undefined') {
-          KeyboardShortcuts.toggle(e.target.checked);
-        }
-        Toast.success(e.target.checked ? 'Keyboard shortcuts enabled' : 'Keyboard shortcuts disabled');
-      });
-    }
-
-    // Show shortcuts button
+    // Show shortcuts button (desktop only)
     const showShortcuts = container.querySelector('#show-shortcuts');
     if (showShortcuts) {
       listenerManager.add(showShortcuts, 'click', () => {
@@ -658,6 +659,14 @@ const Settings = (() => {
             
             if (result.success) {
               Toast.show(result.message, 'success');
+              
+              // Rebuild search index after import
+              if (typeof Search !== 'undefined' && Search.rebuildIndex) {
+                await Search.rebuildIndex().catch(err => 
+                  Utils.debug.error('Failed to rebuild search index after import:', err)
+                );
+              }
+              
               await applySettings();
               await render(container.parentElement?.id || 'settings-content');
             } else {
@@ -665,7 +674,7 @@ const Settings = (() => {
             }
           }
         } catch (err) {
-          console.error('Import error:', err);
+          Utils.debug.error('Import error:', err);
           Toast.show('Failed to import data', 'error');
         }
         
@@ -698,7 +707,7 @@ const Settings = (() => {
         try {
           await PDFExport.exportJournalToPDF();
         } catch (err) {
-          console.error('PDF export error:', err);
+          Utils.debug.error('PDF export error:', err);
           Toast.error('Failed to export PDF');
         }
       });
@@ -769,7 +778,7 @@ const Settings = (() => {
               Router.navigate('quiz');
             }, 500);
           } catch (error) {
-            console.error('Failed to reset data:', error);
+            Utils.debug.error('Failed to reset data:', error);
             Toast.error('Failed to reset data. Please try again.');
             resetBtn.disabled = false;
             resetBtn.textContent = 'Reset';
