@@ -141,6 +141,7 @@
   --winter-primary: #4A90A4;
   --winter-primary-rgb: 74, 144, 164;
   --winter-light: #E3F2FD;
+  --winter-lightest: #EBF8FC;
   --winter-dark: #2E6171;
   --winter-accent: #B3E5FC;
 
@@ -148,6 +149,7 @@
   --spring-primary: #8BC34A;
   --spring-primary-rgb: 139, 195, 74;
   --spring-light: #DCEDC8;
+  --spring-lightest: #F1F8E9;
   --spring-dark: #558B2F;
   --spring-accent: #C5E1A5;
 
@@ -155,6 +157,7 @@
   --summer-primary: #FFA726;
   --summer-primary-rgb: 255, 167, 38;
   --summer-light: #FFE0B2;
+  --summer-lightest: #FFF8E1;
   --summer-dark: #E65100;
   --summer-accent: #FFCC80;
 
@@ -162,6 +165,7 @@
   --autumn-primary: #D32F2F;
   --autumn-primary-rgb: 211, 47, 47;
   --autumn-light: #FFCDD2;
+  --autumn-lightest: #FFEBEE;
   --autumn-dark: #B71C1C;
   --autumn-accent: #EF9A9A;
 }
@@ -329,6 +333,12 @@
   --spring-light: rgba(139, 195, 74, 0.15);      /* Semi-transparent green overlay */
   --summer-light: rgba(255, 167, 38, 0.15);      /* Semi-transparent orange overlay */
   --autumn-light: rgba(211, 47, 47, 0.15);       /* Semi-transparent red overlay */
+
+  /* Lightest tints in dark mode — very subtle surface tinting */
+  --winter-lightest: rgba(74, 144, 164, 0.06);
+  --spring-lightest: rgba(139, 195, 74, 0.06);
+  --summer-lightest: rgba(255, 167, 38, 0.06);
+  --autumn-lightest: rgba(211, 47, 47, 0.06);
   
   /* Adjust seasonal darks (become lighter in dark mode for text contrast) */
   --winter-dark: #8BC9E0;    /* Lighter blue for better readability */
@@ -353,6 +363,7 @@
   --season-primary: var(--winter-primary);
   --season-primary-rgb: var(--winter-primary-rgb);
   --season-light: var(--winter-light);
+  --season-lightest: var(--winter-lightest);
   --season-dark: var(--winter-dark);
   --season-accent: var(--winter-accent);
 }
@@ -363,6 +374,7 @@
   --season-primary: var(--spring-primary);
   --season-primary-rgb: var(--spring-primary-rgb);
   --season-light: var(--spring-light);
+  --season-lightest: var(--spring-lightest);
   --season-dark: var(--spring-dark);
   --season-accent: var(--spring-accent);
 }
@@ -373,6 +385,7 @@
   --season-primary: var(--summer-primary);
   --season-primary-rgb: var(--summer-primary-rgb);
   --season-light: var(--summer-light);
+  --season-lightest: var(--summer-lightest);
   --season-dark: var(--summer-dark);
   --season-accent: var(--summer-accent);
 }
@@ -383,6 +396,7 @@
   --season-primary: var(--autumn-primary);
   --season-primary-rgb: var(--autumn-primary-rgb);
   --season-light: var(--autumn-light);
+  --season-lightest: var(--autumn-lightest);
   --season-dark: var(--autumn-dark);
   --season-accent: var(--autumn-accent);
 }
