@@ -474,13 +474,15 @@ const Store = (() => {
       return { valid: false, errors, warnings };
     }
 
-    const hasAnyValidData = 
+    const hasAnyValidData =
       data.user !== undefined ||
       data.quizResults !== undefined ||
       data.journal !== undefined ||
       data.progress !== undefined ||
       data.favorites !== undefined ||
-      data.settings !== undefined;
+      data.settings !== undefined ||
+      data.audioNotes !== undefined ||
+      data.weeklyReflections !== undefined;
 
     if (!hasAnyValidData) {
       errors.push('No recognizable Spiritual Seasons data found');
@@ -549,6 +551,22 @@ const Store = (() => {
           }
           if (note.duration && note.duration > CONFIG.LIMITS.MAX_AUDIO_DURATION_SECONDS) {
             errors.push(`Audio note ${i + 1}: exceeds duration limit (${CONFIG.LIMITS.MAX_AUDIO_DURATION_SECONDS}s)`);
+          }
+        });
+      }
+    }
+
+    // Validate weekly reflections
+    if (data.weeklyReflections !== undefined) {
+      if (!Array.isArray(data.weeklyReflections)) {
+        errors.push('Weekly reflections must be an array');
+      } else {
+        data.weeklyReflections.forEach((reflection, i) => {
+          if (typeof reflection.week !== 'number' || reflection.week < 1 || reflection.week > 17) {
+            errors.push(`Weekly reflection ${i + 1}: invalid week number`);
+          }
+          if (!Array.isArray(reflection.responses)) {
+            errors.push(`Weekly reflection ${i + 1}: responses must be an array`);
           }
         });
       }
