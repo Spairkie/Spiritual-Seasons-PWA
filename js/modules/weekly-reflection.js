@@ -199,7 +199,6 @@ const WeeklyReflection = (() => {
     // If specific week not found, use a rotating pattern
     const index = (week - 1) % REFLECTION_QUESTIONS.length;
     return REFLECTION_QUESTIONS[index]?.questions || REFLECTION_QUESTIONS[0].questions;
-    return REFLECTION_QUESTIONS[index].questions;
   }
 
   /**
@@ -333,6 +332,7 @@ const WeeklyReflection = (() => {
             <p style="margin-top: var(--space-2); font-size: var(--text-sm); color: var(--text-tertiary);">
               You'll be prompted to reflect after every 7 days you complete.
             </p>
+            <button class="btn btn-primary" style="margin-top: var(--space-4);" data-route="devotional">Start Reading</button>
           </div>
         `;
         return;
@@ -480,7 +480,7 @@ const WeeklyReflection = (() => {
 
             await saveReflection(week, responses);
             // Refresh the view
-            renderReflectionsView('content');
+            renderReflectionsView('reflections-content');
             return true;
           }
         },

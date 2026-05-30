@@ -1,7 +1,7 @@
 {
   "name": "Spiritual Seasons: Daily Devotional Workbook",
   "short_name": "Spiritual Seasons",
-  "description": "A 120-day devotional journey through Winter, Spring, Summer, and Autumn by Dr. Jacqueline Ghee. Version 1.0.0",
+  "description": "A 120-day devotional journey through Winter, Spring, Summer, and Autumn by Dr. Jacqueline Ghee. Version 1.0.1",
   "start_url": "./",
   "scope": "./",
   "display": "standalone",
