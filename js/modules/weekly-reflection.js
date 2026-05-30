@@ -6,6 +6,10 @@
 const WeeklyReflection = (() => {
   const REFLECTION_FREQUENCY = 7; // Every 7 days
 
+  // Track the active delegated listener so re-renders don't stack handlers
+  let _reflectionClickHandler = null;
+  let _reflectionClickContainer = null;
+
   const REFLECTION_QUESTIONS = [
     {
       week: 1,
@@ -436,8 +440,14 @@ const WeeklyReflection = (() => {
       `;
     }
 
-    // Delegated listeners for edit/export/retry actions (replaces inline onclick handlers)
-    container.addEventListener('click', function reflectionClickHandler(e) {
+    // Remove any previous delegated listener before attaching a new one.
+    // renderReflectionsView() can be called multiple times (edit save, retry),
+    // and replacing innerHTML doesn't remove listeners on the container itself.
+    if (_reflectionClickHandler && _reflectionClickContainer) {
+      _reflectionClickContainer.removeEventListener('click', _reflectionClickHandler);
+    }
+
+    _reflectionClickHandler = function(e) {
       const editBtn = e.target.closest('[data-edit-week]');
       if (editBtn) {
         editReflection(Number(editBtn.getAttribute('data-edit-week')));
@@ -450,10 +460,11 @@ const WeeklyReflection = (() => {
       }
       const retryBtn = e.target.closest('[data-retry-reflections]');
       if (retryBtn) {
-        container.removeEventListener('click', reflectionClickHandler);
         renderReflectionsView(retryBtn.getAttribute('data-retry-reflections'));
       }
-    });
+    };
+    _reflectionClickContainer = container;
+    container.addEventListener('click', _reflectionClickHandler);
   }
 
   /**
