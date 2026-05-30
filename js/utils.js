@@ -486,7 +486,7 @@ const Utils = (() => {
         </svg>
         <h3 style="color: var(--text-primary); margin: 0;">${escapeHtml(message)}</h3>
         <p style="color: var(--text-secondary); margin: 0;">Please try again or refresh the page.</p>
-        <button class="btn btn-primary" onclick="location.reload()">Refresh Page</button>
+        <button class="btn btn-primary" data-action="reload">Refresh Page</button>
       </div>
     `;
     

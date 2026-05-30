@@ -201,7 +201,7 @@ const App = (() => {
         We encountered an issue loading this page. You can try refreshing or return to the home page.
       </p>
       <div style="display: flex; gap: var(--space-3); justify-content: center; flex-wrap: wrap;">
-        <button class="btn btn-primary" onclick="location.reload()">
+        <button class="btn btn-primary" data-action="reload">
           ${Utils.getIcon('undo', 16)}
           <span>Refresh Page</span>
         </button>
@@ -864,7 +864,7 @@ const App = (() => {
           </svg>
           <h2 style="color: var(--text-primary);">Something went wrong</h2>
           <p style="color: var(--text-secondary);">${Utils.escapeHtml(error.message) || 'Please refresh the page to try again.'}</p>
-          <button class="btn btn-primary" onclick="location.reload()">Refresh</button>
+          <button class="btn btn-primary" data-action="reload">Refresh</button>
         </div>
       `;
     }
@@ -877,7 +877,7 @@ const App = (() => {
           <div class="season-accent-bar"></div>
           <div class="header-content">
             <div class="header-title" data-route="home" style="cursor: pointer;">
-              <img src="assets/icons/icon.svg" alt="" class="header-logo" onerror="this.style.display='none'">
+              <img src="assets/icons/icon.svg" alt="" class="header-logo" id="header-logo">
               Spiritual Seasons
             </div>
             <div class="header-actions">
@@ -933,6 +933,12 @@ const App = (() => {
         </nav>
       </div>
     `;
+
+    // Attach image error handlers post-render (avoids inline onerror)
+    const headerLogo = document.getElementById('header-logo');
+    if (headerLogo) {
+      headerLogo.addEventListener('error', function () { this.style.display = 'none'; });
+    }
   }
 
   function cleanup() {
@@ -976,6 +982,25 @@ const App = (() => {
     cleanup
   };
 })();
+
+// Attach splash logo error handler immediately (before any network requests)
+(function () {
+  const splashLogo = document.getElementById('splash-logo');
+  if (splashLogo) {
+    splashLogo.addEventListener('error', function () { this.style.display = 'none'; });
+  }
+})();
+
+// Dismiss splash screen after load (moved from inline script in index.html)
+window.addEventListener('load', () => {
+  setTimeout(() => {
+    const splash = document.getElementById('splash');
+    if (splash) {
+      splash.classList.add('fade-out');
+      setTimeout(() => splash.remove(), 500);
+    }
+  }, 800);
+});
 
 // Start the app
 document.addEventListener('DOMContentLoaded', () => {

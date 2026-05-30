@@ -51,7 +51,7 @@ const IntroPages = (() => {
     const tocHtml = `
       <div class="intro-page intro-toc-page">
         <div class="intro-book-cover" style="cursor: pointer;" id="book-cover-click">
-          <img src="assets/images/book-cover.webp" alt="Spiritual Seasons Book Cover" class="book-cover-image" onerror="this.style.display='none'">
+          <img src="assets/images/book-cover.webp" alt="Spiritual Seasons Book Cover" class="book-cover-image" id="book-cover-img">
         </div>
         
         <div class="intro-header" style="cursor: pointer;" id="intro-header-click">
@@ -63,7 +63,13 @@ const IntroPages = (() => {
     `;
 
     container.innerHTML = tocHtml;
-    
+
+    // Attach image error handler post-render (avoids inline onerror)
+    const bookCoverImg = document.getElementById('book-cover-img');
+    if (bookCoverImg) {
+      bookCoverImg.addEventListener('error', function () { this.style.display = 'none'; });
+    }
+
     // Make book cover and header clickable to continue to quiz
     const bookCover = document.getElementById('book-cover-click');
     const introHeader = document.getElementById('intro-header-click');

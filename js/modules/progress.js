@@ -441,12 +441,15 @@ const Progress = (() => {
         <div class="page-content">
           <div class="error-message">
             <p>Unable to load progress data</p>
-            <button class="btn btn-secondary" onclick="Progress.renderDashboard('${containerId}')">
+            <button class="btn btn-secondary" data-retry-progress="${containerId}">
               Try Again
             </button>
           </div>
         </div>
       `;
+      container.querySelector('[data-retry-progress]')?.addEventListener('click', () => {
+        renderDashboard(containerId);
+      });
     }
   }
 
@@ -482,7 +485,7 @@ const Progress = (() => {
       const streak = await getCurrentStreak();
       
       container.innerHTML = `
-        <div class="streak-widget" onclick="Router.navigate('progress')">
+        <div class="streak-widget" data-route="progress" style="cursor: pointer;">
           <div class="streak-widget-icon">🔥</div>
           <div class="streak-widget-content">
             <div class="streak-widget-number">${streak.current}</div>
