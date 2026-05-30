@@ -207,7 +207,7 @@ const PDFExport = (() => {
   }
 
   /**
-   * Load jsPDF library dynamically
+   * Load jsPDF library dynamically from bundled local copy
    */
   async function loadJsPDF() {
     return new Promise((resolve, reject) => {
@@ -217,13 +217,13 @@ const PDFExport = (() => {
       }
 
       const script = document.createElement('script');
-      script.src = 'https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js';
+      script.src = './js/lib/jspdf.umd.min.js';
       script.onload = () => {
         Utils.debug.log('✓ jsPDF loaded');
         resolve();
       };
       script.onerror = () => {
-        reject(new Error('PDF library could not be loaded. Please check your internet connection and try again.'));
+        reject(new Error('PDF library could not be loaded. Please try again.'));
       };
       document.head.appendChild(script);
     });

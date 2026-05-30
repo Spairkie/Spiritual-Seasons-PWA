@@ -200,8 +200,10 @@ const Quiz = (() => {
 
   /**
    * Render the quiz UI
+   * @param {string} containerId
+   * @param {number|null} focusIndex - option index to restore focus to after re-render
    */
-  function render(containerId) {
+  function render(containerId, focusIndex = null) {
     const container = document.getElementById(containerId);
     if (!container) return;
 
@@ -226,12 +228,12 @@ const Quiz = (() => {
           <p class="quiz-question-text">"${question.text}"</p>
           
           <div class="quiz-options" role="radiogroup" aria-label="${Utils.escapeHtml(question.text)}">
-            ${Object.entries(scaleLabels).map(([value, label]) => `
+            ${Object.entries(scaleLabels).map(([value, label], idx) => `
               <div class="quiz-option ${currentAnswer === parseInt(value) ? 'selected' : ''}"
                    data-value="${value}"
                    role="radio"
                    aria-checked="${currentAnswer === parseInt(value) ? 'true' : 'false'}"
-                   tabindex="${currentAnswer === parseInt(value) ? '0' : '-1'}">
+                   tabindex="${currentAnswer === parseInt(value) || (currentAnswer === undefined && idx === 0) ? '0' : '-1'}">
                 <div class="quiz-option-radio" aria-hidden="true"></div>
                 <span class="quiz-option-label">${label}</span>
               </div>
@@ -266,16 +268,24 @@ const Quiz = (() => {
       </div>
     `;
 
-    // Attach event listeners
-    attachListeners(container);
+    // Attach event listeners and restore focus if navigation came from keyboard
+    attachListeners(container, focusIndex);
   }
 
   /**
    * Attach event listeners
+   * @param {HTMLElement} container
+   * @param {number|null} focusIndex - option to auto-focus (for keyboard navigation restoring focus after re-render)
    */
-  function attachListeners(container) {
+  function attachListeners(container, focusIndex = null) {
     // Option selection — click and keyboard (arrow keys for radiogroup)
     const options = [...container.querySelectorAll('.quiz-option')];
+
+    // Restore keyboard focus to the navigated option after re-render
+    if (focusIndex !== null && options[focusIndex]) {
+      options[focusIndex].focus();
+    }
+
     options.forEach((option, idx) => {
       option.addEventListener('click', () => {
         const value = parseInt(option.getAttribute('data-value'));
@@ -285,17 +295,21 @@ const Quiz = (() => {
       option.addEventListener('keydown', (e) => {
         if (e.key === ' ' || e.key === 'Enter') {
           e.preventDefault();
-          option.click();
+          // Select current option and re-render; focus stays at same position
+          answerQuestion(parseInt(option.getAttribute('data-value')));
+          render(container.id, idx);
         } else if (e.key === 'ArrowDown' || e.key === 'ArrowRight') {
           e.preventDefault();
-          const next = options[(idx + 1) % options.length];
-          next.focus();
-          next.click();
+          // Select next option and re-render with focus on it
+          const nextIdx = (idx + 1) % options.length;
+          answerQuestion(parseInt(options[nextIdx].getAttribute('data-value')));
+          render(container.id, nextIdx);
         } else if (e.key === 'ArrowUp' || e.key === 'ArrowLeft') {
           e.preventDefault();
-          const prev = options[(idx - 1 + options.length) % options.length];
-          prev.focus();
-          prev.click();
+          // Select prev option and re-render with focus on it
+          const prevIdx = (idx - 1 + options.length) % options.length;
+          answerQuestion(parseInt(options[prevIdx].getAttribute('data-value')));
+          render(container.id, prevIdx);
         }
       });
     });
