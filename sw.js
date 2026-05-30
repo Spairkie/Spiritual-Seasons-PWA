@@ -5,7 +5,7 @@
 
 // VERSION CONFIGURATION
 const VERSION = '1.0.1';
-const BUILD_TIME = '20260530b';
+const BUILD_TIME = '20260530c';
 const CACHE_NAME = `spiritual-seasons-v${VERSION}-${BUILD_TIME}`;
 const FONT_CACHE = `spiritual-seasons-fonts-v${VERSION}`;
 
@@ -68,6 +68,8 @@ const STATIC_ASSETS = [
   './js/modules/data-export.js',
   './js/modules/page-transitions.js',
   './js/modules/pdf-export.js',
+  // Bundled libraries
+  './js/lib/jspdf.umd.min.js',
   // Main App
   './js/app.js',
   // Content
