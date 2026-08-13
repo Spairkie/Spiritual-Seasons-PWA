@@ -426,7 +426,7 @@ const App = (() => {
 
     // Hero section with greeting and seasonal badge
     const hero = Utils.createElement('div', { className: 'home-hero' },
-      Utils.createElement('p', { className: 'home-greeting' }, `📅 ${greeting}`),
+      Utils.createElement('p', { className: 'home-greeting' }, greeting),
       Utils.createElement('h1', { className: 'home-date' }, dateStr)
     );
 
@@ -454,7 +454,7 @@ const App = (() => {
       const progressPct = Math.round(((completedCount || 0) / 120) * 100);
       todayCard.innerHTML = `
         <div class="today-card-header">
-          <span class="today-label">📖 TODAY'S DEVOTIONAL</span>
+          <span class="today-label">TODAY'S DEVOTIONAL</span>
           <span class="today-progress">Day ${currentDay || 1} of 120</span>
         </div>
         <p style="font-size: var(--text-xs); color: var(--color-text-muted); margin: 0 0 var(--space-2);">Day ${dayInSeason} of 30 in ${season.name || ''}</p>
@@ -475,7 +475,7 @@ const App = (() => {
     } else {
       todayCard.innerHTML = `
         <div class="today-card-header">
-          <span class="today-label">📖 TODAY'S DEVOTIONAL</span>
+          <span class="today-label">TODAY'S DEVOTIONAL</span>
           <span class="today-progress">DAY 0 OF 30</span>
         </div>
         <p class="today-text">Take the quiz to discover your spiritual season and begin your journey.</p>
@@ -497,23 +497,23 @@ const App = (() => {
       <div class="wellness-header">QUICK WELLNESS TOOLS</div>
       <div class="wellness-tools-grid">
         <button class="wellness-tool-card wellness-meditation" data-show-meditation-timer>
-          <div class="tool-icon">⏱️</div>
-          <div class="tool-title">5 Min Meditation</div>
-          <div class="tool-subtitle">Peace & stillness</div>
+          <div class="tool-icon">${Utils.getIcon('clock', 19)}</div>
+          <div class="tool-title">Meditation timer</div>
+          <div class="tool-subtitle">Peace and stillness</div>
         </button>
         <button class="wellness-tool-card wellness-breathe" data-show-breathing>
-          <div class="tool-icon">💨</div>
-          <div class="tool-title">Breathe</div>
+          <div class="tool-icon">${Utils.getIcon('wind', 19)}</div>
+          <div class="tool-title">Guided breathing</div>
           <div class="tool-subtitle">Box pattern 4-4-4-4</div>
         </button>
         <button class="wellness-tool-card wellness-sounds" data-show-ambient>
-          <div class="tool-icon">🎵</div>
-          <div class="tool-title">Ambient Sounds</div>
+          <div class="tool-icon">${Utils.getIcon('waveform', 19)}</div>
+          <div class="tool-title">Ambient sounds</div>
           <div class="tool-subtitle">Calming soundscape</div>
         </button>
         <button class="wellness-tool-card wellness-favorites" data-route="favorites">
-          <div class="tool-icon">❤️</div>
-          <div class="tool-title">Favorites</div>
+          <div class="tool-icon">${Utils.getIcon('heart', 19)}</div>
+          <div class="tool-title">Favourites</div>
           <div class="tool-subtitle">View saved days</div>
         </button>
       </div>
@@ -671,10 +671,10 @@ const App = (() => {
 
   async function init() {
     Utils.debug.log('%c✨ Spiritual Seasons v' + CONFIG.APP_VERSION + ' ✨', 
-      'font-size: 20px; font-weight: bold; color: #4A90A4; text-shadow: 2px 2px 4px rgba(0,0,0,0.1);'
+      'font-size: 20px; font-weight: bold; color: #4C7688; text-shadow: 2px 2px 4px rgba(0,0,0,0.1);'
     );
-    Utils.debug.log('%cBy Dr. Jacqueline Ghee • Built with ❤️', 
-      'font-size: 12px; color: #5D6D7E;'
+    Utils.debug.log('%cBy Dr. Jacqueline Ghee • Built with ❤️',
+      'font-size: 12px; color: #5C5852;'
     );
     Utils.debug.log('Initializing Spiritual Seasons PWA...');
 
@@ -885,6 +885,9 @@ const App = (() => {
               Spiritual Seasons
             </div>
             <div class="header-actions">
+              <button class="btn-icon btn-ghost" id="theme-toggle-btn" aria-label="Toggle dark mode">
+                <span id="theme-toggle-icon">${Utils.getIcon('moon', 20)}</span>
+              </button>
               <button class="btn-icon btn-ghost" data-route="search" aria-label="Search">
                 ${Utils.getIcon('search', 20)}
               </button>
@@ -895,19 +898,65 @@ const App = (() => {
           </div>
         </header>
 
-        <main class="app-main">
-          <div id="page-home" class="page"><div id="home-content"></div></div>
-          <div id="page-intro" class="page"><div id="intro-content"></div></div>
-          <div id="page-quiz" class="page"><div id="quiz-content"></div></div>
-          <div id="page-devotional" class="page"><div id="devotional-content"></div></div>
-          <div id="page-contents" class="page"><div id="contents-content"></div></div>
-          <div id="page-search" class="page"><div id="search-content"></div></div>
-          <div id="page-favorites" class="page"><div id="favorites-content"></div></div>
-          <div id="page-progress" class="page"><div id="progress-content"></div></div>
-          <div id="page-reflections" class="page"><div id="reflections-content"></div></div>
-          <div id="page-privacy" class="page"><div id="privacy-content"></div></div>
-          <div id="page-settings" class="page"><div id="settings-content"></div></div>
-        </main>
+        <div class="app-body">
+          <aside class="sidebar" aria-label="Main navigation">
+            <div class="sidebar-group-label">Journey</div>
+            <a class="nav-item sidebar-item" data-route="home" aria-label="Home">
+              ${Utils.getIcon('home', 19)}
+              <span>Home</span>
+            </a>
+            <a class="nav-item sidebar-item" data-route="devotional" aria-label="Read">
+              ${Utils.getIcon('book', 19)}
+              <span>Today&rsquo;s devotional</span>
+            </a>
+            <a class="nav-item sidebar-item" data-route="contents" aria-label="Contents">
+              ${Utils.getIcon('list', 19)}
+              <span>Contents</span>
+            </a>
+            <a class="nav-item sidebar-item" data-route="favorites" aria-label="Favourites">
+              ${Utils.getIcon('heart', 19)}
+              <span>Favourites</span>
+            </a>
+            <a class="nav-item sidebar-item" data-route="progress" aria-label="Progress">
+              <svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <path d="M13 2L3 14h9l-1 8 10-12h-9l1-8z"/>
+              </svg>
+              <span>Progress</span>
+            </a>
+            <div class="sidebar-group-label">Wellness</div>
+            <button type="button" class="sidebar-item sidebar-action" data-show-meditation-timer>
+              ${Utils.getIcon('clock', 19)}
+              <span>Meditation timer</span>
+            </button>
+            <button type="button" class="sidebar-item sidebar-action" data-show-breathing>
+              ${Utils.getIcon('wind', 19)}
+              <span>Guided breathing</span>
+            </button>
+            <button type="button" class="sidebar-item sidebar-action" data-show-ambient>
+              ${Utils.getIcon('waveform', 19)}
+              <span>Ambient sounds</span>
+            </button>
+            <div class="sidebar-spacer"></div>
+            <a class="nav-item sidebar-item" data-route="settings" aria-label="Settings">
+              ${Utils.getIcon('settings', 19)}
+              <span>Settings</span>
+            </a>
+          </aside>
+
+          <main class="app-main">
+            <div id="page-home" class="page"><div id="home-content"></div></div>
+            <div id="page-intro" class="page"><div id="intro-content"></div></div>
+            <div id="page-quiz" class="page"><div id="quiz-content"></div></div>
+            <div id="page-devotional" class="page"><div id="devotional-content"></div></div>
+            <div id="page-contents" class="page"><div id="contents-content"></div></div>
+            <div id="page-search" class="page"><div id="search-content"></div></div>
+            <div id="page-favorites" class="page"><div id="favorites-content"></div></div>
+            <div id="page-progress" class="page"><div id="progress-content"></div></div>
+            <div id="page-reflections" class="page"><div id="reflections-content"></div></div>
+            <div id="page-privacy" class="page"><div id="privacy-content"></div></div>
+            <div id="page-settings" class="page"><div id="settings-content"></div></div>
+          </main>
+        </div>
 
         <nav class="bottom-nav" role="navigation" aria-label="Main navigation">
           <div class="bottom-nav-content">
@@ -942,6 +991,51 @@ const App = (() => {
     const headerLogo = document.getElementById('header-logo');
     if (headerLogo) {
       headerLogo.addEventListener('error', function () { this.style.display = 'none'; });
+    }
+
+    // Theme quick-toggle in header
+    const themeToggleBtn = document.getElementById('theme-toggle-btn');
+    if (themeToggleBtn) {
+      const syncThemeToggleIcon = () => {
+        const isDark = document.documentElement.getAttribute('data-theme') === 'dark';
+        const icon = document.getElementById('theme-toggle-icon');
+        if (icon) icon.innerHTML = Utils.getIcon(isDark ? 'sun' : 'moon', 20);
+        themeToggleBtn.setAttribute('aria-label', isDark ? 'Switch to light mode' : 'Switch to dark mode');
+      };
+      syncThemeToggleIcon();
+      themeToggleBtn.addEventListener('click', async () => {
+        const isDark = document.documentElement.getAttribute('data-theme') === 'dark';
+        const nextMode = isDark ? 'light' : 'dark';
+        if (typeof Settings !== 'undefined' && Settings.applyDarkMode) {
+          Settings.applyDarkMode(nextMode);
+        } else {
+          document.documentElement.setAttribute('data-theme', nextMode);
+        }
+        syncThemeToggleIcon();
+        if (typeof Store !== 'undefined' && Store.saveSetting) {
+          try { await Store.saveSetting('darkMode', nextMode); } catch (e) { /* non-fatal */ }
+        }
+      });
+    }
+
+    // Sidebar wellness tool shortcuts (mirrors the Home page quick-tools wiring)
+    const sidebarMeditationBtn = document.querySelector('.sidebar [data-show-meditation-timer]');
+    if (sidebarMeditationBtn) {
+      sidebarMeditationBtn.addEventListener('click', () => {
+        if (typeof MeditationTimer !== 'undefined') MeditationTimer.showTimer();
+      });
+    }
+    const sidebarBreathingBtn = document.querySelector('.sidebar [data-show-breathing]');
+    if (sidebarBreathingBtn) {
+      sidebarBreathingBtn.addEventListener('click', () => {
+        if (typeof GuidedBreathing !== 'undefined') GuidedBreathing.showBreathing();
+      });
+    }
+    const sidebarAmbientBtn = document.querySelector('.sidebar [data-show-ambient]');
+    if (sidebarAmbientBtn) {
+      sidebarAmbientBtn.addEventListener('click', () => {
+        showAmbientSoundPanel();
+      });
     }
   }
 

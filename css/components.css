@@ -29,25 +29,29 @@
   display: flex;
   align-items: center;
   justify-content: space-between;
-  padding: var(--space-3) var(--space-4);
+  gap: var(--space-3);
+  height: var(--app-header-height);
+  padding: 0 var(--space-4);
   max-width: var(--container-max);
   margin: 0 auto;
 }
 
 .header-title {
   font-family: var(--font-display);
-  font-size: var(--text-lg);
+  font-size: 19px;
   font-weight: 600;
+  letter-spacing: -0.01em;
   color: var(--text-primary);
   display: flex;
   align-items: center;
-  gap: var(--space-2);
+  gap: 10px;
 }
 
 .header-logo {
-  width: 32px;
-  height: 32px;
-  border-radius: var(--radius-md);
+  width: 30px;
+  height: 30px;
+  border-radius: 9px;
+  flex: none;
 }
 
 .header-actions {
@@ -108,6 +112,114 @@
 .nav-item svg {
   width: 24px;
   height: 24px;
+}
+
+/* ============================================
+   App Body / Sidebar (desktop wide layout)
+   Below --wide-breakpoint the sidebar is hidden and
+   the bottom-nav (above) is used instead.
+   ============================================ */
+.app-body {
+  flex: 1;
+  min-height: 0;
+  display: flex;
+  flex-direction: row;
+}
+
+.sidebar {
+  display: none;
+  flex: none;
+  width: var(--sidebar-width);
+  padding: var(--space-4) var(--space-3);
+  background: var(--bg-primary);
+  border-right: 1px solid var(--border-primary);
+  flex-direction: column;
+  gap: 2px;
+  overflow-y: auto;
+}
+
+.sidebar-group-label {
+  font: 600 10px/1 var(--font-body);
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: var(--text-tertiary);
+  padding: var(--space-3) var(--space-3) var(--space-2);
+}
+
+.sidebar-group-label:first-child {
+  padding-top: var(--space-1);
+}
+
+.sidebar-item {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: flex-start;
+  gap: 12px;
+  width: 100%;
+  min-height: 44px;
+  padding: 0 var(--space-3);
+  border-radius: var(--radius-lg);
+  color: var(--text-secondary);
+  font-size: 14px;
+  font-weight: 500;
+  text-decoration: none;
+  transition: background var(--transition-fast), color var(--transition-fast);
+}
+
+.sidebar-item:hover {
+  background: var(--bg-secondary);
+  color: var(--text-primary);
+  text-decoration: none;
+}
+
+.sidebar-item svg {
+  flex: none;
+  width: 19px;
+  height: 19px;
+}
+
+.sidebar-item span {
+  flex: 1;
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.sidebar-item.active {
+  background: var(--season-lightest);
+  color: var(--season-dark);
+  font-weight: 600;
+}
+
+.sidebar-action {
+  border: none;
+  background: none;
+  cursor: pointer;
+  font-family: inherit;
+}
+
+.sidebar-spacer {
+  margin-top: auto;
+}
+
+@media (min-width: 900px) {
+  .sidebar {
+    display: flex;
+  }
+
+  .bottom-nav {
+    display: none;
+  }
+
+  .app-main {
+    padding-bottom: 0;
+  }
+
+  .page {
+    padding-bottom: var(--space-8);
+  }
 }
 
 /* ============================================
@@ -1528,60 +1640,58 @@
 
 .wellness-tool-card {
   background: var(--bg-primary);
-  border: none;
-  border-radius: var(--radius-xl);
-  padding: var(--space-5);
-  text-align: center;
+  border: 1px solid var(--border-primary);
+  border-radius: var(--radius-lg);
+  padding: 13px 14px;
+  text-align: left;
   cursor: pointer;
-  transition: all var(--transition-fast);
+  transition: border-color var(--transition-fast), transform var(--transition-fast), box-shadow var(--transition-fast);
   display: flex;
   flex-direction: column;
-  align-items: center;
-  gap: var(--space-2);
-  min-height: 120px;
+  align-items: flex-start;
+  gap: 3px;
+  min-height: 84px;
+  color: var(--text-primary);
 }
 
 .wellness-tool-card:hover {
-  transform: translateY(-2px);
-  box-shadow: var(--shadow-lg);
+  border-color: var(--season-primary);
+  transform: translateY(-1px);
+  box-shadow: var(--shadow-sm);
 }
 
 .wellness-tool-card:active {
   transform: translateY(0);
 }
 
-.wellness-meditation {
-  background: linear-gradient(135deg, #4DD0E1 0%, #26C6DA 100%);
-  color: white;
-}
-
-.wellness-breathe {
-  background: linear-gradient(135deg, #9575CD 0%, #7E57C2 100%);
-  color: white;
-}
-
-.wellness-sounds {
-  background: linear-gradient(135deg, #66BB6A 0%, #43A047 100%);
-  color: white;
-}
-
+.wellness-meditation,
+.wellness-breathe,
+.wellness-sounds,
 .wellness-favorites {
-  background: linear-gradient(135deg, #EF5350 0%, #E53935 100%);
-  color: white;
+  background: var(--bg-primary);
+  color: var(--text-primary);
 }
 
 .tool-icon {
-  font-size: var(--text-3xl);
+  color: var(--season-primary);
+  display: flex;
+  margin-bottom: 2px;
+}
+
+.tool-icon svg {
+  width: 19px;
+  height: 19px;
 }
 
 .tool-title {
   font-weight: 600;
-  font-size: var(--text-base);
+  font-size: 13.5px;
 }
 
 .tool-subtitle {
-  font-size: var(--text-xs);
-  opacity: 0.9;
+  font-size: 11.5px;
+  color: var(--text-tertiary);
+  line-height: 1.35;
 }
 
 /* Home Verse Quote */
@@ -1802,6 +1912,10 @@
   justify-content: center;
   align-items: center;
   margin-bottom: var(--space-8);
+}
+
+.intro-begin-btn {
+  margin-top: var(--space-2);
 }
 
 .book-cover-image {

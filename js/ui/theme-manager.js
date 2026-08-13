@@ -131,14 +131,14 @@ const ThemeManager = (() => {
 
     // Season colors for light mode
     const seasonColors = {
-      winter: '#4A90A4',
-      spring: '#8BC34A',
-      summer: '#FFA726',
-      autumn: '#D32F2F'
+      winter: '#4C7688',
+      spring: '#6D8E4E',
+      summer: '#B5822B',
+      autumn: '#A9503A'
     };
 
     // In dark mode, use dark background; in light mode, use season color
-    const color = mode === 'dark' ? '#0A0A0A' : seasonColors[season];
+    const color = mode === 'dark' ? '#15140F' : seasonColors[season];
     metaTheme.content = color;
   }
 

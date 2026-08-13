@@ -59,6 +59,10 @@ const IntroPages = (() => {
           <h2 class="intro-subtitle">${Utils.escapeHtml(bookData.subtitle)}</h2>
           <p class="intro-author">by ${Utils.escapeHtml(bookData.author)}</p>
         </div>
+
+        <button type="button" class="btn btn-primary btn-lg intro-begin-btn" id="intro-begin-btn">
+          Begin &mdash; discover your season
+        </button>
       </div>
     `;
 
@@ -73,16 +77,24 @@ const IntroPages = (() => {
     // Make book cover and header clickable to continue to quiz
     const bookCover = document.getElementById('book-cover-click');
     const introHeader = document.getElementById('intro-header-click');
-    
+    const beginBtn = document.getElementById('intro-begin-btn');
+
     if (bookCover) {
       bookCover.addEventListener('click', (e) => {
         e.preventDefault();
         Router.navigate('quiz');
       });
     }
-    
+
     if (introHeader) {
       introHeader.addEventListener('click', (e) => {
+        e.preventDefault();
+        Router.navigate('quiz');
+      });
+    }
+
+    if (beginBtn) {
+      beginBtn.addEventListener('click', (e) => {
         e.preventDefault();
         Router.navigate('quiz');
       });

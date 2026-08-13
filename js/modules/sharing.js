@@ -117,28 +117,28 @@ const Sharing = (() => {
   // Season color schemes
   const SEASON_COLORS = {
     winter: {
-      bg: '#E3F2FD',
-      primary: '#4A90A4',
-      text: '#2E6171',
-      accent: '#5FA6B8'
+      bg: '#EAF1F4',
+      primary: '#4C7688',
+      text: '#2B4E5C',
+      accent: '#8BA6B2'
     },
     spring: {
-      bg: '#DCEDC8',
-      primary: '#8BC34A',
-      text: '#558B2F',
-      accent: '#9CCC65'
+      bg: '#EFF3E7',
+      primary: '#6D8E4E',
+      text: '#43602F',
+      accent: '#A0B68C'
     },
     summer: {
-      bg: '#FFF9C4',
-      primary: '#F9A825',
-      text: '#F57F17',
-      accent: '#FDD835'
+      bg: '#FAF2E1',
+      primary: '#B5822B',
+      text: '#835A16',
+      accent: '#CFAE75'
     },
     autumn: {
-      bg: '#FFE0B2',
-      primary: '#E65100',
-      text: '#BF360C',
-      accent: '#FF9800'
+      bg: '#F8EBE6',
+      primary: '#A9503A',
+      text: '#7A3524',
+      accent: '#C78D7F'
     }
   };
 

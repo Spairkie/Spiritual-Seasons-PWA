@@ -45,7 +45,7 @@ const CONFIG = {
       title: 'Stillness & Trust',
       emoji: '❄️',
       dayRange: [1, 30],
-      color: '#4A90A4'
+      color: '#4C7688'
     },
     SPRING: {
       id: 'spring',
@@ -53,7 +53,7 @@ const CONFIG = {
       title: 'Renewal & Planting',
       emoji: '🌸',
       dayRange: [31, 60],
-      color: '#8BC34A'
+      color: '#6D8E4E'
     },
     SUMMER: {
       id: 'summer',
@@ -61,7 +61,7 @@ const CONFIG = {
       title: 'Abundance & Joy',
       emoji: '☀️',
       dayRange: [61, 90],
-      color: '#FFA726'
+      color: '#B5822B'
     },
     AUTUMN: {
       id: 'autumn',
@@ -69,7 +69,7 @@ const CONFIG = {
       title: 'Harvest & Letting Go',
       emoji: '🍂',
       dayRange: [91, 120],
-      color: '#D32F2F'
+      color: '#A9503A'
     }
   },
 
