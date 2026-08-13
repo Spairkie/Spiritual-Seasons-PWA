@@ -601,9 +601,9 @@ const Quiz = (() => {
 
     // Get season icon
     const seasonIcons = {
-      winter: `<svg viewBox="0 0 48 48" fill="none" stroke="currentColor" stroke-width="2">
-        <circle cx="24" cy="24" r="8"/>
-        <path d="M24 4v8M24 36v8M4 24h8M36 24h8M8.93 8.93l5.66 5.66M33.41 33.41l5.66 5.66M8.93 39.07l5.66-5.66M33.41 14.59l5.66-5.66"/>
+      winter: `<svg viewBox="0 0 48 48" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round">
+        <path d="M24 5v38M7.6 14.4l32.8 19.2M40.4 14.4 7.6 33.6"/>
+        <path d="M24 12.8 19.2 9.2M24 12.8l4.8-3.6M24 35.2l-4.8 3.6M24 35.2l4.8 3.6M13.2 20.2 10.4 16M13.2 20.2l-5.2.8M34.8 27.8l2.8 4.2M34.8 27.8l5.2-.8M13.2 27.8l-5.2-.8M13.2 27.8 10.4 32M34.8 20.2l5.2.8M34.8 20.2 37.6 16"/>
       </svg>`,
       spring: `<svg viewBox="0 0 48 48" fill="none" stroke="currentColor" stroke-width="2">
         <path d="M24 44V24"/>
@@ -651,7 +651,7 @@ const Quiz = (() => {
           </button>
         </div>
 
-        <div style="margin-top: var(--space-8); padding-top: var(--space-6); border-top: 1px solid var(--border-color);">
+        <div style="margin-top: var(--space-5); padding-top: var(--space-5); border-top: 1px solid var(--border-color);">
           <p style="font-size: var(--text-sm); color: var(--text-secondary); margin-bottom: var(--space-4);">
             Your scores by season:
           </p>
