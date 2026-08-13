@@ -5,15 +5,19 @@
 
 // VERSION CONFIGURATION
 const VERSION = '1.0.1';
-const BUILD_TIME = '20260530c';
+const BUILD_TIME = '20260813a';
 const CACHE_NAME = `spiritual-seasons-v${VERSION}-${BUILD_TIME}`;
-const FONT_CACHE = `spiritual-seasons-fonts-v${VERSION}`;
 
 // Use relative paths - works whether app is at root or subfolder
 const STATIC_ASSETS = [
   './',
   './index.html',
   './manifest.webmanifest',
+  // Self-hosted fonts (works fully offline; no Google Fonts CDN dependency)
+  './css/fonts.css',
+  './assets/fonts/cormorant-garamond-normal.woff2',
+  './assets/fonts/cormorant-garamond-italic.woff2',
+  './assets/fonts/libre-franklin-normal.woff2',
   // CSS Files
   './css/variables.css',
   './css/reset.css',
@@ -89,44 +93,19 @@ const STATIC_ASSETS = [
   './assets/images/book-cover.webp'
 ];
 
-// Google Fonts to cache
-const FONT_URLS = [
-  'https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;0,700;1,400;1,500&family=Source+Sans+3:wght@300;400;500;600;700&display=swap'
-];
-
 // Install event
 self.addEventListener('install', (event) => {
   console.log(`[ServiceWorker] Installing version ${VERSION}...`);
   
   event.waitUntil(
-    Promise.all([
-      // Cache static assets
-      caches.open(CACHE_NAME).then((cache) => {
-        console.log('[ServiceWorker] Caching static assets');
-        return cache.addAll(STATIC_ASSETS).catch(err => {
-          console.warn('[ServiceWorker] Some assets failed to cache:', err);
-          // Continue even if some assets fail
-          return Promise.resolve();
-        });
-      }),
-      // Pre-cache fonts
-      caches.open(FONT_CACHE).then((cache) => {
-        console.log('[ServiceWorker] Caching fonts');
-        return Promise.all(
-          FONT_URLS.map(url => 
-            fetch(url, { mode: 'cors' })
-              .then(response => {
-                if (response.ok) {
-                  return cache.put(url, response);
-                }
-              })
-              .catch(err => {
-                console.warn('[ServiceWorker] Font cache failed:', err);
-              })
-          )
-        );
-      })
-    ])
+    caches.open(CACHE_NAME).then((cache) => {
+      console.log('[ServiceWorker] Caching static assets');
+      return cache.addAll(STATIC_ASSETS).catch(err => {
+        console.warn('[ServiceWorker] Some assets failed to cache:', err);
+        // Continue even if some assets fail
+        return Promise.resolve();
+      });
+    })
     .then(() => {
       console.log(`[ServiceWorker] Install complete - ${CACHE_NAME}`);
       return self.skipWaiting();
@@ -145,7 +124,7 @@ self.addEventListener('activate', (event) => {
           cacheNames
             .filter((name) => {
               // Delete all caches that don't match current version
-              const isCurrentCache = name === CACHE_NAME || name === FONT_CACHE;
+              const isCurrentCache = name === CACHE_NAME;
               if (!isCurrentCache) {
                 console.log('[ServiceWorker] Deleting old cache:', name);
               }
@@ -180,30 +159,9 @@ self.addEventListener('fetch', (event) => {
     return;
   }
 
-  // Handle Google Fonts
-  if (url.hostname === 'fonts.googleapis.com' || url.hostname === 'fonts.gstatic.com') {
-    event.respondWith(
-      caches.open(FONT_CACHE).then((cache) => {
-        return cache.match(event.request).then((cachedResponse) => {
-          if (cachedResponse) {
-            return cachedResponse;
-          }
-          return fetch(event.request).then((networkResponse) => {
-            if (networkResponse.ok) {
-              cache.put(event.request, networkResponse.clone());
-            }
-            return networkResponse;
-          }).catch(() => {
-            // Return empty response for fonts - page will use fallback
-            return new Response('', { status: 200 });
-          });
-        });
-      })
-    );
-    return;
-  }
-
-  // Skip other cross-origin requests
+  // Skip cross-origin requests (fonts are now self-hosted, so everything
+  // this app needs is same-origin and covered by the cache-first strategy
+  // below)
   if (url.origin !== self.location.origin) {
     return;
   }

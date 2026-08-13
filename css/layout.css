@@ -71,7 +71,14 @@ html, body {
   opacity: 0;
   transform: translateY(10px);
   transition: opacity var(--transition-base), transform var(--transition-base);
-  min-height: 100%;
+  /* min-height:100% here would resolve against the nearest ancestor with an
+     explicit CSS height, which (through the flex-grown .app-body/.app-main
+     chain) is .app-shell's full 100dvh — not the space actually left after
+     the header. That silently forced every page to be header-height taller
+     than necessary, adding scroll to pages whose content already fit.
+     Compute the real available height directly instead. */
+  min-height: calc(100vh - var(--app-header-height) - var(--bottom-nav-height));
+  min-height: calc(100dvh - var(--app-header-height) - var(--bottom-nav-height));
   padding-bottom: var(--page-bottom-padding); /* Clears fixed bottom nav (64px) + safe-area + breathing room */
 }
 

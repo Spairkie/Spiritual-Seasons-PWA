@@ -226,6 +226,9 @@
 
   .page {
     padding-bottom: var(--space-8);
+    /* Bottom nav is hidden at this width, so don't reserve space for it */
+    min-height: calc(100vh - var(--app-header-height));
+    min-height: calc(100dvh - var(--app-header-height));
   }
 }
 

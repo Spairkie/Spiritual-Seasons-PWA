@@ -247,7 +247,7 @@ const TOC = (() => {
     });
 
     container.innerHTML = `
-      <div class="season-bg" style="min-height: 100vh;">
+      <div class="season-bg">
         <div class="page-header">
           <div class="season-badge">${season.title.split(' — ')[0]}</div>
           <h1 class="page-title" style="font-size: var(--text-2xl);">${season.title}</h1>

@@ -12,7 +12,8 @@
 /* Season background wrapper (for backwards compatibility) */
 .season-bg {
   position: relative;
-  min-height: 100vh;
+  min-height: calc(100vh - var(--app-header-height) - var(--bottom-nav-height));
+  min-height: calc(100dvh - var(--app-header-height) - var(--bottom-nav-height));
   background: linear-gradient(
     180deg,
     color-mix(in srgb, var(--season-light) 20%, var(--bg-cream)),
@@ -20,7 +21,11 @@
   );
 }
 
-/* Apply seasonal backgrounds to full page containers */
+/* Apply seasonal backgrounds to full page containers.
+   min-height intentionally matches .page's own calc() (not a bare 100vh) —
+   a bare 100vh here was overriding .page's height (higher specificity via
+   ID selectors) and forcing every page to be a full viewport tall even
+   when its content, plus the header above it, already fit comfortably. */
 #page-home,
 #page-devotional,
 #page-contents,
@@ -32,12 +37,29 @@
 #page-settings,
 #page-privacy {
   position: relative;
-  min-height: 100vh;
+  min-height: calc(100vh - var(--app-header-height) - var(--bottom-nav-height));
+  min-height: calc(100dvh - var(--app-header-height) - var(--bottom-nav-height));
   background: linear-gradient(
     180deg,
     color-mix(in srgb, var(--season-light) 20%, var(--bg-cream)),
     var(--bg-cream)
   );
+}
+
+@media (min-width: 900px) {
+  #page-home,
+  #page-devotional,
+  #page-contents,
+  #page-progress,
+  #page-favorites,
+  #page-reflections,
+  #page-intro,
+  #page-search,
+  #page-settings,
+  #page-privacy {
+    min-height: calc(100vh - var(--app-header-height));
+    min-height: calc(100dvh - var(--app-header-height));
+  }
 }
 
 /* Ensure content has proper z-index above background effects */
