@@ -388,10 +388,10 @@ const Privacy = (() => {
 
         <!-- Local-First & Offline Note -->
         <div class="privacy-section">
-          <div style="background: var(--color-surface); border-radius: var(--radius-lg); padding: var(--space-4); border-left: 3px solid var(--season-primary);">
+          <div style="background: var(--card-bg); border-radius: var(--radius-lg); padding: var(--space-4); border-left: 3px solid var(--season-primary);">
             <p style="font-weight: 600; margin-bottom: var(--space-1);">🔒 Your data stays on this device</p>
-            <p style="font-size: var(--text-sm); color: var(--color-text-secondary); margin-bottom: var(--space-2);">All your journal entries, progress, and reflections are stored only in your browser. Nothing is sent to any server.</p>
-            <p style="font-size: var(--text-sm); color: var(--color-text-secondary);">📶 <strong>Works offline:</strong> All 120 devotionals are cached on your device. Once you've opened the app, you can read, journal, and track progress without an internet connection.</p>
+            <p style="font-size: var(--text-sm); color: var(--text-secondary); margin-bottom: var(--space-2);">All your journal entries, progress, and reflections are stored only in your browser. Nothing is sent to any server.</p>
+            <p style="font-size: var(--text-sm); color: var(--text-secondary);">📶 <strong>Works offline:</strong> All 120 devotionals are cached on your device. Once you've opened the app, you can read, journal, and track progress without an internet connection.</p>
           </div>
         </div>
 

@@ -216,7 +216,7 @@ const Settings = (() => {
             </label>
           </div>
           <div class="settings-item" style="padding-top: 0; padding-bottom: var(--space-2);">
-            <p class="settings-item-description" style="font-size: var(--text-xs); color: var(--color-text-muted); font-style: italic; margin: 0;">Reminders appear while the app is open in your browser or when installed as a standalone app.</p>
+            <p class="settings-item-description" style="font-size: var(--text-xs); color: var(--text-muted); font-style: italic; margin: 0;">Reminders appear while the app is open in your browser or when installed as a standalone app.</p>
           </div>
 
           <div class="settings-item" id="reminder-time-setting" style="display: ${settings.notificationsEnabled ? 'flex' : 'none'}">
@@ -390,8 +390,8 @@ const Settings = (() => {
       <div class="settings-group">
         <h3 class="settings-group-title">About & Legal</h3>
         <div class="settings-list">
-          <div class="settings-item" style="background: var(--color-surface-alt, var(--color-surface)); border-radius: var(--radius-md); padding: var(--space-3);">
-            <p class="settings-item-description" style="font-size: var(--text-sm); color: var(--color-text-secondary); margin: 0;">
+          <div class="settings-item" style="background: var(--bg-secondary); border-radius: var(--radius-md); padding: var(--space-3);">
+            <p class="settings-item-description" style="font-size: var(--text-sm); color: var(--text-secondary); margin: 0;">
               ${Utils.getIcon('shield', 14)} All your data is stored only on this device. Nothing is sent to any server.
             </p>
           </div>

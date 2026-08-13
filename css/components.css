@@ -45,6 +45,14 @@
   display: flex;
   align-items: center;
   gap: 10px;
+  min-width: 0;
+  flex-shrink: 1;
+}
+
+.header-title-text {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
 }
 
 .header-logo {
@@ -58,12 +66,15 @@
   display: flex;
   align-items: center;
   gap: var(--space-2);
+  flex-shrink: 0;
 }
 
 /* Main Content */
 .app-main {
   flex: 1;
-  padding-bottom: var(--space-16); /* Base clearance for fixed bottom nav; safe-area handled by .page */
+  /* No padding-bottom here: each .page already reserves clearance for the
+     fixed bottom nav via --page-bottom-padding. Adding it here too just
+     stacks redundant empty space and forces unnecessary scrolling. */
 }
 
 /* Bottom Navigation */
@@ -213,10 +224,6 @@
     display: none;
   }
 
-  .app-main {
-    padding-bottom: 0;
-  }
-
   .page {
     padding-bottom: var(--space-8);
   }
@@ -252,14 +259,16 @@
 .page-content {
   max-width: var(--container-max);
   margin: 0 auto;
-  padding: 0 var(--space-4) var(--space-8);
+  /* Bottom clearance for the fixed bottom-nav already comes from .page's
+     padding-bottom — keep this small to avoid stacking redundant space. */
+  padding: 0 var(--space-4) var(--space-4);
 }
 
 /* For pages that need narrower content */
 .page-content-narrow {
   max-width: var(--container-md);
   margin: 0 auto;
-  padding: 0 var(--space-4) var(--space-8);
+  padding: 0 var(--space-4) var(--space-4);
 }
 
 /* For full-width sections within pages */
@@ -793,7 +802,7 @@
 
 .devotional-header {
   text-align: center;
-  padding: var(--space-10) var(--space-4) var(--space-8);
+  padding: var(--space-6) var(--space-4);
   background: linear-gradient(180deg, var(--season-light) 0%, transparent 100%);
   position: relative;
 }
@@ -818,7 +827,7 @@
   font-size: var(--text-sm);
   font-weight: 700;
   border-radius: var(--radius-full);
-  margin-bottom: var(--space-5);
+  margin-bottom: var(--space-3);
   text-transform: uppercase;
   letter-spacing: 0.05em;
   box-shadow: 0 4px 12px rgba(var(--season-primary-rgb), 0.3);
@@ -858,7 +867,7 @@
 }
 
 .devotional-actions {
-  margin-top: var(--space-6);
+  margin-top: var(--space-4);
   display: flex;
   gap: var(--space-3);
   flex-wrap: wrap;
@@ -1370,15 +1379,17 @@
    ============================================ */
 
 .home-hero {
-  padding: var(--space-8) var(--space-4);
+  padding: var(--space-4) var(--space-4) var(--space-3);
   text-align: center;
 }
 
 .home-greeting {
-  font-size: var(--text-base);
-  color: var(--text-primary);
-  margin-bottom: var(--space-2);
-  font-weight: 500;
+  font-size: var(--text-xs);
+  color: var(--text-tertiary);
+  margin-bottom: var(--space-1);
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
 }
 
 .home-date {
@@ -1386,14 +1397,14 @@
   font-size: var(--text-2xl);
   font-weight: 700;
   color: var(--text-primary);
-  margin-bottom: var(--space-3);
+  margin-bottom: var(--space-1);
 }
 
 .today-card {
   background: var(--bg-primary);
   border-radius: var(--radius-2xl);
-  padding: var(--space-6);
-  margin: 0 var(--space-4) var(--space-6);
+  padding: var(--space-5);
+  margin: 0 var(--space-4) var(--space-4);
   box-shadow: var(--shadow-lg);
   border: 1px solid var(--border-primary);
 }
@@ -1402,7 +1413,7 @@
   display: flex;
   align-items: center;
   justify-content: space-between;
-  margin-bottom: var(--space-4);
+  margin-bottom: var(--space-3);
 }
 
 .today-label {
@@ -1617,7 +1628,7 @@
 
 /* Wellness Section */
 .wellness-section {
-  padding: var(--space-6) var(--space-4);
+  padding: 0 var(--space-4) var(--space-4);
 }
 
 .wellness-header {
@@ -1627,7 +1638,7 @@
   text-transform: uppercase;
   letter-spacing: 0.05em;
   text-align: center;
-  margin-bottom: var(--space-4);
+  margin-bottom: var(--space-3);
 }
 
 /* Wellness Grid - Always 2x2 on ALL screen sizes */
@@ -1696,7 +1707,7 @@
 
 /* Home Verse Quote */
 .home-verse-quote {
-  padding: var(--space-6) var(--space-4);
+  padding: var(--space-4) var(--space-4) 0;
   text-align: center;
 }
 
@@ -4937,10 +4948,6 @@ textarea:focus-visible {
 }
 
 @media (min-width: 768px) {
-  .app-main {
-    padding-bottom: var(--space-8);
-  }
-  
   .header-nav {
     display: flex;
     gap: var(--space-6);

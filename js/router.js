@@ -151,10 +151,16 @@ const Router = (() => {
     }
   }
 
+  // Routes that don't have their own nav item but are reached from Home
+  // (the season quiz and the initial book-cover screen) should still show
+  // the Home tab as active, rather than leaving the nav with nothing lit.
+  const HOME_GROUP_ROUTES = ['home', 'intro', 'quiz'];
+
   function updateNav(path) {
+    const isHomeGroup = HOME_GROUP_ROUTES.includes(path);
     document.querySelectorAll('.nav-item').forEach(item => {
       const itemPath = item.getAttribute('data-route');
-      const isActive = itemPath === path;
+      const isActive = itemPath === path || (itemPath === 'home' && isHomeGroup);
       item.classList.toggle('active', isActive);
       item.setAttribute('aria-current', isActive ? 'page' : 'false');
     });
