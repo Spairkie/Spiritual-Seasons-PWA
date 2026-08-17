@@ -47,7 +47,15 @@ journal/progress/streaks, built on a long-lived branch in this same repo.
       `fake-indexeddb`, covering CRUD, the streak-calculation algorithm
       (including the DST-safe day-diff logic), and a full
       export → reset → import round trip.
-- [ ] Content loader + router
+- [x] Content loader (`src/content/content.ts`) — fetches/caches
+      `book.json`/`quiz.json`, typed lookups (`getSeasonForDay`,
+      `getDayEntry`, etc.) verified against the real 1-120 day layout
+      (four contiguous 30-day seasons), plus a `useContent()` hook
+- [x] Router (`src/router/router.ts`) — typed hash router on
+      `@preact/signals`, same URL shape as the legacy app
+      (`#read/42?query=…`) so old habits/bookmarks still resolve sensibly.
+      13 more Vitest tests (28 total) covering hash parsing/serialization
+      and the content day→season lookups
 - [ ] Core UI primitives (Button, Card, ListRow, Toggle, Badge, NavItem,
       Sheet/Modal, ProgressRing)
 - [ ] App shell: header, responsive nav (bottom nav / sidebar), theming
