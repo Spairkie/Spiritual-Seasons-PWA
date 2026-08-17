@@ -4,8 +4,9 @@ import { currentRoute } from '@/router/router';
 import { ROUTE_TITLES } from '@/app-shell/nav';
 import { IntroPage } from '@/pages/IntroPage';
 import { QuizPage } from '@/pages/QuizPage';
+import { HomePage } from '@/pages/HomePage';
 
-/** Route bodies for the 5 main destinations land in tasks #20-24
+/** Route bodies for the remaining destinations land in tasks #21-24
  * (src/pages/*); this placeholder just proves routing + the shell work
  * together in the meantime. */
 function RoutePlaceholder() {
@@ -29,9 +30,5 @@ export function App() {
   if (route.name === 'intro') return <IntroPage />;
   if (route.name === 'quiz') return <QuizPage />;
 
-  return (
-    <AppShell>
-      <RoutePlaceholder />
-    </AppShell>
-  );
+  return <AppShell>{route.name === 'home' ? <HomePage /> : <RoutePlaceholder />}</AppShell>;
 }

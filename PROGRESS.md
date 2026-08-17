@@ -91,7 +91,12 @@ journal/progress/streaks, built on a long-lived branch in this same repo.
       an actual end-to-end run of the flow in headless Chromium
       (quiz → result → home), not just unit tests — a good reminder that
       the interaction tests are pulling real weight here.
-- [ ] Home page
+- [x] Home page (`src/pages/HomePage.tsx`) — today's scripture reference
+      and text, season badge, day-within-season count, overall progress
+      ring, and streak, in a 2-column layout at desktop (single column on
+      mobile). Verified visually at both widths with seeded progress/
+      streak data: correct season theming, correct "Continue reading" vs
+      "Read again" state, and the CTA navigates to the right day.
 - [ ] Devotional (Read) page
 - [ ] Contents page (Favourites folded in as a filter, per master plan §5)
 - [ ] Progress page
