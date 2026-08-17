@@ -63,7 +63,14 @@ journal/progress/streaks, built on a long-lived branch in this same repo.
       desktop from the same component. Visually verified at mobile and
       desktop widths in headless Chromium (screenshots + a live focus-trap
       exercise), zero console errors.
-- [ ] App shell: header, responsive nav (bottom nav / sidebar), theming
+- [x] App shell (`src/app-shell/`) — sticky header, desktop sidebar /
+      mobile bottom nav (same five destinations, one shared `NAV_ENTRIES`
+      config), streak indicator, and theming wired end to end: settings
+      load into a reactive signal (`src/state/settings.ts`) and
+      `applyTheme()` sets `data-theme`/`data-season` on the document root.
+      Verified in headless Chromium at mobile and desktop widths — nav
+      clicks update the route/title/hash, dark mode and all four season
+      accents render correctly, zero console errors.
 - [ ] Quiz + intro pages
 - [ ] Home page
 - [ ] Devotional (Read) page
