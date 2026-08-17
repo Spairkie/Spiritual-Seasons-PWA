@@ -97,7 +97,26 @@ journal/progress/streaks, built on a long-lived branch in this same repo.
       mobile). Verified visually at both widths with seeded progress/
       streak data: correct season theming, correct "Continue reading" vs
       "Read again" state, and the CTA navigates to the right day.
-- [ ] Devotional (Read) page
+- [x] Devotional (Read) page (`src/pages/ReadPage.tsx`) — the core screen:
+      scripture + prompt, prev/next day nav, mark complete/incomplete,
+      favourite toggle, and a journaling textarea with debounced autosave
+      (2s, matching the legacy `AUTOSAVE_DELAY_MS`) or a manual Save
+      button when the user has autosave off in Settings. 2-column at
+      desktop, single column on mobile.
+
+      Caught two real bugs via end-to-end interaction testing (typing,
+      waiting out the autosave debounce, then reading IndexedDB directly
+      to confirm the write): (1) a leftover "skip the first autosave"
+      guard was silently eating every day's actual first keystroke —
+      removed, since setting a controlled `value` prop never fires
+      `input` events in the first place, so the guard was solving a
+      problem that didn't exist; (2) the favourited heart icon's red
+      tint was losing to the button's own `text-ink` class — Tailwind's
+      cascade is resolved by stylesheet order, not DOM class-attribute
+      order, so appending a class last in JSX doesn't guarantee it wins.
+      Fixed with `!text-danger`. Both confirmed fixed by re-running the
+      same interaction test against the built page, not just re-reading
+      the code.
 - [ ] Contents page (Favourites folded in as a filter, per master plan §5)
 - [ ] Progress page
 - [ ] Settings page (Data & Privacy folded in, per master plan §5)

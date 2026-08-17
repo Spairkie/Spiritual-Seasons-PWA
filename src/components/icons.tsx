@@ -64,6 +64,43 @@ export function SettingsIcon({ class: className }: IconProps) {
   );
 }
 
+export function HeartIcon({ class: className, filled = false }: IconProps & { filled?: boolean }) {
+  return (
+    <svg
+      {...commonProps}
+      fill={filled ? 'currentColor' : 'none'}
+      class={className}
+      aria-hidden="true"
+    >
+      <path d="M12 20.5s-7.5-4.6-10-9.3C.6 8 2 4.5 5.3 3.8c2-.4 3.9.5 5 2.2 1.1-1.7 3-2.6 5-2.2C18.6 4.5 20 8 18 11.2c-2.5 4.7-10 9.3-10 9.3Z" />
+    </svg>
+  );
+}
+
+export function ChevronLeftIcon({ class: className }: IconProps) {
+  return (
+    <svg {...commonProps} class={className} aria-hidden="true">
+      <path d="M15 5 8 12l7 7" />
+    </svg>
+  );
+}
+
+export function ChevronRightIcon({ class: className }: IconProps) {
+  return (
+    <svg {...commonProps} class={className} aria-hidden="true">
+      <path d="M9 5l7 7-7 7" />
+    </svg>
+  );
+}
+
+export function CheckIcon({ class: className }: IconProps) {
+  return (
+    <svg {...commonProps} class={className} aria-hidden="true">
+      <path d="M5 12.5 10 17l9-10" />
+    </svg>
+  );
+}
+
 export function FlameIcon({ class: className }: IconProps) {
   return (
     <svg {...commonProps} class={className} aria-hidden="true">

@@ -5,6 +5,7 @@ import { ROUTE_TITLES } from '@/app-shell/nav';
 import { IntroPage } from '@/pages/IntroPage';
 import { QuizPage } from '@/pages/QuizPage';
 import { HomePage } from '@/pages/HomePage';
+import { ReadPage } from '@/pages/ReadPage';
 
 /** Route bodies for the remaining destinations land in tasks #21-24
  * (src/pages/*); this placeholder just proves routing + the shell work
@@ -30,5 +31,9 @@ export function App() {
   if (route.name === 'intro') return <IntroPage />;
   if (route.name === 'quiz') return <QuizPage />;
 
-  return <AppShell>{route.name === 'home' ? <HomePage /> : <RoutePlaceholder />}</AppShell>;
+  let body = <RoutePlaceholder />;
+  if (route.name === 'home') body = <HomePage />;
+  if (route.name === 'read') body = <ReadPage key={route.params.param ?? 'current'} />;
+
+  return <AppShell>{body}</AppShell>;
 }
