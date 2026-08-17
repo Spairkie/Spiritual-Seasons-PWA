@@ -142,7 +142,31 @@ journal/progress/streaks, built on a long-lived branch in this same repo.
       single column on mobile. Verified visually at both widths with
       seeded data (8 winter + 5 spring days complete, 8-day streak, 8
       journal entries) — every number on screen matched the seed exactly.
-- [ ] Settings page (Data & Privacy folded in, per master plan §5)
+- [x] Settings page (`src/pages/SettingsPage.tsx`) — appearance (dark
+      mode, season colour, text size, line spacing) via a shared
+      Sheet-based picker for all four enum settings; journaling
+      (autosave, keyboard shortcuts) and reminders (daily reminder +
+      time) as toggles; quick links back into the quiz/intro flows; and
+      Data & Privacy folded in per the master plan (§5/decision 2) —
+      export (real file download), import (file picker → validate →
+      merge), and a confirm-gated full reset.
+
+      Corrected one thing while porting the legacy privacy copy: it
+      claimed audio notes are stored "as encrypted blobs," which isn't
+      true (they're plain Blobs in IndexedDB, encrypted only to whatever
+      degree the OS/browser profile already provides) — dropped the
+      false claim rather than carry it into the rebuild.
+
+      Verified end-to-end in headless Chromium: the appearance sheet
+      actually changes `data-theme` live, toggling notifications reveals
+      the time picker, Export triggers a real file download with the
+      correct name, and Reset shows the confirm dialog, wipes the store,
+      and correctly lands back on onboarding.
+
+This completes all five main destinations — someone can now go through
+the full loop: onboard → quiz → read a day → journal → mark complete →
+favourite → see it reflected in Contents/Progress → adjust appearance
+in Settings.
 - [ ] Wellness features (timer, breathing, ambient sound, TTS)
 - [ ] Search, sharing, export/import UI, PWA/service worker polish
 - [ ] Accessibility pass (WCAG 2.2 AA), real-device check, final review
