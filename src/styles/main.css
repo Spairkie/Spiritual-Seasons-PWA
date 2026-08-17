@@ -1,0 +1,211 @@
+@import 'tailwindcss';
+@import './fonts.css';
+
+/* ============================================================
+   DESIGN TOKENS
+   Single source of truth. @theme entries generate Tailwind
+   utilities (bg-paper, text-ink-2, rounded-card, font-serif...);
+   the same custom properties are then overridden per-theme/
+   per-season below, so every utility that uses them repaints
+   automatically — no per-season utility classes anywhere.
+   ============================================================ */
+@theme {
+  --font-serif: 'Cormorant Garamond', Georgia, serif;
+  --font-sans: 'Libre Franklin', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+
+  /* Base palette (light values here; dark/season overrides follow) */
+  --color-paper: #FBF9F5;
+  --color-surface: #FFFFFF;
+  --color-surface-2: #F4F0E9;
+  --color-ink: #1F1D1A;
+  --color-ink-2: #5C5852;
+  --color-ink-3: #8B857B;
+  --color-ink-muted: #A39D92;
+  --color-line: #E7E2D8;
+  --color-line-2: #D8D2C6;
+  --color-on-accent: #FFFFFF;
+
+  /* Seasonal accent (default = winter; switched at runtime, see below) */
+  --color-accent: #4C7688;
+  --color-accent-deep: #2B4E5C;
+  --color-tint: #EAF1F4;
+  --color-tint-2: #DBE7EC;
+
+  /* Semantic (not season-dependent) */
+  --color-danger: #A9503A;
+  --color-danger-deep: #7A3524;
+
+  --radius-control: 0.8125rem;  /* 13px — buttons, list rows */
+  --radius-card: 1rem;          /* 16px — cards */
+  --radius-panel: 1.25rem;      /* 20px — large cards, sheets */
+
+  --shadow-soft: 0 1px 2px rgba(31, 29, 26, .04), 0 10px 26px -16px rgba(31, 29, 26, .18);
+  --shadow-panel: 0 30px 70px -30px rgba(31, 29, 26, .5);
+
+  --ease-standard: cubic-bezier(.4, 0, .2, 1);
+  --ease-spring: cubic-bezier(.34, 1.56, .64, 1);
+
+  /* Layout constants shared by the shell */
+  --spacing-header: 60px;
+  --spacing-bottom-nav: 64px;
+  --spacing-sidebar: 236px;
+}
+
+/* ------------------------------------------------------------
+   Dark mode. Same three-way pattern used across this app's
+   artifacts: bare :root carries light (already above), the
+   media query covers "system says dark" unless an explicit
+   light choice overrides it, and [data-theme=dark] wins outright.
+   ------------------------------------------------------------ */
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme='light']) {
+    --color-paper: #15140F;
+    --color-surface: #1D1C17;
+    --color-surface-2: #26241D;
+    --color-ink: #F3EFE6;
+    --color-ink-2: #B2ACA1;
+    --color-ink-3: #8B8579;
+    --color-ink-muted: #6E6960;
+    --color-line: #302D26;
+    --color-line-2: #3D3931;
+    --color-on-accent: #14130F;
+  }
+}
+:root[data-theme='dark'] {
+  --color-paper: #15140F;
+  --color-surface: #1D1C17;
+  --color-surface-2: #26241D;
+  --color-ink: #F3EFE6;
+  --color-ink-2: #B2ACA1;
+  --color-ink-3: #8B8579;
+  --color-ink-muted: #6E6960;
+  --color-line: #302D26;
+  --color-line-2: #3D3931;
+  --color-on-accent: #14130F;
+}
+
+/* ------------------------------------------------------------
+   Seasonal accents. Light values first; each gets a dark-mode
+   override (brighter, not simply inverted — contrast against a
+   dark surface needs more lightness/saturation).
+   ------------------------------------------------------------ */
+[data-season='winter'] {
+  --color-accent: #4C7688;
+  --color-accent-deep: #2B4E5C;
+  --color-tint: #EAF1F4;
+  --color-tint-2: #DBE7EC;
+}
+[data-season='spring'] {
+  --color-accent: #6D8E4E;
+  --color-accent-deep: #43602F;
+  --color-tint: #EFF3E7;
+  --color-tint-2: #E0EAD2;
+}
+[data-season='summer'] {
+  --color-accent: #B5822B;
+  --color-accent-deep: #835A16;
+  --color-tint: #FAF2E1;
+  --color-tint-2: #F0E2C4;
+}
+[data-season='autumn'] {
+  --color-accent: #A9503A;
+  --color-accent-deep: #7A3524;
+  --color-tint: #F8EBE6;
+  --color-tint-2: #EFD8D0;
+}
+
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme='light']) {
+    &[data-season='winter'] { --color-accent: #7FB3C6; --color-accent-deep: #A9CFDD; --color-tint: #1A2A31; --color-tint-2: #23363E; }
+    &[data-season='spring'] { --color-accent: #9DBE7B; --color-accent-deep: #BBD69E; --color-tint: #1E2718; --color-tint-2: #28331F; }
+    &[data-season='summer'] { --color-accent: #DCAE5C; --color-accent-deep: #EDC77F; --color-tint: #2A2113; --color-tint-2: #372B18; }
+    &[data-season='autumn'] { --color-accent: #D08469; --color-accent-deep: #E2A188; --color-tint: #2B1A15; --color-tint-2: #38221B; }
+  }
+}
+:root[data-theme='dark'] {
+  &[data-season='winter'] { --color-accent: #7FB3C6; --color-accent-deep: #A9CFDD; --color-tint: #1A2A31; --color-tint-2: #23363E; }
+  &[data-season='spring'] { --color-accent: #9DBE7B; --color-accent-deep: #BBD69E; --color-tint: #1E2718; --color-tint-2: #28331F; }
+  &[data-season='summer'] { --color-accent: #DCAE5C; --color-accent-deep: #EDC77F; --color-tint: #2A2113; --color-tint-2: #372B18; }
+  &[data-season='autumn'] { --color-accent: #D08469; --color-accent-deep: #E2A188; --color-tint: #2B1A15; --color-tint-2: #38221B; }
+}
+
+/* ============================================================
+   BASE LAYER
+   ============================================================ */
+@layer base {
+  * {
+    box-sizing: border-box;
+  }
+
+  html,
+  body {
+    height: 100%;
+    /* Locked native shell: only .app-main scrolls, never the page itself.
+       (This exact pattern is fine — the bug in the old app wasn't this,
+       it was an unrelated ID selector fighting it three files away.) */
+    overflow: hidden;
+    position: fixed;
+    width: 100%;
+    overscroll-behavior: none;
+  }
+
+  body {
+    background: var(--color-paper);
+    color: var(--color-ink);
+    font-family: var(--font-sans);
+    font-size: 15px;
+    line-height: 1.5;
+    -webkit-font-smoothing: antialiased;
+  }
+
+  button {
+    font: inherit;
+    color: inherit;
+  }
+
+  textarea,
+  select,
+  input {
+    font: inherit;
+    color: inherit;
+  }
+
+  ::selection {
+    background: var(--color-tint);
+    color: var(--color-accent-deep);
+  }
+
+  :focus-visible {
+    outline: 2px solid var(--color-accent);
+    outline-offset: 2px;
+    border-radius: 6px;
+  }
+
+  .skip-link {
+    position: absolute;
+    top: -100%;
+    left: 12px;
+    z-index: 1000;
+    background: var(--color-surface);
+    color: var(--color-ink);
+    padding: 10px 16px;
+    border-radius: 10px;
+    box-shadow: var(--shadow-soft);
+    font-weight: 600;
+    font-size: 14px;
+  }
+  .skip-link:focus {
+    top: 12px;
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    *,
+    *::before,
+    *::after {
+      animation-duration: 0.001ms !important;
+      animation-iteration-count: 1 !important;
+      transition-duration: 0.001ms !important;
+      scroll-behavior: auto !important;
+    }
+  }
+}
