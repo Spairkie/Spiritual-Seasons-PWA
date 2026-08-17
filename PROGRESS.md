@@ -167,8 +167,31 @@ This completes all five main destinations — someone can now go through
 the full loop: onboard → quiz → read a day → journal → mark complete →
 favourite → see it reflected in Contents/Progress → adjust appearance
 in Settings.
-- [ ] Wellness features (timer, breathing, ambient sound, TTS)
-- [ ] Search, sharing, export/import UI, PWA/service worker polish
+- [x] Wellness features — all four, none needing bundled audio assets:
+      - **TTS** (`src/lib/tts.ts`): a "Listen" link on the Read page reads
+        the day's scripture aloud via the Web Speech API, respecting the
+        user's saved reading speed.
+      - **Meditation timer** (`MeditationTimer.tsx`): 1/3/5/10-minute
+        presets, a progress ring, and a two-tone bell chime
+        (`src/lib/chime.ts`, synthesized via Web Audio — no asset file)
+        on completion.
+      - **Guided breathing** (`BreathingExercise.tsx`): box breathing
+        (4-4-4-4), an animated circle synced to the phase.
+      - **Ambient sound** (`src/lib/ambientSound.ts`): rain, ocean, and
+        white noise, all procedurally generated from filtered/modulated
+        noise buffers via the Web Audio API — deliberately trimmed from
+        the legacy app's ten thinner oscillator-based presets to three
+        well-executed ones, rather than reproduce all ten at lower
+        quality. Also added as a default-preset picker + reading-speed
+        slider in Settings.
+
+      All three interactive tools live in one `WellnessSheet`, opened
+      from the Read page, so there's no new nav destination for
+      something people reach for occasionally rather than every visit.
+      Verified end-to-end in headless Chromium: timer counts down for
+      real, breathing phase label updates, ambient sound's play/stop
+      state toggles correctly, zero console errors throughout.
+- [ ] Search, sharing, PWA/service worker polish
 - [ ] Accessibility pass (WCAG 2.2 AA), real-device check, final review
 
 `src/main.tsx` / `src/app.tsx` currently render a placeholder that only

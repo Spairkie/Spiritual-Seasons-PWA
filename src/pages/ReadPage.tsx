@@ -4,6 +4,8 @@ import { CheckIcon, ChevronLeftIcon, ChevronRightIcon, HeartIcon } from '@/compo
 import { getDayEntry, getSeasonForDay, TOTAL_DAYS, useContent } from '@/content/content';
 import { currentRoute, navigate } from '@/router/router';
 import * as store from '@/store';
+import { isTtsSupported, speak, stopSpeaking } from '@/lib/tts';
+import { WellnessSheet } from '@/components/wellness/WellnessSheet';
 
 /** Matches legacy CONFIG.JOURNAL.AUTOSAVE_DELAY_MS. */
 const AUTOSAVE_DELAY_MS = 2000;
@@ -22,6 +24,7 @@ interface DayState {
   isFavorite: boolean;
   isComplete: boolean;
   autoSave: boolean;
+  ttsRate: number;
 }
 
 export function ReadPage() {
@@ -29,7 +32,14 @@ export function ReadPage() {
   const [day, setDay] = useState<number | null>(dayFromRouteParam);
   const [state, setState] = useState<DayState | null>(null);
   const [saveStatus, setSaveStatus] = useState<SaveStatus>('idle');
+  const [speaking, setSpeaking] = useState(false);
+  const [wellnessOpen, setWellnessOpen] = useState(false);
   const saveTimer = useRef<ReturnType<typeof setTimeout> | null>(null);
+
+  // Stop any in-progress narration when navigating away from this day.
+  useEffect(() => {
+    return () => stopSpeaking();
+  }, [day]);
 
   // If no explicit day was in the URL (e.g. the Read nav item, which links
   // to #read with no day), resolve it from the stored current day instead —
@@ -47,11 +57,12 @@ export function ReadPage() {
     if (saveTimer.current) clearTimeout(saveTimer.current);
     (async () => {
       await store.init();
-      const [journalEntry, progress, isFavorite, autoSave] = await Promise.all([
+      const [journalEntry, progress, isFavorite, autoSave, ttsRate] = await Promise.all([
         store.getJournalEntry(day),
         store.getDayProgress(day),
         store.isFavorite(day),
         store.getSetting('autoSave'),
+        store.getSetting('ttsRate'),
       ]);
       if (cancelled) return;
       setState({
@@ -59,6 +70,7 @@ export function ReadPage() {
         isFavorite,
         isComplete: !!progress?.completed,
         autoSave,
+        ttsRate,
       });
       await store.setCurrentDay(day);
     })();
@@ -128,6 +140,16 @@ export function ReadPage() {
     setState((prev) => (prev ? { ...prev, isFavorite: nowFavorite } : prev));
   }
 
+  function toggleSpeak() {
+    if (speaking) {
+      stopSpeaking();
+      setSpeaking(false);
+      return;
+    }
+    speak(`${entry.scriptureRef}. ${entry.scriptureText}`, resolvedState.ttsRate, () => setSpeaking(false));
+    setSpeaking(true);
+  }
+
   return (
     <div class="p-5">
       <div class="mx-auto grid max-w-4xl gap-5 md:grid-cols-2">
@@ -156,7 +178,18 @@ export function ReadPage() {
             </button>
           </div>
 
-          <p class="mt-4 font-serif text-xl font-semibold text-ink">{entry.scriptureRef}</p>
+          <div class="mt-4 flex items-start justify-between gap-3">
+            <p class="font-serif text-xl font-semibold text-ink">{entry.scriptureRef}</p>
+            {isTtsSupported() && (
+              <button
+                type="button"
+                onClick={toggleSpeak}
+                class="shrink-0 text-sm font-semibold text-accent-deep hover:underline"
+              >
+                {speaking ? 'Stop' : 'Listen'}
+              </button>
+            )}
+          </div>
           <p class="mt-2 text-ink-2">{entry.scriptureText}</p>
 
           <p class="mt-5 font-serif text-lg text-ink">Reflect</p>
@@ -181,6 +214,14 @@ export function ReadPage() {
               <HeartIcon class="h-4 w-4" filled={state.isFavorite} />
             </Button>
           </div>
+
+          <button
+            type="button"
+            onClick={() => setWellnessOpen(true)}
+            class="mt-3 w-full text-center text-sm font-semibold text-ink-3 hover:text-ink-2"
+          >
+            Take a moment — timer, breathing, ambient sound
+          </button>
         </Card>
 
         <Card padding="lg">
@@ -206,6 +247,8 @@ export function ReadPage() {
           )}
         </Card>
       </div>
+
+      <WellnessSheet open={wellnessOpen} onClose={() => setWellnessOpen(false)} />
     </div>
   );
 }

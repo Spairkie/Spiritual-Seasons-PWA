@@ -4,8 +4,9 @@ import { navigate } from '@/router/router';
 import * as store from '@/store';
 import { settingsSignal, updateSetting } from '@/state/settings';
 import type { Settings } from '@/types/store';
+import { AMBIENT_PRESETS } from '@/lib/ambientSound';
 
-type OptionKey = 'darkMode' | 'seasonTheme' | 'fontSize' | 'lineSpacing';
+type OptionKey = 'darkMode' | 'seasonTheme' | 'fontSize' | 'lineSpacing' | 'ambientSound';
 
 const OPTIONS: Record<OptionKey, { label: string; sheetTitle: string; choices: Array<{ value: string; label: string }> }> = {
   darkMode: {
@@ -47,6 +48,11 @@ const OPTIONS: Record<OptionKey, { label: string; sheetTitle: string; choices: A
       { value: 'relaxed', label: 'Relaxed' },
       { value: 'loose', label: 'Loose' },
     ],
+  },
+  ambientSound: {
+    label: 'Default ambient sound',
+    sheetTitle: 'Default ambient sound',
+    choices: AMBIENT_PRESETS,
   },
 };
 
@@ -168,6 +174,32 @@ export function SettingsPage() {
                 }
               />
             )}
+          </Card>
+        </section>
+
+        <section>
+          <h2 class="mb-2 px-1 text-sm font-semibold uppercase tracking-wide text-ink-3">Sound &amp; voice</h2>
+          <Card padding="none">
+            <ListRow
+              title="Default ambient sound"
+              subtitle={currentLabel('ambientSound')}
+              onClick={() => setOpenSheet('ambientSound')}
+            />
+            <ListRow
+              title="Reading voice speed"
+              trailing={
+                <input
+                  type="range"
+                  min="0.5"
+                  max="1.5"
+                  step="0.1"
+                  value={settings.ttsRate}
+                  onInput={(e) => void updateSetting('ttsRate', Number((e.target as HTMLInputElement).value))}
+                  class="w-28 accent-[var(--color-accent)]"
+                  aria-label="Reading voice speed"
+                />
+              }
+            />
           </Card>
         </section>
 
