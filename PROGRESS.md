@@ -71,7 +71,26 @@ journal/progress/streaks, built on a long-lived branch in this same repo.
       Verified in headless Chromium at mobile and desktop widths — nav
       clicks update the route/title/hash, dark mode and all four season
       accents render correctly, zero console errors.
-- [ ] Quiz + intro pages
+- [x] Quiz + intro pages (`src/pages/QuizPage.tsx`, `IntroPage.tsx`) —
+      real scoring logic (`src/content/quizLogic.ts`, 5 more tests) against
+      the actual quiz.json (16 questions, 4 per season, highest-total
+      wins, ties prompt the user to choose per `rules.tieBehavior`).
+      First-launch users are redirected to onboarding automatically;
+      completing it saves quiz results, sets the current season, and
+      jumps to the season's first day only on a true first-ever
+      completion (retaking the quiz later doesn't discard progress).
+      Onboarding renders full-screen, outside the nav shell.
+
+      Caught and fixed a real race condition here: the settings signal is
+      a module-level singleton that survives across AppShell mounts, so
+      the *stale* snapshot from the pre-onboarding redirect at boot was
+      winning a race against the fresh reload on the next mount and
+      bouncing the user straight back to onboarding right after they
+      finished it. Fixed by gating the redirect on a mount-local
+      "settings loaded" flag instead of "settings is non-null". Caught by
+      an actual end-to-end run of the flow in headless Chromium
+      (quiz → result → home), not just unit tests — a good reminder that
+      the interaction tests are pulling real weight here.
 - [ ] Home page
 - [ ] Devotional (Read) page
 - [ ] Contents page (Favourites folded in as a filter, per master plan §5)

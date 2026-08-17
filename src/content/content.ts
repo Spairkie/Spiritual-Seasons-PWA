@@ -35,6 +35,12 @@ export function getSeasonIdForDay(day: number): SeasonId {
   return 'autumn';
 }
 
+const SEASON_START_DAY: Record<SeasonId, number> = { winter: 1, spring: 31, summer: 61, autumn: 91 };
+
+export function getFirstDayOfSeason(seasonId: SeasonId): number {
+  return SEASON_START_DAY[seasonId];
+}
+
 export function getSeasonById(book: BookData, seasonId: SeasonId): BookSeason {
   const season = book.seasons.find((s) => s.id === seasonId);
   if (!season) throw new Error(`Unknown season id: ${seasonId}`);

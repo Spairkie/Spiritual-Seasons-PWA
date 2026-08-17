@@ -2,9 +2,12 @@ import { AppShell } from '@/app-shell/AppShell';
 import { Card } from '@/components/ui';
 import { currentRoute } from '@/router/router';
 import { ROUTE_TITLES } from '@/app-shell/nav';
+import { IntroPage } from '@/pages/IntroPage';
+import { QuizPage } from '@/pages/QuizPage';
 
-/** Route bodies land in tasks #19-24 (src/pages/*); this placeholder just
- * proves routing + the shell work together end to end in the meantime. */
+/** Route bodies for the 5 main destinations land in tasks #20-24
+ * (src/pages/*); this placeholder just proves routing + the shell work
+ * together in the meantime. */
 function RoutePlaceholder() {
   const route = currentRoute.value;
   return (
@@ -18,6 +21,14 @@ function RoutePlaceholder() {
 }
 
 export function App() {
+  const route = currentRoute.value;
+
+  // Onboarding (intro + quiz) renders full-screen, without the persistent
+  // nav chrome — same reasoning as most app first-run flows: don't let
+  // someone navigate away mid-onboarding via a nav they haven't seen yet.
+  if (route.name === 'intro') return <IntroPage />;
+  if (route.name === 'quiz') return <QuizPage />;
+
   return (
     <AppShell>
       <RoutePlaceholder />
