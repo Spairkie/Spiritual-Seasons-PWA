@@ -136,7 +136,12 @@ journal/progress/streaks, built on a long-lived branch in this same repo.
       would have silently produced full untrimmed titles instead of
       "Winter"/"Spring"/etc. — checked the actual JSON instead of
       trusting the assumption.
-- [ ] Progress page
+- [x] Progress page (`src/pages/ProgressPage.tsx`) — overall progress ring,
+      current/longest streak, journal entry count, and a per-season
+      breakdown with individual progress bars. 2-column at desktop,
+      single column on mobile. Verified visually at both widths with
+      seeded data (8 winter + 5 spring days complete, 8-day streak, 8
+      journal entries) — every number on screen matched the seed exactly.
 - [ ] Settings page (Data & Privacy folded in, per master plan §5)
 - [ ] Wellness features (timer, breathing, ambient sound, TTS)
 - [ ] Search, sharing, export/import UI, PWA/service worker polish
