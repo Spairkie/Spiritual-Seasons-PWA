@@ -56,8 +56,13 @@ journal/progress/streaks, built on a long-lived branch in this same repo.
       (`#read/42?query=…`) so old habits/bookmarks still resolve sensibly.
       13 more Vitest tests (28 total) covering hash parsing/serialization
       and the content day→season lookups
-- [ ] Core UI primitives (Button, Card, ListRow, Toggle, Badge, NavItem,
-      Sheet/Modal, ProgressRing)
+- [x] Core UI primitives (`src/components/ui/`) — Button, Card, ListRow,
+      Toggle, Badge, NavItem, Sheet, ProgressRing. Sheet is a real
+      accessible dialog: focus trap, Escape-to-close, focus restored to
+      the trigger on close, bottom sheet on mobile / centered modal on
+      desktop from the same component. Visually verified at mobile and
+      desktop widths in headless Chromium (screenshots + a live focus-trap
+      exercise), zero console errors.
 - [ ] App shell: header, responsive nav (bottom nav / sidebar), theming
 - [ ] Quiz + intro pages
 - [ ] Home page
