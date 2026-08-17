@@ -1,6 +1,6 @@
 import { useMemo, useState } from 'preact/hooks';
 import { Button, Card } from '@/components/ui';
-import { useContent, getFirstDayOfSeason } from '@/content/content';
+import { SEASON_LABELS, useContent, getFirstDayOfSeason } from '@/content/content';
 import { computeScores, determineOutcome, flattenQuestions } from '@/content/quizLogic';
 import { quizAnswerKey } from '@/types/quiz';
 import type { QuizAnswers } from '@/types/quiz';
@@ -9,13 +9,6 @@ import { navigate } from '@/router/router';
 import * as store from '@/store';
 
 type Phase = 'start' | 'question' | 'tie' | 'result';
-
-const SEASON_LABELS: Record<SeasonId, string> = {
-  winter: 'Winter',
-  spring: 'Spring',
-  summer: 'Summer',
-  autumn: 'Autumn',
-};
 
 export function QuizPage() {
   const { quiz, error } = useContent();

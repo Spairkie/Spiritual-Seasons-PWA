@@ -60,6 +60,13 @@ export function getDayEntry(book: BookData, day: number): DayEntry {
 
 export const TOTAL_DAYS = 120;
 
+export const SEASON_LABELS: Record<SeasonId, string> = {
+  winter: 'Winter',
+  spring: 'Spring',
+  summer: 'Summer',
+  autumn: 'Autumn',
+};
+
 interface ContentState {
   book: BookData | null;
   quiz: QuizData | null;

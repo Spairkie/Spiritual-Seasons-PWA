@@ -117,7 +117,25 @@ journal/progress/streaks, built on a long-lived branch in this same repo.
       Fixed with `!text-danger`. Both confirmed fixed by re-running the
       same interaction test against the built page, not just re-reading
       the code.
-- [ ] Contents page (Favourites folded in as a filter, per master plan §5)
+- [x] Contents page (`src/pages/ContentsPage.tsx`) — all 120 days grouped
+      by season, with completion checkmarks and favourite hearts, plus
+      the "All days / Favourites" segmented filter that replaces a
+      separate Favourites page per the master plan's simplified IA
+      (§5/decision 2). Loads all progress/favourites once (two queries)
+      rather than per-row, and skips a season's whole section when it
+      has no favourites in that filter. Verified visually with seeded
+      data: filter switches correctly, tapping a day navigates to that
+      exact Read page.
+
+      Also deduplicated `SEASON_LABELS` (winter/spring/summer/autumn →
+      display name), which had been copy-pasted into both QuizPage and
+      HomePage already — moved into `src/content/content.ts` as the one
+      shared copy. Caught in the process: the copy I was about to
+      duplicate a third time assumed season titles split on " – " (en
+      dash), but the real content uses an em dash, so that string split
+      would have silently produced full untrimmed titles instead of
+      "Winter"/"Spring"/etc. — checked the actual JSON instead of
+      trusting the assumption.
 - [ ] Progress page
 - [ ] Settings page (Data & Privacy folded in, per master plan §5)
 - [ ] Wellness features (timer, breathing, ambient sound, TTS)

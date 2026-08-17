@@ -1,10 +1,9 @@
 import { useEffect, useState } from 'preact/hooks';
 import { Badge, Button, Card, ProgressRing } from '@/components/ui';
 import { FlameIcon } from '@/components/icons';
-import { getDayEntry, getSeasonForDay, TOTAL_DAYS, useContent } from '@/content/content';
+import { SEASON_LABELS, getDayEntry, getSeasonForDay, TOTAL_DAYS, useContent } from '@/content/content';
 import { navigate } from '@/router/router';
 import * as store from '@/store';
-import type { SeasonId } from '@/types/book';
 
 interface HomeState {
   currentDay: number;
@@ -12,13 +11,6 @@ interface HomeState {
   completedCount: number;
   isDayComplete: boolean;
 }
-
-const SEASON_LABELS: Record<SeasonId, string> = {
-  winter: 'Winter',
-  spring: 'Spring',
-  summer: 'Summer',
-  autumn: 'Autumn',
-};
 
 function useHomeState(): HomeState | null {
   const [state, setState] = useState<HomeState | null>(null);

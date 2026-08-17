@@ -6,6 +6,7 @@ import { IntroPage } from '@/pages/IntroPage';
 import { QuizPage } from '@/pages/QuizPage';
 import { HomePage } from '@/pages/HomePage';
 import { ReadPage } from '@/pages/ReadPage';
+import { ContentsPage } from '@/pages/ContentsPage';
 
 /** Route bodies for the remaining destinations land in tasks #21-24
  * (src/pages/*); this placeholder just proves routing + the shell work
@@ -34,6 +35,7 @@ export function App() {
   let body = <RoutePlaceholder />;
   if (route.name === 'home') body = <HomePage />;
   if (route.name === 'read') body = <ReadPage key={route.params.param ?? 'current'} />;
+  if (route.name === 'contents') body = <ContentsPage />;
 
   return <AppShell>{body}</AppShell>;
 }
