@@ -19,7 +19,7 @@
   --color-surface-2: #F4F0E9;
   --color-ink: #1F1D1A;
   --color-ink-2: #5C5852;
-  --color-ink-3: #8B857B;
+  --color-ink-3: #6E6860; /* darkened from #8B857B — that value was only 3.5-3.7:1 against paper/surface, failing WCAG AA's 4.5:1 for normal text (caught by an automated axe-core audit, not visually — see PROGRESS.md) */
   --color-ink-muted: #A39D92;
   --color-line: #E7E2D8;
   --color-line-2: #D8D2C6;
@@ -64,7 +64,7 @@
     --color-surface-2: #26241D;
     --color-ink: #F3EFE6;
     --color-ink-2: #B2ACA1;
-    --color-ink-3: #8B8579;
+    --color-ink-3: #9C9689; /* lightened from #8B8579 — 4.24:1 against surface-2 dark, just under WCAG AA's 4.5:1 (caught by axe-core) */
     --color-ink-muted: #6E6960;
     --color-line: #302D26;
     --color-line-2: #3D3931;
@@ -77,7 +77,7 @@
   --color-surface-2: #26241D;
   --color-ink: #F3EFE6;
   --color-ink-2: #B2ACA1;
-  --color-ink-3: #8B8579;
+  --color-ink-3: #9C9689;
   --color-ink-muted: #6E6960;
   --color-line: #302D26;
   --color-line-2: #3D3931;
@@ -96,13 +96,17 @@
   --color-tint-2: #DBE7EC;
 }
 [data-season='spring'] {
-  --color-accent: #6D8E4E;
+  /* darkened from #6D8E4E — white text on it was only 3.7:1, failing WCAG
+     AA's 4.5:1 for the primary button and other text-on-accent surfaces
+     (caught by axe-core) */
+  --color-accent: #59743F;
   --color-accent-deep: #43602F;
   --color-tint: #EFF3E7;
   --color-tint-2: #E0EAD2;
 }
 [data-season='summer'] {
-  --color-accent: #B5822B;
+  /* darkened from #B5822B — white text on it was only 3.4:1, same issue */
+  --color-accent: #8D6521;
   --color-accent-deep: #835A16;
   --color-tint: #FAF2E1;
   --color-tint-2: #F0E2C4;

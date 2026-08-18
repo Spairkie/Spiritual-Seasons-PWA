@@ -124,7 +124,7 @@ export function QuizPage() {
                 class="flex items-center justify-between rounded-control border border-line px-4 py-3 text-left transition-colors hover:border-accent hover:bg-tint focus-visible:outline-2 focus-visible:outline-accent focus-visible:outline-offset-2"
               >
                 <span class="text-[15px] font-medium text-ink">{label}</span>
-                <span class="text-sm text-ink-muted">{value}</span>
+                <span class="text-sm text-ink-3">{value}</span>
               </button>
             ))}
           </div>

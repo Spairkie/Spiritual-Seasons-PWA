@@ -19,7 +19,7 @@ journal/progress/streaks, built on a long-lived branch in this same repo.
 |---|---|---|
 | Component framework | Preact 10 + TypeScript + JSX | 3KB, far larger ecosystem than SolidJS (18.2M vs 2.2M weekly downloads), fixes the "which module owns this DOM node" ambiguity that caused several legacy bugs |
 | CSS | Tailwind v4 (`@theme`, Lightning CSS, first-party Vite plugin) | Design tokens as real CSS custom properties (still overridable per-season/per-theme), zero-config content detection, no more "which of 8 CSS files wins" cascade bugs |
-| Build | Vite 8 + `vite-plugin-pwa` (Workbox) | Replaces the hand-maintained `STATIC_ASSETS` cache-list; HMR for dev |
+| Build | Vite 8 + `vite-plugin-pwa` (`injectManifest`, hand-written `src/sw.ts`) | Replaces the hand-maintained `STATIC_ASSETS` cache-list; HMR for dev. Started as `generateSW` (bundled Workbox runtime) but that fails ServiceWorker script evaluation outright under Vite 8 — switched to injectManifest with our own SW once that was diagnosed, see the PWA entry below |
 | Data | `idb` + IndexedDB, same DB name/version/schema as legacy | Zero migration needed — existing users' data reads straight through |
 | Routing | Custom typed hash router (not `preact-iso`) | Exact control over the legacy app's URL scheme; works unmodified on static hosts |
 | CSP | Netlify `_headers` file, not a `<meta>` tag | Decouples dev-server flexibility from the production policy |
@@ -243,11 +243,64 @@ in Settings.
       (WebWorker lib types conflict with the main app's DOM lib in one
       shared program) so it's still typechecked, just not bundled
       through the app's own build path.
-- [ ] Accessibility pass (WCAG 2.2 AA), real-device check, final review
+- [x] Accessibility pass — automated WCAG 2A/2AA/2.1A/2.1AA audit
+      (`axe-core` against every page) rather than a manual eyeball pass,
+      swept across all 7 pages × all 4 season accents × both color
+      schemes (56 combinations). Found and fixed three real, previously
+      invisible violations, all at the design-token level so the fix
+      applies everywhere at once instead of per-component:
+      1. `--color-ink-3` (light mode) — the "muted secondary text" token
+         used pervasively (nav labels, list-row subtitles, captions) was
+         only 3.5–3.7:1 against paper/surface, failing the 4.5:1 minimum
+         for normal-sized text. Darkened `#8B857B` → `#6E6860` (~5.2–5.5:1).
+      2. `--color-ink-3` (dark mode) passed against the plain surface but
+         not against `--color-surface-2` (4.24:1) — the segmented-filter-
+         tab background on Contents. Lightened `#8B8579` → `#9C9689`.
+      3. Spring's and summer's `--color-accent` (white text on top, for
+         the primary button and other text-on-accent surfaces) were only
+         3.7:1 and 3.4:1 — winter and autumn happened to pass by
+         accident of hue, spring/summer didn't. Darkened both
+         (`#6D8E4E`→`#59743F`, `#B5822B`→`#8D6521`) to ~5.2:1.
+      4. The reminder-time `<input type="time">` in Settings had no
+         accessible name (a `title=` on its parent `ListRow` isn't
+         programmatically associated with the input) — added
+         `aria-label="Reminder time"`.
 
-`src/main.tsx` / `src/app.tsx` currently render a placeholder that only
-proves the pipeline (Vite build, Preact render, Tailwind, store init) works
-end to end — the real router and app shell replace it in the next steps.
+      Also verified keyboard-only navigation end to end (Tab through the
+      sidebar in logical order, Enter activates a nav item and routes
+      correctly) and re-confirmed the Sheet dialog's focus trap /
+      Escape-to-close (built and verified back in task #17, re-checked
+      here as part of the same pass). Final sweep: 0 violations across
+      all 56 page/season/theme combinations.
+
+## Real-device notes
+
+Everything above was verified in headless Chromium (desktop + mobile
+viewport emulation) — that's real coverage for layout, interaction, and
+automated accessibility checks, but it is not a substitute for actually
+running on physical hardware before shipping. Specifically still worth
+checking on real devices before release, none of which headless Chromium
+can meaningfully stand in for:
+- **iOS Safari**: PWA install behavior, `100dvh`/safe-area-inset handling
+  on notched devices, and the Web Speech API / SpeechSynthesis voice list
+  (Safari's TTS voice availability differs meaningfully from Chrome's).
+- **Actual offline installs**: this session verified offline behavior via
+  `vite preview` + Playwright's simulated offline mode, which is a real
+  service-worker/Cache-Storage test — but a true "install to home screen,
+  kill the network, relaunch from the icon" pass on a real phone is the
+  final word, since it also exercises OS-level PWA chrome the simulated
+  test doesn't touch.
+- **Touch target sizing**: the design uses 44px-ish tap targets
+  throughout, but that's worth a real-thumb check, especially the
+  day-navigation chevrons on the Read page and the Sheet's close button.
+- **Screen readers**: the axe-core audit catches programmatic
+  issues (contrast, missing labels, ARIA misuse) very well, but doesn't
+  replace an actual VoiceOver/TalkBack pass through the quiz flow and the
+  journal textarea, where the experience is more about announcement
+  timing and flow than static markup correctness.
+- **Reduced-motion / reduced-data**: `prefers-reduced-motion` is handled
+  in `main.css`'s base layer, but hasn't been checked on a device with
+  that setting actually enabled.
 
 ## Compatibility guarantees
 

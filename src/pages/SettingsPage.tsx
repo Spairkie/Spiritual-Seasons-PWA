@@ -167,6 +167,7 @@ export function SettingsPage() {
                 trailing={
                   <input
                     type="time"
+                    aria-label="Reminder time"
                     value={settings.reminderTime}
                     onChange={(e) => void updateSetting('reminderTime', (e.target as HTMLInputElement).value)}
                     class="rounded-control border border-line bg-paper px-2 py-1 text-sm text-ink"
