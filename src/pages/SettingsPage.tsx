@@ -5,6 +5,7 @@ import * as store from '@/store';
 import { settingsSignal, updateSetting } from '@/state/settings';
 import type { Settings } from '@/types/store';
 import { AMBIENT_PRESETS } from '@/lib/ambientSound';
+import { exportJournalToPDF } from '@/lib/pdfExport';
 
 type OptionKey = 'darkMode' | 'seasonTheme' | 'fontSize' | 'lineSpacing' | 'ambientSound';
 
@@ -60,6 +61,8 @@ export function SettingsPage() {
   const settings = settingsSignal.value;
   const [openSheet, setOpenSheet] = useState<OptionKey | null>(null);
   const [importMessage, setImportMessage] = useState<string | null>(null);
+  const [pdfStatus, setPdfStatus] = useState<'idle' | 'exporting'>('idle');
+  const [pdfMessage, setPdfMessage] = useState<string | null>(null);
   const fileInputRef = useRef<HTMLInputElement>(null);
 
   if (!settings) {
@@ -73,6 +76,14 @@ export function SettingsPage() {
   function currentLabel(key: OptionKey) {
     const value = settings![key];
     return OPTIONS[key].choices.find((c) => c.value === value)?.label ?? '';
+  }
+
+  async function exportPdf() {
+    setPdfStatus('exporting');
+    setPdfMessage(null);
+    const result = await exportJournalToPDF();
+    setPdfStatus('idle');
+    setPdfMessage(result.message);
   }
 
   async function exportData() {
@@ -226,6 +237,10 @@ export function SettingsPage() {
               <Button variant="secondary" onClick={() => void exportData()}>
                 Export my data
               </Button>
+              <Button variant="secondary" onClick={() => void exportPdf()} disabled={pdfStatus === 'exporting'}>
+                {pdfStatus === 'exporting' ? 'Exporting…' : 'Export journal as PDF'}
+              </Button>
+              {pdfMessage && <p class="text-sm text-ink-3">{pdfMessage}</p>}
               <Button variant="secondary" onClick={() => fileInputRef.current?.click()}>
                 Import data
               </Button>

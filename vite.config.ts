@@ -40,6 +40,12 @@ export default defineConfig({
   build: {
     target: 'es2022',
     sourcemap: true,
+    // Without this, Vite still emits a <link rel="modulepreload"> for the
+    // jspdf chunk on every page load — eagerly fetching ~112KB gzipped
+    // even for people who never export a PDF, defeating the point of
+    // dynamically importing it in the first place. This app has no other
+    // dynamic imports currently, so there's nothing this hint would help.
+    modulePreload: false,
     rollupOptions: {
       output: {
         // Keep the PDF export path (jsPDF) out of the main bundle — it's

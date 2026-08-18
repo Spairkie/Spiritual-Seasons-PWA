@@ -322,7 +322,31 @@ things the legacy app had. Continuing to close that gap:
       Verified end-to-end: card appears at 7 completed days, saving persists
       the exact question/response pairing, the card disappears once saved,
       and the Progress page renders it back correctly.
-- [ ] PDF export of journal entries
+- [x] **PDF export of journal entries** (`src/lib/pdfExport.ts`) — ported
+      the legacy app's layout (title page, per-entry season/day badge,
+      scripture ref, date, wrapped journal text, page-break handling)
+      using this app's own design-token colors rather than the legacy
+      app's unrelated hardcoded ones. Wired into Settings next to the
+      JSON export/import.
+
+      Caught and fixed a real bundle-size regression while verifying it:
+      `import { jsPDF } from 'jspdf'` at the top of the module put jsPDF
+      (and its unused-by-us `html2canvas` peer dependency, ~340KB total)
+      into the eagerly-loaded module graph despite `vite.config.ts`
+      already having a `manualChunks` rule specifically written to keep
+      it out of the main bundle — the static import defeated that intent.
+      Switched to a dynamic `await import('jspdf')` inside the export
+      function, and separately found that Vite still emitted a
+      `<link rel="modulepreload">` for the chunk on every page load *even
+      with* the dynamic import — a second, independent eager-fetch path
+      — fixed with `build.modulePreload: false`. Confirmed via actual
+      network-request tracing in headless Chromium that the modulepreload
+      hint is gone; the jsPDF chunk is now only ever requested by the
+      service worker's own background install-time precache (a
+      deliberate choice, not a bug — this app promises "works fully
+      offline" in its Settings copy, so PDF export should work offline
+      too even before it's ever been used once online), never as part of
+      the page's own critical rendering path.
 - [ ] Keyboard shortcuts (the Settings toggle already existed but did
       nothing — a half-finished implementation being finished now)
 - [ ] Audio journal notes (voice recording)
