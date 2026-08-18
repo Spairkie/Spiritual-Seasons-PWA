@@ -428,6 +428,50 @@ things the legacy app had. Continuing to close that gap:
         → cancel returns to idle → delete returns to idle — zero console
         errors throughout.
 
+- [x] Daily reminder notifications. Settings already had a "Daily
+      reminder" toggle and a reminder-time picker, but flipping the toggle
+      only wrote a boolean to Settings — nothing ever requested
+      notification permission or scheduled anything, the same
+      half-finished-implementation pattern the keyboard-shortcuts toggle
+      had. Ported the scheduling core of the legacy Notifications module
+      (`legacy/js/modules/notifications.js`) at a scope that matches the
+      rebuild's simpler Settings schema (no quiet-hours/snooze fields to
+      add — those are legacy-only extras, dropped as extra surface area
+      for a feature nobody had asked to extend):
+      - `src/lib/notifications.ts` — support/permission checks, and
+        `showDailyReminder()` which looks up the current day/season/
+        progress and calls the *service worker's*
+        `registration.showNotification()` rather than `new Notification()`
+        — the latter throws on Android Chrome, which only allows showing
+        notifications through an active SW registration.
+      - `src/hooks/useDailyReminder.ts` — a `setTimeout`-based scheduler
+        keyed off `notificationsEnabled`/`reminderTime` in
+        `settingsSignal`, re-arming itself for the next day each time it
+        fires. This is the same mechanism the legacy app used (there's no
+        server to push from) — a best-effort reminder that only fires if
+        a tab happens to be open around the chosen time, not true
+        background push. Mounted once in `AppShell.tsx`.
+      - `notificationclick` handler added to `src/sw.ts`: focuses an
+        existing tab and calls `WindowClient.navigate()` to the
+        notification's day (re-requesting `index.html`, served from the
+        precache, so the app boots straight to that day), or opens a new
+        tab if none is open.
+      - `SettingsPage.tsx`: the toggle now actually requests permission
+        when turned on (and reflects a browser-level "denied" state by
+        disabling itself with an explanatory subtitle, since JS can't
+        re-prompt after a denial), reveals the reminder-time row only
+        once permission is granted, and adds a "Send a test notification"
+        action for immediate feedback.
+      - Verified against a production build served via `vite preview`
+        (the service worker only registers in production, not the plain
+        dev server) with Playwright's `notifications` permission
+        auto-granted: toggling on reveals the time picker and test
+        button; sending a test notification actually invokes the real
+        service worker's `showNotification()` (confirmed by intercepting
+        the call, not just checking for a thrown error) with the correct
+        day/season title and prompt text; the enabled state persists
+        across a reload. Zero console errors.
+
 ## Compatibility guarantees
 
 The new store layer opens the same `spiritual-seasons-db` (v1) database

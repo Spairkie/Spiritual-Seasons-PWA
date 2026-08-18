@@ -108,3 +108,26 @@ self.addEventListener('fetch', (event) => {
 
   event.respondWith(cacheFirst(event.request));
 });
+
+self.addEventListener('notificationclick', (event) => {
+  event.notification.close();
+  const day = (event.notification.data as { day?: number } | undefined)?.day;
+  const targetUrl = day ? `/#read/${day}` : '/#home';
+
+  event.waitUntil(
+    (async () => {
+      const clients = await self.clients.matchAll({ type: 'window', includeUncontrolled: true });
+      const existing = clients[0];
+      if (existing) {
+        // navigate() re-requests index.html (served from cache by the
+        // fetch handler above) with the new hash, so the app boots fresh
+        // and the router picks the target day straight up — simpler than
+        // a postMessage round trip to a client that may not be listening.
+        await existing.navigate(targetUrl);
+        await existing.focus();
+        return;
+      }
+      await self.clients.openWindow(targetUrl);
+    })()
+  );
+});

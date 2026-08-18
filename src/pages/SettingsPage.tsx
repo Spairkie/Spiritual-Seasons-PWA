@@ -6,6 +6,12 @@ import { settingsSignal, updateSetting } from '@/state/settings';
 import type { Settings } from '@/types/store';
 import { AMBIENT_PRESETS } from '@/lib/ambientSound';
 import { exportJournalToPDF } from '@/lib/pdfExport';
+import {
+  isNotificationSupported,
+  notificationPermission,
+  requestNotificationPermission,
+  showDailyReminder,
+} from '@/lib/notifications';
 
 type OptionKey = 'darkMode' | 'seasonTheme' | 'fontSize' | 'lineSpacing' | 'ambientSound';
 
@@ -63,6 +69,8 @@ export function SettingsPage() {
   const [importMessage, setImportMessage] = useState<string | null>(null);
   const [pdfStatus, setPdfStatus] = useState<'idle' | 'exporting'>('idle');
   const [pdfMessage, setPdfMessage] = useState<string | null>(null);
+  const [permission, setPermission] = useState(notificationPermission());
+  const [testSent, setTestSent] = useState(false);
   const fileInputRef = useRef<HTMLInputElement>(null);
 
   if (!settings) {
@@ -76,6 +84,27 @@ export function SettingsPage() {
   function currentLabel(key: OptionKey) {
     const value = settings![key];
     return OPTIONS[key].choices.find((c) => c.value === value)?.label ?? '';
+  }
+
+  async function toggleNotifications(wantsEnabled: boolean) {
+    if (!wantsEnabled) {
+      await updateSetting('notificationsEnabled', false);
+      return;
+    }
+    const result = await requestNotificationPermission();
+    setPermission(result);
+    await updateSetting('notificationsEnabled', result === 'granted');
+  }
+
+  async function sendTest() {
+    if (permission !== 'granted') {
+      const result = await requestNotificationPermission();
+      setPermission(result);
+      if (result !== 'granted') return;
+    }
+    await showDailyReminder();
+    setTestSent(true);
+    setTimeout(() => setTestSent(false), 3000);
   }
 
   async function exportPdf() {
@@ -161,30 +190,43 @@ export function SettingsPage() {
         <section>
           <h2 class="mb-2 px-1 text-sm font-semibold uppercase tracking-wide text-ink-3">Reminders</h2>
           <Card padding="none">
-            <ListRow
-              title="Daily reminder"
-              subtitle="A gentle nudge to read each day"
-              trailing={
-                <Toggle
-                  checked={settings.notificationsEnabled}
-                  onChange={(v) => void updateSetting('notificationsEnabled', v)}
-                  label="Daily reminder"
+            {isNotificationSupported() ? (
+              <>
+                <ListRow
+                  title="Daily reminder"
+                  subtitle={permission === 'denied' ? 'Blocked — enable notifications for this site in your browser' : 'A gentle nudge to read each day'}
+                  trailing={
+                    <Toggle
+                      checked={settings.notificationsEnabled && permission === 'granted'}
+                      onChange={(v) => void toggleNotifications(v)}
+                      label="Daily reminder"
+                      disabled={permission === 'denied'}
+                    />
+                  }
                 />
-              }
-            />
-            {settings.notificationsEnabled && (
-              <ListRow
-                title="Reminder time"
-                trailing={
-                  <input
-                    type="time"
-                    aria-label="Reminder time"
-                    value={settings.reminderTime}
-                    onChange={(e) => void updateSetting('reminderTime', (e.target as HTMLInputElement).value)}
-                    class="rounded-control border border-line bg-paper px-2 py-1 text-sm text-ink"
-                  />
-                }
-              />
+                {settings.notificationsEnabled && permission === 'granted' && (
+                  <>
+                    <ListRow
+                      title="Reminder time"
+                      trailing={
+                        <input
+                          type="time"
+                          aria-label="Reminder time"
+                          value={settings.reminderTime}
+                          onChange={(e) => void updateSetting('reminderTime', (e.target as HTMLInputElement).value)}
+                          class="rounded-control border border-line bg-paper px-2 py-1 text-sm text-ink"
+                        />
+                      }
+                    />
+                    <ListRow
+                      title={testSent ? 'Test notification sent' : 'Send a test notification'}
+                      onClick={() => void sendTest()}
+                    />
+                  </>
+                )}
+              </>
+            ) : (
+              <div class="px-4 py-3 text-sm text-ink-3">Notifications aren't supported in this browser.</div>
             )}
           </Card>
         </section>
