@@ -387,7 +387,46 @@ things the legacy app had. Continuing to close that gap:
         here" into the focused journal textarea does *not* navigate away,
         confirming `shouldIgnoreKeyEvent` correctly ignores keys while
         typing. Zero console errors across the whole run.
-- [ ] Audio journal notes (voice recording)
+- [x] Audio journal notes (voice recording). Ported the legacy AudioNotes
+      module (`legacy/js/modules/audio.js`) — the store layer
+      (`src/store/audioNotes.ts`, one record per day, keyPath `day`) and
+      export/import wiring (`src/store/dataTransfer.ts`) already existed
+      from the original 27 tasks; this added the recording UI itself:
+      - `src/lib/audioRecording.ts` — framework-free recording logic:
+        feature detection, mic-permission + `MediaRecorder` setup with the
+        same codec fallback order as legacy (opus-in-webm →
+        opus-in-ogg → mp4 → webm), the same 5-minute/10MB limits, a
+        `startRecording()` that returns a `{stop, cancel}` session, and
+        `getAudioDuration()`/`formatDuration()`/`formatSize()` helpers.
+      - `src/components/AudioNoteRecorder.tsx` — a small state machine
+        (idle → recording → saving → playback) rendered under the
+        Journal card on the Read page (`day` prop), with record / stop &
+        save / cancel / delete / re-record controls, an elapsed-time
+        progress bar while recording, and a native `<audio controls>`
+        player with duration/size/date once a note exists.
+      - Added `MicIcon`, `StopIcon`, `TrashIcon` to `src/components/icons.tsx`.
+      - Deliberately simplified vs. legacy: uses `window.confirm` for the
+        delete/re-record confirmations (matching how Settings' "delete all
+        data" already does it) rather than porting a whole custom Modal
+        component for two confirm dialogs.
+      - **Bug found and fixed during verification**: `getAudioDuration()`
+        initially reported `Infinity` for freshly-recorded WebM blobs,
+        rendering as "Infinity:NaN" in the UI — a long-standing Chromium
+        bug (crbug.com/642012) where `MediaRecorder`'s WebM output has no
+        duration in its header, so `<audio>.duration` stays `Infinity`
+        until something forces a seek past the end. This affects any app
+        using this exact `<audio>`-element duration technique in Chrome,
+        including presumably the legacy app. Fixed with the standard
+        workaround (seek to `Number.MAX_SAFE_INTEGER`, read the corrected
+        `duration` on the resulting `timeupdate`), plus a
+        `Number.isFinite` guard in `formatDuration` as a safety net.
+      - Verified via a Playwright smoke test launched with
+        `--use-fake-device-for-media-stream` and a granted `microphone`
+        permission: record → live elapsed timer/progress bar → stop &
+        save → correct duration/size/date shown → note survives a page
+        reload (confirms IndexedDB persistence) → re-record replaces it
+        → cancel returns to idle → delete returns to idle — zero console
+        errors throughout.
 
 ## Compatibility guarantees
 

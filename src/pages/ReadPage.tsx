@@ -7,6 +7,7 @@ import * as store from '@/store';
 import { isTtsSupported, speak, stopSpeaking } from '@/lib/tts';
 import { shareText } from '@/lib/share';
 import { WellnessSheet } from '@/components/wellness/WellnessSheet';
+import { AudioNoteRecorder } from '@/components/AudioNoteRecorder';
 import { useShortcuts } from '@/hooks/useShortcuts';
 
 /** Matches legacy CONFIG.JOURNAL.AUTOSAVE_DELAY_MS. */
@@ -295,6 +296,11 @@ export function ReadPage() {
               Save entry
             </Button>
           )}
+
+          <div class="mt-4 border-t border-line pt-4">
+            <p class="mb-2 text-sm font-semibold text-ink-2">Voice note</p>
+            <AudioNoteRecorder day={resolvedDay} />
+          </div>
         </Card>
       </div>
 

@@ -113,6 +113,35 @@ export function ShareIcon({ class: className }: IconProps) {
   );
 }
 
+export function MicIcon({ class: className }: IconProps) {
+  return (
+    <svg {...commonProps} class={className} aria-hidden="true">
+      <rect x="9" y="2" width="6" height="12" rx="3" />
+      <path d="M5 10.5v1.5a7 7 0 0 0 14 0v-1.5" />
+      <path d="M12 19v3" />
+      <path d="M8.5 22h7" />
+    </svg>
+  );
+}
+
+export function StopIcon({ class: className }: IconProps) {
+  return (
+    <svg {...commonProps} fill="currentColor" class={className} aria-hidden="true">
+      <rect x="6" y="6" width="12" height="12" rx="2" />
+    </svg>
+  );
+}
+
+export function TrashIcon({ class: className }: IconProps) {
+  return (
+    <svg {...commonProps} class={className} aria-hidden="true">
+      <path d="M4 7h16" />
+      <path d="M9 7V4.5A1.5 1.5 0 0 1 10.5 3h3A1.5 1.5 0 0 1 15 4.5V7" />
+      <path d="M6 7v12.5A1.5 1.5 0 0 0 7.5 21h9a1.5 1.5 0 0 0 1.5-1.5V7" />
+    </svg>
+  );
+}
+
 export function FlameIcon({ class: className }: IconProps) {
   return (
     <svg {...commonProps} class={className} aria-hidden="true">
