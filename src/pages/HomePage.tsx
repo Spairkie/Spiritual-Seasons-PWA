@@ -4,6 +4,8 @@ import { FlameIcon } from '@/components/icons';
 import { SEASON_LABELS, getDayEntry, getSeasonForDay, TOTAL_DAYS, useContent } from '@/content/content';
 import { navigate } from '@/router/router';
 import * as store from '@/store';
+import { checkReflectionDue } from '@/lib/weeklyReflection';
+import { WeeklyReflectionSheet } from '@/components/WeeklyReflectionSheet';
 
 interface HomeState {
   currentDay: number;
@@ -45,6 +47,18 @@ function useHomeState(): HomeState | null {
 export function HomePage() {
   const { book, error } = useContent();
   const home = useHomeState();
+  const [dueWeek, setDueWeek] = useState<number | null>(null);
+  const [reflectionOpen, setReflectionOpen] = useState(false);
+
+  useEffect(() => {
+    let cancelled = false;
+    checkReflectionDue().then((week) => {
+      if (!cancelled) setDueWeek(week);
+    });
+    return () => {
+      cancelled = true;
+    };
+  }, [home?.completedCount]);
 
   if (error) {
     return (
@@ -119,8 +133,32 @@ export function HomePage() {
               </div>
             </Card>
           )}
+
+          {dueWeek !== null && (
+            <Card padding="lg">
+              <p class="text-sm font-semibold text-ink">Week {dueWeek} reflection</p>
+              <p class="mt-1 text-sm text-ink-3">
+                You've completed a week of devotions — take a moment to reflect.
+              </p>
+              <Button class="mt-3" variant="secondary" fullWidth onClick={() => setReflectionOpen(true)}>
+                Reflect now
+              </Button>
+            </Card>
+          )}
         </div>
       </div>
+
+      {dueWeek !== null && (
+        <WeeklyReflectionSheet
+          week={dueWeek}
+          open={reflectionOpen}
+          onClose={() => setReflectionOpen(false)}
+          onSaved={() => {
+            setReflectionOpen(false);
+            setDueWeek(null);
+          }}
+        />
+      )}
     </div>
   );
 }

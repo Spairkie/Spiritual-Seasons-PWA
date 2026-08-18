@@ -302,6 +302,31 @@ can meaningfully stand in for:
   in `main.css`'s base layer, but hasn't been checked on a device with
   that setting actually enabled.
 
+## Beyond the master plan's 27 tasks: legacy feature parity
+
+The master plan's task list covered the core rebuild; once all 27 were done
+the app was feature-complete for its core loop but still missing a few
+things the legacy app had. Continuing to close that gap:
+
+- [x] **Weekly Reflections** (`src/content/weeklyReflectionQuestions.ts`,
+      `src/lib/weeklyReflection.ts`, `src/components/WeeklyReflectionSheet.tsx`) —
+      ported the legacy app's 17 weeks of distinct prompts verbatim. Surfaced
+      contextually per the master plan's IA (§5: "not a standalone nav
+      destination") as a dismissible card on Home that appears once every 7
+      completed days and opens a Sheet to answer; past reflections are
+      browsable (expand/collapse) in a new section on the Progress page, so
+      they aren't write-only. The "due" check is based on completed-day
+      count crossing a multiple of 7 with no existing reflection for that
+      week yet — matches the legacy app's actual logic (`isReflectionDue`),
+      not just the day number, so skipping around doesn't skip reflections.
+      Verified end-to-end: card appears at 7 completed days, saving persists
+      the exact question/response pairing, the card disappears once saved,
+      and the Progress page renders it back correctly.
+- [ ] PDF export of journal entries
+- [ ] Keyboard shortcuts (the Settings toggle already existed but did
+      nothing — a half-finished implementation being finished now)
+- [ ] Audio journal notes (voice recording)
+
 ## Compatibility guarantees
 
 The new store layer opens the same `spiritual-seasons-db` (v1) database

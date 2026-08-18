@@ -4,6 +4,7 @@ import { FlameIcon } from '@/components/icons';
 import { SEASON_LABELS, TOTAL_DAYS, useContent } from '@/content/content';
 import * as store from '@/store';
 import type { SeasonId } from '@/types/book';
+import type { WeeklyReflectionRecord } from '@/types/store';
 
 interface ProgressState {
   completedCount: number;
@@ -11,6 +12,7 @@ interface ProgressState {
   currentStreak: number;
   longestStreak: number;
   bySeason: Record<SeasonId, number>;
+  reflections: WeeklyReflectionRecord[];
 }
 
 function useProgressState(): ProgressState | null {
@@ -20,10 +22,11 @@ function useProgressState(): ProgressState | null {
     let cancelled = false;
     (async () => {
       await store.init();
-      const [progress, journal, streak] = await Promise.all([
+      const [progress, journal, streak, reflections] = await Promise.all([
         store.getAllProgress(),
         store.getAllJournalEntries(),
         store.getStreak(),
+        store.getAllWeeklyReflections(),
       ]);
       if (cancelled) return;
 
@@ -38,6 +41,7 @@ function useProgressState(): ProgressState | null {
         currentStreak: streak.current,
         longestStreak: streak.longest,
         bySeason,
+        reflections: reflections.sort((a, b) => a.week - b.week),
       });
     })();
     return () => {
@@ -126,6 +130,31 @@ export function ProgressPage() {
             })}
           </div>
         </Card>
+
+        {state.reflections.length > 0 && (
+          <Card padding="lg" class="md:col-span-2">
+            <p class="mb-3 font-serif text-lg font-semibold text-ink">Weekly reflections</p>
+            <div class="flex flex-col gap-2">
+              {state.reflections.map((reflection) => (
+                <details key={reflection.week} class="group rounded-control border border-line px-4 py-3">
+                  <summary class="cursor-pointer list-none text-[15px] font-medium text-ink marker:content-none">
+                    Week {reflection.week}
+                  </summary>
+                  <div class="mt-3 flex flex-col gap-3">
+                    {reflection.questions.map((question, i) =>
+                      reflection.responses[i]?.trim() ? (
+                        <div key={i}>
+                          <p class="text-sm font-semibold text-ink-2">{question}</p>
+                          <p class="mt-1 text-sm text-ink-2">{reflection.responses[i]}</p>
+                        </div>
+                      ) : null
+                    )}
+                  </div>
+                </details>
+              ))}
+            </div>
+          </Card>
+        )}
       </div>
     </div>
   );
