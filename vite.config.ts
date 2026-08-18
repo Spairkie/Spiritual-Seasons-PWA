@@ -20,20 +20,21 @@ export default defineConfig({
     preact(),
     tailwindcss(),
     VitePWA({
+      // generateSW's bundled Workbox runtime fails ServiceWorker script
+      // evaluation outright under this project's Vite 8 toolchain (isolated
+      // and confirmed via a hand-written minimal SW that installs/caches
+      // fine in the same environment — see PROGRESS.md). injectManifest
+      // uses our own src/sw.ts instead, with only the precache file list
+      // injected at build time.
+      strategies: 'injectManifest',
       registerType: 'autoUpdate',
+      srcDir: 'src',
+      filename: 'sw.ts',
+      injectManifest: {
+        globPatterns: ['**/*.{js,css,html,ico,png,svg,webp,woff2}']
+      },
       includeAssets: ['assets/icons/*.svg', 'assets/images/*.webp'],
-      manifest: false, // we ship a hand-written manifest.webmanifest in public/
-      workbox: {
-        globPatterns: ['**/*.{js,css,html,ico,png,svg,webp,woff2}'],
-        // Content JSON should refresh when online, but still work offline.
-        runtimeCaching: [
-          {
-            urlPattern: /\/content\/.*\.json$/,
-            handler: 'NetworkFirst',
-            options: { cacheName: 'content' }
-          }
-        ]
-      }
+      manifest: false // we ship a hand-written manifest.webmanifest in public/
     })
   ],
   build: {

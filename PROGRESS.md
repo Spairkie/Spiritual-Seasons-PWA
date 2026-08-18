@@ -191,7 +191,58 @@ in Settings.
       Verified end-to-end in headless Chromium: timer counts down for
       real, breathing phase label updates, ambient sound's play/stop
       state toggles correctly, zero console errors throughout.
-- [ ] Search, sharing, PWA/service worker polish
+- [x] Search — a search box on the Contents page matches scripture
+      reference, scripture text, prompt text, or day number, across all
+      seasons, overriding the All/Favourites filter rather than combining
+      with it. No new nav destination.
+- [x] Sharing — a share button on the Read page uses the Web Share API
+      where available, falling back to clipboard copy everywhere else
+      (verified via `navigator.share` being genuinely `undefined` in the
+      test browser, confirming the fallback path actually ran, not just
+      the happy path).
+- [x] PWA / service worker — found and fixed a real, non-obvious bug: the
+      app was not actually installable as a working offline PWA.
+      `vite-plugin-pwa`'s default `generateSW` strategy (Workbox 7.4,
+      bundled via vite-plugin-pwa 1.3.0) fails **ServiceWorker script
+      evaluation outright** under this project's Vite 8 toolchain — a
+      genuine version incompatibility, not a config mistake. Diagnosed by
+      isolating a hand-written minimal service worker (which installed
+      and cached correctly in the exact same environment) against the
+      generated one (which didn't), ruling out the environment/Cache API
+      itself as the cause before concluding it was the generated runtime.
+
+      Fixed by switching to vite-plugin-pwa's `injectManifest` strategy
+      with a fully hand-written service worker (`src/sw.ts`, ~100 lines,
+      no Workbox dependency) — only the precache file list is injected
+      at build time; everything else is plain Cache API. Two more real
+      bugs surfaced and fixed while building and verifying *that*:
+      1. The precache manifest can list the same file twice (once by
+         content hash from the JS bundle, once via `includeAssets`) —
+         `Cache.addAll()` rejects outright on duplicate requests, so the
+         whole install was silently failing (worker went straight to
+         `redundant`, no error surfaced anywhere a normal dev workflow
+         would see it). Fixed by deduping the URL list before `addAll()`.
+      2. Once installs succeeded, `crossorigin` `<script>`/`<link>`
+         requests (the app's own JS/CSS bundle) still 404'd offline
+         because the dev/preview server sends `Vary: Origin`, and the
+         install-time same-origin caching request carried no Origin
+         header while the runtime CORS request did — a spec-correct
+         Vary check treating them as different cache entries despite an
+         identical URL. Fixed with `{ ignoreVary: true }` on every
+         `caches.match()` call.
+
+      All three of these were invisible to `npm run build` and to normal
+      dev-server browsing — they only show up if you actually register
+      the built service worker, wait for it to finish installing, force
+      the browser offline, and try to load the app for real, which is
+      what finally caught them. Verified end-to-end: `precache-v1` holds
+      all 18 unique deduped assets, a fully offline page reload renders
+      the real app (not a browser error page), and `/content/book.json`
+      still resolves via the NetworkFirst content cache while offline.
+      `tsconfig.sw.json` gives `src/sw.ts` its own project reference
+      (WebWorker lib types conflict with the main app's DOM lib in one
+      shared program) so it's still typechecked, just not bundled
+      through the app's own build path.
 - [ ] Accessibility pass (WCAG 2.2 AA), real-device check, final review
 
 `src/main.tsx` / `src/app.tsx` currently render a placeholder that only

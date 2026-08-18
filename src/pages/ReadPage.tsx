@@ -1,10 +1,11 @@
 import { useEffect, useRef, useState } from 'preact/hooks';
 import { Button, Card } from '@/components/ui';
-import { CheckIcon, ChevronLeftIcon, ChevronRightIcon, HeartIcon } from '@/components/icons';
+import { CheckIcon, ChevronLeftIcon, ChevronRightIcon, HeartIcon, ShareIcon } from '@/components/icons';
 import { getDayEntry, getSeasonForDay, TOTAL_DAYS, useContent } from '@/content/content';
 import { currentRoute, navigate } from '@/router/router';
 import * as store from '@/store';
 import { isTtsSupported, speak, stopSpeaking } from '@/lib/tts';
+import { shareText } from '@/lib/share';
 import { WellnessSheet } from '@/components/wellness/WellnessSheet';
 
 /** Matches legacy CONFIG.JOURNAL.AUTOSAVE_DELAY_MS. */
@@ -34,6 +35,7 @@ export function ReadPage() {
   const [saveStatus, setSaveStatus] = useState<SaveStatus>('idle');
   const [speaking, setSpeaking] = useState(false);
   const [wellnessOpen, setWellnessOpen] = useState(false);
+  const [shareStatus, setShareStatus] = useState<'idle' | 'shared' | 'copied' | 'failed'>('idle');
   const saveTimer = useRef<ReturnType<typeof setTimeout> | null>(null);
 
   // Stop any in-progress narration when navigating away from this day.
@@ -150,6 +152,15 @@ export function ReadPage() {
     setSpeaking(true);
   }
 
+  async function share() {
+    const result = await shareText(
+      entry.scriptureRef,
+      `${entry.scriptureRef}\n\n"${entry.scriptureText}"\n\n— Spiritual Seasons, Day ${resolvedDay}`
+    );
+    setShareStatus(result);
+    setTimeout(() => setShareStatus('idle'), 2000);
+  }
+
   return (
     <div class="p-5">
       <div class="mx-auto grid max-w-4xl gap-5 md:grid-cols-2">
@@ -213,7 +224,17 @@ export function ReadPage() {
             >
               <HeartIcon class="h-4 w-4" filled={state.isFavorite} />
             </Button>
+            <Button variant="secondary" onClick={() => void share()} aria-label="Share this verse">
+              <ShareIcon class="h-4 w-4" />
+            </Button>
           </div>
+          {shareStatus !== 'idle' && (
+            <p class="mt-2 text-center text-sm text-ink-3">
+              {shareStatus === 'shared' && 'Shared'}
+              {shareStatus === 'copied' && 'Copied to clipboard'}
+              {shareStatus === 'failed' && "Couldn't share — try again"}
+            </p>
+          )}
 
           <button
             type="button"
