@@ -500,6 +500,31 @@ things the legacy app had. Continuing to close that gap:
         is present, and turning it off stops further vibration calls.
         Zero console errors.
 
+- [x] Calendar export (.ics). Ports
+      `legacy/js/modules/calendar-integration.js` — a downloadable iCalendar
+      file with one event per devotional day (scripture reference/text +
+      reflection prompt in the description, 30-minute duration, a
+      15-minute VALARM reminder, categorized by season), starting from a
+      user-chosen date and daily time.
+      - `src/lib/calendarExport.ts` — ICS generation (`VCALENDAR`/`VEVENT`/
+        `VALARM` blocks, `\r\n` line endings, the same text-escaping rules
+        as the legacy generator) built from `loadBookData()`'s
+        `seasons[].days[]`, plus a Blob-and-anchor `downloadICS()` matching
+        the pattern already used by Settings' "Export my data".
+      - `src/components/CalendarExportSheet.tsx` — a Sheet with start-date
+        and daily-time inputs and an Export button, opened from a new
+        "Export to calendar" row under Settings' "Your journey" section.
+      - Deliberately dropped vs. legacy: the two follow-up `Modal.create()`
+        dialogs (a "what's included" info card before exporting and a
+        "next steps" confirmation after) — no Modal component exists in
+        this rebuild, and the Sheet's own description text already covers
+        the "what's included" copy; the download itself is the confirmation.
+      - Verified via Playwright: intercepted the actual download and
+        parsed the `.ics` content — exactly 120 `VEVENT` blocks, correct
+        `SUMMARY` for day 1 and day 120, `VALARM`/`TRIGGER:-PT15M` present,
+        and `DTSTART` on the first event matching the chosen start
+        date/time. Zero console errors.
+
 ## Compatibility guarantees
 
 The new store layer opens the same `spiritual-seasons-db` (v1) database

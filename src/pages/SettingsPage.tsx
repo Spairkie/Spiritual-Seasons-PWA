@@ -13,6 +13,7 @@ import {
   showDailyReminder,
 } from '@/lib/notifications';
 import { isHapticsSupported } from '@/lib/haptics';
+import { CalendarExportSheet } from '@/components/CalendarExportSheet';
 
 type OptionKey = 'darkMode' | 'seasonTheme' | 'fontSize' | 'lineSpacing' | 'ambientSound';
 
@@ -72,6 +73,7 @@ export function SettingsPage() {
   const [pdfMessage, setPdfMessage] = useState<string | null>(null);
   const [permission, setPermission] = useState(notificationPermission());
   const [testSent, setTestSent] = useState(false);
+  const [calendarSheetOpen, setCalendarSheetOpen] = useState(false);
   const fileInputRef = useRef<HTMLInputElement>(null);
 
   if (!settings) {
@@ -276,6 +278,7 @@ export function SettingsPage() {
           <Card padding="none">
             <ListRow title="Retake the season quiz" onClick={() => navigate('quiz')} />
             <ListRow title="View the introduction" onClick={() => navigate('intro')} />
+            <ListRow title="Export to calendar" subtitle="Add all 120 days to your calendar app" onClick={() => setCalendarSheetOpen(true)} />
           </Card>
         </section>
 
@@ -344,6 +347,8 @@ export function SettingsPage() {
           </div>
         </Sheet>
       ))}
+
+      <CalendarExportSheet open={calendarSheetOpen} onClose={() => setCalendarSheetOpen(false)} />
     </div>
   );
 }
