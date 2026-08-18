@@ -1,6 +1,6 @@
 import { useEffect, useMemo, useRef, useState } from 'preact/hooks';
 import { Button, Card } from '@/components/ui';
-import { CheckIcon, ChevronLeftIcon, ChevronRightIcon, HeartIcon, ShareIcon } from '@/components/icons';
+import { CheckIcon, ChevronLeftIcon, ChevronRightIcon, HeartIcon, ImageIcon, ShareIcon } from '@/components/icons';
 import { getDayEntry, getSeasonForDay, TOTAL_DAYS, useContent } from '@/content/content';
 import { currentRoute, navigate } from '@/router/router';
 import * as store from '@/store';
@@ -8,6 +8,7 @@ import { isTtsSupported, speak, stopSpeaking } from '@/lib/tts';
 import { shareText } from '@/lib/share';
 import { WellnessSheet } from '@/components/wellness/WellnessSheet';
 import { AudioNoteRecorder } from '@/components/AudioNoteRecorder';
+import { VerseImageSheet } from '@/components/VerseImageSheet';
 import { useShortcuts } from '@/hooks/useShortcuts';
 
 /** Matches legacy CONFIG.JOURNAL.AUTOSAVE_DELAY_MS. */
@@ -37,6 +38,7 @@ export function ReadPage() {
   const [saveStatus, setSaveStatus] = useState<SaveStatus>('idle');
   const [speaking, setSpeaking] = useState(false);
   const [wellnessOpen, setWellnessOpen] = useState(false);
+  const [imageSheetOpen, setImageSheetOpen] = useState(false);
   const [shareStatus, setShareStatus] = useState<'idle' | 'shared' | 'copied' | 'failed'>('idle');
   const saveTimer = useRef<ReturnType<typeof setTimeout> | null>(null);
   const journalRef = useRef<HTMLTextAreaElement>(null);
@@ -256,6 +258,9 @@ export function ReadPage() {
             <Button variant="secondary" onClick={() => void share()} aria-label="Share this verse">
               <ShareIcon class="h-4 w-4" />
             </Button>
+            <Button variant="secondary" onClick={() => setImageSheetOpen(true)} aria-label="Share as image">
+              <ImageIcon class="h-4 w-4" />
+            </Button>
           </div>
           {shareStatus !== 'idle' && (
             <p class="mt-2 text-center text-sm text-ink-3">
@@ -305,6 +310,13 @@ export function ReadPage() {
       </div>
 
       <WellnessSheet open={wellnessOpen} onClose={() => setWellnessOpen(false)} />
+      <VerseImageSheet
+        open={imageSheetOpen}
+        onClose={() => setImageSheetOpen(false)}
+        scriptureText={entry.scriptureText}
+        scriptureRef={entry.scriptureRef}
+        seasonId={season.id}
+      />
     </div>
   );
 }

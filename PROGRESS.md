@@ -525,6 +525,37 @@ things the legacy app had. Continuing to close that gap:
         and `DTSTART` on the first event matching the chosen start
         date/time. Zero console errors.
 
+- [x] Shareable verse images. Ports the core idea of
+      `legacy/js/modules/verse-images.js` (canvas-generated image of the
+      day's verse, for social sharing) at a deliberately trimmed scope —
+      legacy offered 6 templates, 3 aspect ratios, custom color pickers,
+      and a font picker; this rebuild ships one well-designed template at
+      a single 1080×1080 size, using the app's *own* season accent-gradient
+      tokens (the same hex values as `--color-accent`/`--color-accent-deep`
+      in `src/styles/main.css`, not a separate palette invented for this
+      one feature) and its own self-hosted Cormorant Garamond serif rather
+      than legacy's font-picker. A single polished default beats a
+      half-used customization lab nobody asked to extend.
+      - `src/lib/verseImage.ts` — draws a season-gradient card with the
+        italic serif verse text (word-wrapped, size scaled to length),
+        reference, and a "Spiritual Seasons" watermark onto a canvas
+        (awaiting `document.fonts.ready` first so the custom font is
+        actually loaded before the first paint); `downloadVerseImage()`
+        and `shareVerseImage()` (Web Share API with a `File`, feature-
+        detected via `navigator.share`/`canShare`, silently returning
+        `false` on user-cancel rather than treating it as an error).
+      - `src/components/VerseImageSheet.tsx` — a Sheet with a live canvas
+        preview and Download/Share buttons (Share only rendered when the
+        API is actually present), opened from a new image-icon button
+        added to the Read page's existing Complete/Favourite/Share row.
+      - New `ImageIcon` in `src/components/icons.tsx`.
+      - Verified via Playwright: opened the sheet, sampled the generated
+        canvas's pixel data to confirm it isn't a blank/solid frame,
+        confirmed the Download button actually fires a `.png` download
+        with a filename derived from the scripture reference, and
+        confirmed the Share button correctly doesn't render in an
+        environment without the Web Share API. Zero console errors.
+
 ## Compatibility guarantees
 
 The new store layer opens the same `spiritual-seasons-db` (v1) database
