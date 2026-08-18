@@ -6,6 +6,7 @@ import { applyTheme } from '@/state/theme';
 import * as store from '@/store';
 import { useShortcuts } from '@/hooks/useShortcuts';
 import { useDailyReminder } from '@/hooks/useDailyReminder';
+import { useHapticFeedback } from '@/hooks/useHapticFeedback';
 import { ShortcutsHelpSheet } from '@/components/ShortcutsHelpSheet';
 import { Header } from './Header';
 import { Sidebar } from './Sidebar';
@@ -81,6 +82,7 @@ export function AppShell({ children }: AppShellProps) {
   );
   useShortcuts(globalShortcuts);
   useDailyReminder();
+  useHapticFeedback();
 
   return (
     <div class="min-h-screen bg-paper">

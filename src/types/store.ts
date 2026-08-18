@@ -82,6 +82,7 @@ export interface Settings {
   ttsRate: number;
   ambientSound: string;
   keyboardShortcuts: boolean;
+  hapticsEnabled: boolean;
   onboardingCompleted: boolean;
 }
 
@@ -98,6 +99,7 @@ export const DEFAULT_SETTINGS: Settings = {
   ttsRate: 0.9,
   ambientSound: 'silence',
   keyboardShortcuts: true,
+  hapticsEnabled: true,
   onboardingCompleted: false,
 };
 

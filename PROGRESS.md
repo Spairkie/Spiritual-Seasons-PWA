@@ -472,6 +472,34 @@ things the legacy app had. Continuing to close that gap:
         day/season title and prompt text; the enabled state persists
         across a reload. Zero console errors.
 
+- [x] Haptic feedback. Ported `legacy/js/modules/haptics.js`'s core idea
+      (light vibration feedback on taps) at a trimmed scope — the legacy
+      module distinguished `.btn-primary`/`.btn-ghost` CSS classes that
+      don't exist in this rebuild's Tailwind-utility markup, so pattern
+      selection here is structural instead: nav items (inside a `<nav>`
+      landmark) get a `selection` buzz, every other button/`[role="button"]`
+      gets `light`, and checkbox/radio/range controls fire on change.
+      - `src/lib/haptics.ts` — `isHapticsSupported()`, and `triggerHaptic()`
+        which checks the new `hapticsEnabled` Settings field (default
+        `true`, additive to `DEFAULT_SETTINGS` so existing users' stored
+        settings just pick up the default with no migration) before
+        calling `navigator.vibrate()`.
+      - `src/hooks/useHapticFeedback.ts` — one delegated `click`/`change`/
+        `input` listener set on `document`, mounted once in `AppShell`,
+        with a `WeakMap`-based per-element de-dup on range inputs so
+        dragging a slider doesn't buzz on every pixel.
+      - New "Haptic feedback" toggle in Settings' Journaling card,
+        rendered only when `isHapticsSupported()` — desktop browsers don't
+        expose the Vibration API at all, so the row simply doesn't exist
+        there rather than showing a control that can never do anything.
+      - Verified via Playwright with `navigator.vibrate` stubbed in an
+        init script (desktop Chromium has no Vibration API at all, so
+        this is the only way to exercise the feature the way a real
+        Android Chrome user would): a nav-item click fires the
+        `selection` pattern, the Settings toggle is visible once the API
+        is present, and turning it off stops further vibration calls.
+        Zero console errors.
+
 ## Compatibility guarantees
 
 The new store layer opens the same `spiritual-seasons-db` (v1) database

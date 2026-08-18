@@ -12,6 +12,7 @@ import {
   requestNotificationPermission,
   showDailyReminder,
 } from '@/lib/notifications';
+import { isHapticsSupported } from '@/lib/haptics';
 
 type OptionKey = 'darkMode' | 'seasonTheme' | 'fontSize' | 'lineSpacing' | 'ambientSound';
 
@@ -184,6 +185,19 @@ export function SettingsPage() {
                 />
               }
             />
+            {isHapticsSupported() && (
+              <ListRow
+                title="Haptic feedback"
+                subtitle="A light buzz when you tap buttons and controls"
+                trailing={
+                  <Toggle
+                    checked={settings.hapticsEnabled}
+                    onChange={(v) => void updateSetting('hapticsEnabled', v)}
+                    label="Haptic feedback"
+                  />
+                }
+              />
+            )}
           </Card>
         </section>
 
