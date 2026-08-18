@@ -5,9 +5,9 @@ import { BreathingExercise } from './BreathingExercise';
 import { AMBIENT_PRESETS, getCurrentPreset, playAmbientSound, stopAmbientSound } from '@/lib/ambientSound';
 import type { AmbientPreset } from '@/lib/ambientSound';
 
-type Tab = 'timer' | 'breathe' | 'sound';
+export type WellnessTab = 'timer' | 'breathe' | 'sound';
 
-const TABS: Array<{ value: Tab; label: string }> = [
+const TABS: Array<{ value: WellnessTab; label: string }> = [
   { value: 'timer', label: 'Timer' },
   { value: 'breathe', label: 'Breathe' },
   { value: 'sound', label: 'Sound' },
@@ -16,6 +16,7 @@ const TABS: Array<{ value: Tab; label: string }> = [
 export interface WellnessSheetProps {
   open: boolean;
   onClose: () => void;
+  initialTab?: WellnessTab;
 }
 
 function AmbientSoundPicker() {
@@ -53,8 +54,14 @@ function AmbientSoundPicker() {
   );
 }
 
-export function WellnessSheet({ open, onClose }: WellnessSheetProps) {
-  const [tab, setTab] = useState<Tab>('timer');
+export function WellnessSheet({ open, onClose, initialTab = 'timer' }: WellnessSheetProps) {
+  const [tab, setTab] = useState<WellnessTab>(initialTab);
+
+  // Jump to whichever tab the caller opened this sheet for (e.g. Home's
+  // "Breathe" tile) each time it's (re)opened, rather than only on mount.
+  useEffect(() => {
+    if (open) setTab(initialTab);
+  }, [open, initialTab]);
 
   // Ambient sound is meant to keep playing while the sheet is closed (it's
   // background audio for reading/journaling) — only stop it when the whole

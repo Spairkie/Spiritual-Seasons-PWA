@@ -158,13 +158,6 @@
   html,
   body {
     height: 100%;
-    /* Locked native shell: only .app-main scrolls, never the page itself.
-       (This exact pattern is fine — the bug in the old app wasn't this,
-       it was an unrelated ID selector fighting it three files away.) */
-    overflow: hidden;
-    position: fixed;
-    width: 100%;
-    overscroll-behavior: none;
   }
 
   body {

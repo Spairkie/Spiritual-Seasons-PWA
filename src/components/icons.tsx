@@ -59,7 +59,7 @@ export function SettingsIcon({ class: className }: IconProps) {
   return (
     <svg {...commonProps} class={className} aria-hidden="true">
       <circle cx="12" cy="12" r="3" />
-      <path d="M19.4 13a1.7 1.7 0 0 0 .34 1.87l.06.06a2 2 0 1 1-2.83 2.83l-.06-.06a1.7 1.7 0 0 0-1.87-.34 1.7 1.7 0 0 0-1.04 1.56V19a2 2 0 1 1-4 0v-.09A1.7 1.7 0 0 0 9 17.35a1.7 1.7 0 0 0-1.87.34l-.06.06a2 2 0 1 1-2.83-2.83l.06-.06A1.7 1.7 0 0 0 4.65 13a1.7 1.7 0 0 0-1.56-1.04H3a2 2 0 1 1 0-4h.09A1.7 1.7 0 0 0 4.65 6.6a1.7 1.7 0 0 0-.34-1.87l-.06-.06a2 2 0 1 1 2.83-2.83l.06.06A1.7 1.7 0 0 0 9 2.24 1.7 1.7 0 0 0 10.04.68V0" />
+      <path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 1 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 1 1-2.83-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 1 1 2.83-2.83l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 1 1 2.83 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z" />
     </svg>
   );
 }
@@ -152,10 +152,40 @@ export function ImageIcon({ class: className }: IconProps) {
   );
 }
 
+export function WindIcon({ class: className }: IconProps) {
+  return (
+    <svg {...commonProps} class={className} aria-hidden="true">
+      <path d="M3 8h11.5a2.5 2.5 0 1 0-2.5-2.5" />
+      <path d="M3 12h15.5a2.5 2.5 0 1 1-2.5 2.5" />
+      <path d="M3 16h9.5a2.5 2.5 0 1 1-2.5 2.5" />
+    </svg>
+  );
+}
+
+export function MusicNoteIcon({ class: className }: IconProps) {
+  return (
+    <svg {...commonProps} class={className} aria-hidden="true">
+      <path d="M9 18V5l11-2v13" />
+      <circle cx="6" cy="18" r="3" />
+      <circle cx="17" cy="16" r="3" />
+    </svg>
+  );
+}
+
+export function TimerIcon({ class: className }: IconProps) {
+  return (
+    <svg {...commonProps} class={className} aria-hidden="true">
+      <circle cx="12" cy="13" r="8" />
+      <path d="M12 9v4l2.5 2.5" />
+      <path d="M9 2h6" />
+    </svg>
+  );
+}
+
 export function FlameIcon({ class: className }: IconProps) {
   return (
     <svg {...commonProps} class={className} aria-hidden="true">
-      <path d="M12 2c1.5 3 .5 4.5-.5 6C10 10 8 11.5 8 14.5A4.5 4.5 0 0 0 16 17c0-2-1-3-1-3s.5 2-1 3c.5-1.5-.5-3-.5-3s2 1 2.5 3.5A6.5 6.5 0 0 1 12 22a6.5 6.5 0 0 1-6.5-6.5C5.5 11 8 9 9 7c-1 .5-2 1.5-2.5 2.5C6 6 8.5 3 12 2Z" />
+      <path d="M8.5 14.5A2.5 2.5 0 0 0 11 12c0-1.38-.5-2-1-3-1.072-2.143-.224-4.054 2-6 .5 2.5 2 4.9 4 6.5 2 1.6 3 3.5 3 5.5a7 7 0 1 1-14 0c0-1.153.433-2.294 1-3a2.5 2.5 0 0 0 2.5 2.5z" />
     </svg>
   );
 }

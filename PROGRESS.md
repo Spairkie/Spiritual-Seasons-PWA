@@ -273,6 +273,90 @@ in Settings.
       here as part of the same pass). Final sweep: 0 violations across
       all 56 page/season/theme combinations.
 
+## Critical UX regression fixes (user-reported, 2026-08-18)
+
+The user reported the app as effectively unusable — "can't scroll on the
+mobile to proceed to the next screen," "can't do nothing on mobile," and
+the desktop build "looks horrible," with "so much empty space" and
+"horrible icons" on every page. This was a real, severe regression, not
+overstated: it was investigated by serving both the legacy app
+(`legacy/`, temporarily pointed at `public/content/` to load real data)
+and this rebuild locally side by side in headless Chromium at matching
+routes/viewports, rather than guessing from code review.
+
+- **Root cause of the mobile "can't scroll" bug — found and fixed.**
+  `src/styles/main.css`'s base layer set `html, body { overflow: hidden;
+  position: fixed; ... }`, with a comment describing a "locked native
+  shell: only `.app-main` scrolls." That `.app-main` class was never
+  actually implemented anywhere in the component tree — the legacy app
+  *does* have this exact pattern working (`<main class="app-main">` with
+  real `overflow-y: auto`, confirmed by inspection), but the rebuild only
+  copied the comment's *intent*, not the implementation. The practical
+  effect: `document.documentElement.scrollHeight` was clamped to exactly
+  `window.innerHeight` everywhere, `overflow-y` was `hidden` on both `html`
+  and `body`, and nothing on any page — Intro, Quiz, Home, Read, Contents,
+  Progress, Settings — could ever scroll past one screen's worth of
+  content. On the Intro page specifically (the page most first-time mobile
+  visitors land on, being the default route until onboarding completes),
+  the "Find my season" button and skip link sat below the fold with no way
+  to reach them — confirmed by a full-page screenshot showing the buttons
+  present in the DOM but permanently offscreen. Fixed by removing the
+  unimplemented locked-shell rule entirely (`html, body { height: 100% }`
+  now, nothing else) rather than finishing the `.app-main` pattern —
+  `Header` already uses `sticky`, and `Sidebar`/`BottomNav` already use
+  `fixed`, so none of them needed the body to be non-scrolling in the
+  first place; normal document scroll is simpler and was verified to work
+  everywhere. Confirmed via `document.scrollingElement` metrics
+  (`scrollHeight` now correctly exceeds `innerHeight`) and an actual
+  scroll-and-click reaching the Intro CTA on a 390×844 viewport.
+- **Broken icons — found and fixed.** `SettingsIcon` and `FlameIcon` in
+  `src/components/icons.tsx` had hand-drawn SVG paths that were
+  geometrically incomplete/self-intersecting — not a stylistic choice, an
+  actual bug. `SettingsIcon`'s path ended mid-gear without closing back to
+  its start, rendering as an unrecognizable squiggle instead of a gear
+  (visible next to "Settings" in the sidebar/bottom nav on every single
+  page). `FlameIcon`'s path had backtracking sub-curves that don't trace a
+  flame silhouette, rendering as a curled comma instead of a flame
+  (visible on the streak badge on Home, the sidebar, and Progress).
+  Replaced both with correct, well-formed paths in the same stroke style
+  as the rest of the icon set (Feather's MIT-licensed gear path for
+  Settings; Lucide's ISC-licensed flame path, adapted to this app's stroke
+  convention, for Flame) — confirmed via a zoomed screenshot of the
+  sidebar that both now render as an actual gear and an actual flame.
+- **Desktop "so much empty space" — diagnosed and addressed.** Measuring
+  actual DOM layout (not eyeballing screenshots, which the reduced-size
+  image view in this session initially misled on) confirmed the content
+  columns on Home/Read/Contents/Settings *are* correctly centered via
+  `mx-auto` within the space next to the sidebar — centering was never the
+  bug. The real issue was content density: this rebuild's Home page had
+  quietly dropped the legacy app's "Quick wellness tools" grid (Meditation
+  timer / Breathe / Ambient sounds / Favourites — four colored quick-launch
+  tiles), leaving Home with only two cards and a large dead area below
+  them on any screen wider than ~900px. Restored the grid on
+  `HomePage.tsx`, wired to the existing `WellnessSheet` (which gained an
+  `initialTab` prop so each tile deep-links straight to its tool) plus a
+  Favourites tile linking to Contents; added `WindIcon`/`MusicNoteIcon`/
+  `TimerIcon` to match. Verified each tile opens the correct sheet tab.
+- **Contents page — restored the season-grouped, collapsible, color-coded
+  accordion legacy had, which this rebuild had flattened into one long
+  undifferentiated 120-row list requiring extensive scrolling to even see
+  all four seasons.** `ContentsPage.tsx`'s `SeasonSection` now renders as a
+  native `<details>`/`<summary>` (collapsed by default, matching legacy;
+  force-open when searching or filtering to Favourites so matches are
+  never hidden), with the summary using each season's own `colorLight`/
+  `colorDark` from the book data (the same fields `getSeasonForDay`
+  already exposes, not a new palette) as its background/text color, plus
+  a day-range and a live "N of 30 completed" count and an animated chevron
+  — reproducing the legacy accordion's scannability almost exactly, using
+  data the app already had. Verified expand/collapse interaction and that
+  all four seasons are visible without scrolling on both mobile and
+  desktop.
+
+All four fixes verified with `tsc`, `vitest` (33/33), a full `vite build`,
+and real-browser screenshots at both 390×844 and 1440×900 before and
+after, comparing directly against the actual legacy app running locally
+(not just against this rebuild's own prior state) — not just claimed.
+
 ## Real-device notes
 
 Everything above was verified in headless Chromium (desktop + mobile

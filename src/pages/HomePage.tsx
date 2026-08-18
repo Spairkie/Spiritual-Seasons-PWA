@@ -1,11 +1,26 @@
 import { useEffect, useState } from 'preact/hooks';
 import { Badge, Button, Card, ProgressRing } from '@/components/ui';
-import { FlameIcon } from '@/components/icons';
+import { FlameIcon, HeartIcon, MusicNoteIcon, TimerIcon, WindIcon } from '@/components/icons';
 import { SEASON_LABELS, getDayEntry, getSeasonForDay, TOTAL_DAYS, useContent } from '@/content/content';
 import { navigate } from '@/router/router';
 import * as store from '@/store';
 import { checkReflectionDue } from '@/lib/weeklyReflection';
 import { WeeklyReflectionSheet } from '@/components/WeeklyReflectionSheet';
+import { WellnessSheet, type WellnessTab } from '@/components/wellness/WellnessSheet';
+
+interface WellnessTile {
+  tab: WellnessTab;
+  label: string;
+  hint: string;
+  icon: typeof TimerIcon;
+  gradient: string;
+}
+
+const WELLNESS_TILES: WellnessTile[] = [
+  { tab: 'timer', label: '5 min meditation', hint: 'Peace & stillness', icon: TimerIcon, gradient: 'from-[#22B8CF] to-[#0F9CB3]' },
+  { tab: 'breathe', label: 'Breathe', hint: 'Box pattern 4-4-4-4', icon: WindIcon, gradient: 'from-[#9775FA] to-[#7048C4]' },
+  { tab: 'sound', label: 'Ambient sounds', hint: 'Calming soundscape', icon: MusicNoteIcon, gradient: 'from-[#51CF66] to-[#2F9E44]' },
+];
 
 interface HomeState {
   currentDay: number;
@@ -49,6 +64,8 @@ export function HomePage() {
   const home = useHomeState();
   const [dueWeek, setDueWeek] = useState<number | null>(null);
   const [reflectionOpen, setReflectionOpen] = useState(false);
+  const [wellnessTab, setWellnessTab] = useState<WellnessTab>('timer');
+  const [wellnessOpen, setWellnessOpen] = useState(false);
 
   useEffect(() => {
     let cancelled = false;
@@ -147,6 +164,43 @@ export function HomePage() {
           )}
         </div>
       </div>
+
+      <div class="mx-auto mt-8 max-w-4xl">
+        <h2 class="mb-3 text-center text-xs font-semibold uppercase tracking-wide text-ink-3">
+          Quick wellness tools
+        </h2>
+        <div class="grid grid-cols-2 gap-4 md:grid-cols-4">
+          {WELLNESS_TILES.map((tile) => (
+            <button
+              key={tile.tab}
+              type="button"
+              onClick={() => {
+                setWellnessTab(tile.tab);
+                setWellnessOpen(true);
+              }}
+              class={[
+                'flex flex-col items-center gap-2 rounded-card bg-gradient-to-br p-5 text-center text-on-accent shadow-soft transition-transform hover:-translate-y-0.5',
+                tile.gradient,
+              ].join(' ')}
+            >
+              <tile.icon class="h-6 w-6" />
+              <span class="text-sm font-semibold">{tile.label}</span>
+              <span class="text-xs opacity-85">{tile.hint}</span>
+            </button>
+          ))}
+          <button
+            type="button"
+            onClick={() => navigate('contents')}
+            class="flex flex-col items-center gap-2 rounded-card bg-gradient-to-br from-danger to-danger-deep p-5 text-center text-on-accent shadow-soft transition-transform hover:-translate-y-0.5"
+          >
+            <HeartIcon class="h-6 w-6" filled />
+            <span class="text-sm font-semibold">Favourites</span>
+            <span class="text-xs opacity-85">View saved days</span>
+          </button>
+        </div>
+      </div>
+
+      <WellnessSheet open={wellnessOpen} onClose={() => setWellnessOpen(false)} initialTab={wellnessTab} />
 
       {dueWeek !== null && (
         <WeeklyReflectionSheet

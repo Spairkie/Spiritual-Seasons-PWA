@@ -49,18 +49,46 @@ function SeasonSection({
   season,
   status,
   predicate,
+  forceOpen,
 }: {
   season: BookSeason;
   status: DayStatus;
   predicate: (entry: DayEntry) => boolean;
+  forceOpen: boolean;
 }) {
   const days = season.days.filter(predicate);
   if (days.length === 0) return null;
 
+  const completedInSeason = season.days.filter((d) => status.completedDays.has(d.day)).length;
+
   return (
-    <div class="mb-6">
-      <h2 class="mb-2 px-1 font-serif text-lg font-semibold text-ink">{SEASON_LABELS[season.id]}</h2>
-      <Card padding="none">
+    <details class="group mb-4 overflow-hidden rounded-panel" open={forceOpen || undefined}>
+      <summary
+        class="flex cursor-pointer list-none items-center justify-between px-5 py-4 marker:content-none"
+        style={{ background: season.colorLight, color: season.colorDark }}
+      >
+        <div class="flex items-center gap-3">
+          <span class="font-serif text-lg font-semibold">{SEASON_LABELS[season.id]}</span>
+          <span class="text-sm opacity-70">Days {season.daysRange}</span>
+        </div>
+        <div class="flex items-center gap-3">
+          <span class="text-sm font-semibold opacity-80">
+            {completedInSeason} of {season.days.length}
+          </span>
+          <svg
+            viewBox="0 0 24 24"
+            class="h-4 w-4 shrink-0 stroke-current transition-transform group-open:rotate-180"
+            fill="none"
+            stroke-width="2"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+            aria-hidden="true"
+          >
+            <path d="m6 9 6 6 6-6" />
+          </svg>
+        </div>
+      </summary>
+      <div class="border border-t-0 border-line bg-surface p-1">
         {days.map((entry) => (
           <ListRow
             key={entry.day}
@@ -74,8 +102,8 @@ function SeasonSection({
             }
           />
         ))}
-      </Card>
-    </div>
+      </div>
+    </details>
   );
 }
 
@@ -165,7 +193,13 @@ export function ContentsPage() {
         {!noFavouritesYet &&
           !noSearchResults &&
           book.seasons.map((season) => (
-            <SeasonSection key={season.id} season={season} status={status} predicate={predicate} />
+            <SeasonSection
+              key={season.id}
+              season={season}
+              status={status}
+              predicate={predicate}
+              forceOpen={searching || filter === 'favourites'}
+            />
           ))}
       </div>
     </div>
