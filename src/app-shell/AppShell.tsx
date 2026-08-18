@@ -1,9 +1,11 @@
-import { useEffect, useState } from 'preact/hooks';
+import { useEffect, useMemo, useState } from 'preact/hooks';
 import type { ComponentChildren } from 'preact';
 import { currentRoute, navigate } from '@/router/router';
 import { settingsSignal, initSettings } from '@/state/settings';
 import { applyTheme } from '@/state/theme';
 import * as store from '@/store';
+import { useShortcuts } from '@/hooks/useShortcuts';
+import { ShortcutsHelpSheet } from '@/components/ShortcutsHelpSheet';
 import { Header } from './Header';
 import { Sidebar } from './Sidebar';
 import { BottomNav } from './BottomNav';
@@ -24,6 +26,7 @@ export function AppShell({ children }: AppShellProps) {
   // of trusting settings-is-non-null, is what prevents that stale read from
   // firing a bogus redirect back to onboarding right after finishing it.
   const [settingsLoaded, setSettingsLoaded] = useState(false);
+  const [shortcutsHelpOpen, setShortcutsHelpOpen] = useState(false);
 
   // Top-level signal reads — this is what makes AppShell re-render when the
   // route or settings change (@preact/signals subscribes whatever a
@@ -61,6 +64,22 @@ export function AppShell({ children }: AppShellProps) {
 
   const title = ROUTE_TITLES[route.name];
 
+  // Global shortcuts, active on every route (page-local ones like n/p/f/m/j
+  // live directly in ReadPage, which owns the state they act on). Memoized
+  // so the map's identity is stable across re-renders — every closure here
+  // only touches module-level `navigate` and the stable setState setter, so
+  // there's nothing to re-capture and no need to re-attach the listener.
+  const globalShortcuts = useMemo(
+    () => ({
+      h: () => navigate('home'),
+      c: () => navigate('contents'),
+      s: () => navigate('contents'),
+      '?': () => setShortcutsHelpOpen(true),
+    }),
+    []
+  );
+  useShortcuts(globalShortcuts);
+
   return (
     <div class="min-h-screen bg-paper">
       <Sidebar active={route.name} streak={streak} />
@@ -76,6 +95,7 @@ export function AppShell({ children }: AppShellProps) {
         </main>
       </div>
       <BottomNav active={route.name} />
+      <ShortcutsHelpSheet open={shortcutsHelpOpen} onClose={() => setShortcutsHelpOpen(false)} />
     </div>
   );
 }

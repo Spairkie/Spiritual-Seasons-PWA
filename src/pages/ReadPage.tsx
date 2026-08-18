@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState } from 'preact/hooks';
+import { useEffect, useMemo, useRef, useState } from 'preact/hooks';
 import { Button, Card } from '@/components/ui';
 import { CheckIcon, ChevronLeftIcon, ChevronRightIcon, HeartIcon, ShareIcon } from '@/components/icons';
 import { getDayEntry, getSeasonForDay, TOTAL_DAYS, useContent } from '@/content/content';
@@ -7,6 +7,7 @@ import * as store from '@/store';
 import { isTtsSupported, speak, stopSpeaking } from '@/lib/tts';
 import { shareText } from '@/lib/share';
 import { WellnessSheet } from '@/components/wellness/WellnessSheet';
+import { useShortcuts } from '@/hooks/useShortcuts';
 
 /** Matches legacy CONFIG.JOURNAL.AUTOSAVE_DELAY_MS. */
 const AUTOSAVE_DELAY_MS = 2000;
@@ -37,6 +38,7 @@ export function ReadPage() {
   const [wellnessOpen, setWellnessOpen] = useState(false);
   const [shareStatus, setShareStatus] = useState<'idle' | 'shared' | 'copied' | 'failed'>('idle');
   const saveTimer = useRef<ReturnType<typeof setTimeout> | null>(null);
+  const journalRef = useRef<HTMLTextAreaElement>(null);
 
   // Stop any in-progress narration when navigating away from this day.
   useEffect(() => {
@@ -81,6 +83,52 @@ export function ReadPage() {
     };
   }, [day]);
 
+  // Hooks must run unconditionally on every render, so the shortcut wiring
+  // (and the helpers it calls) live above the loading/error guards below —
+  // each guards itself against a not-yet-loaded book/state/day instead of
+  // relying on the narrowed resolvedDay/resolvedState used later for JSX.
+  function goToDay(nextDay: number) {
+    if (nextDay < 1 || nextDay > TOTAL_DAYS) return;
+    setDay(nextDay);
+    navigate('read', { param: nextDay });
+  }
+
+  async function toggleComplete() {
+    if (!book || !state || day === null) return;
+    const season = getSeasonForDay(book, day);
+    if (state.isComplete) {
+      await store.markDayIncomplete(day);
+    } else {
+      await store.markDayComplete(day, season.id);
+    }
+    setState((prev) => (prev ? { ...prev, isComplete: !prev.isComplete } : prev));
+  }
+
+  async function toggleFavorite() {
+    if (!book || !state || day === null) return;
+    const season = getSeasonForDay(book, day);
+    const entry = getDayEntry(book, day);
+    const nowFavorite = await store.toggleFavorite(day, season.id, entry.scriptureRef);
+    setState((prev) => (prev ? { ...prev, isFavorite: nowFavorite } : prev));
+  }
+
+  useShortcuts(
+    useMemo(
+      () => ({
+        n: () => {
+          if (day !== null) goToDay(day + 1);
+        },
+        p: () => {
+          if (day !== null) goToDay(day - 1);
+        },
+        f: () => void toggleFavorite(),
+        m: () => void toggleComplete(),
+        j: () => journalRef.current?.focus(),
+      }),
+      [day, state]
+    )
+  );
+
   if (error) {
     return (
       <div class="p-5">
@@ -109,12 +157,6 @@ export function ReadPage() {
   const season = getSeasonForDay(book, resolvedDay);
   const entry = getDayEntry(book, resolvedDay);
 
-  function goToDay(nextDay: number) {
-    if (nextDay < 1 || nextDay > TOTAL_DAYS) return;
-    setDay(nextDay);
-    navigate('read', { param: nextDay });
-  }
-
   function saveContent(content: string) {
     setSaveStatus('saving');
     store.saveJournalEntry(resolvedDay, content, season.id).then(() => setSaveStatus('saved'));
@@ -126,20 +168,6 @@ export function ReadPage() {
     if (saveTimer.current) clearTimeout(saveTimer.current);
     setSaveStatus('idle');
     saveTimer.current = setTimeout(() => saveContent(content), AUTOSAVE_DELAY_MS);
-  }
-
-  async function toggleComplete() {
-    if (resolvedState.isComplete) {
-      await store.markDayIncomplete(resolvedDay);
-    } else {
-      await store.markDayComplete(resolvedDay, season.id);
-    }
-    setState((prev) => (prev ? { ...prev, isComplete: !prev.isComplete } : prev));
-  }
-
-  async function toggleFavorite() {
-    const nowFavorite = await store.toggleFavorite(resolvedDay, season.id, entry.scriptureRef);
-    setState((prev) => (prev ? { ...prev, isFavorite: nowFavorite } : prev));
   }
 
   function toggleSpeak() {
@@ -254,6 +282,7 @@ export function ReadPage() {
             </span>
           </div>
           <textarea
+            ref={journalRef}
             value={state.content}
             maxLength={MAX_JOURNAL_LENGTH}
             onInput={(e) => handleInput((e.target as HTMLTextAreaElement).value)}

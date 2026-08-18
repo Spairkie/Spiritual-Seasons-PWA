@@ -347,8 +347,46 @@ things the legacy app had. Continuing to close that gap:
       offline" in its Settings copy, so PDF export should work offline
       too even before it's ever been used once online), never as part of
       the page's own critical rendering path.
-- [ ] Keyboard shortcuts (the Settings toggle already existed but did
-      nothing — a half-finished implementation being finished now)
+- [x] Keyboard shortcuts (the Settings toggle already existed but did
+      nothing — a half-finished implementation, now finished). Ported the
+      legacy shortcut map (`legacy/js/modules/keyboard-shortcuts.js`),
+      split by scope rather than one global handler:
+      - `src/lib/keyboardShortcuts.ts` — shared guard utilities
+        (`isTouchDevice`, `shouldIgnoreKeyEvent`: ignores keydowns while
+        typing in an input/textarea/contentEditable, and any ctrl/alt/meta
+        chord) plus the `GLOBAL_SHORTCUTS`/`READ_PAGE_SHORTCUTS` tables
+        used by the help sheet.
+      - `src/hooks/useShortcuts.ts` — a small `useShortcuts(map)` hook that
+        reads the `keyboardShortcuts` setting (via `settingsSignal`, so it
+        turns on/off live from Settings with no reload), skips touch
+        devices, and attaches/detaches one `keydown` listener.
+      - Global shortcuts (`h` home, `c` contents, `s` search-via-contents,
+        `?` help) are wired once in `AppShell.tsx` and open a new
+        `ShortcutsHelpSheet` listing every shortcut.
+      - Page-local shortcuts (`n`/`p` day navigation, `f` favourite,
+        `m` mark complete, `j` focus journal) are wired directly in
+        `ReadPage.tsx` rather than through the global handler, since they
+        need that page's own state/handlers to keep the UI in sync. This
+        meant hoisting `goToDay`/`toggleComplete`/`toggleFavorite` above
+        the page's loading/error guard, because hooks (including
+        `useShortcuts`) can't be called conditionally — each helper now
+        guards itself against a not-yet-loaded book/state/day instead of
+        relying on the later `resolvedDay`/`resolvedState` narrowing.
+      - Deliberately dropped from the legacy behaviour: the boundary
+        toasts ("you're on the last day") and the `.` alternate for `?`,
+        since no toast/snackbar component exists in the rebuild and
+        building one solely for this edge case would be over-engineering;
+        `Escape` needs no separate global handler since `Sheet.tsx`
+        already closes itself on Escape.
+      - Verified via a seeded-IndexedDB Playwright smoke test: `?` opens
+        the help sheet from Home with the full shortcut list; `c`/`h`
+        navigate; on the Read page `n`/`p` change the day (URL + heading
+        both update), `f` flips `aria-pressed` on the favourite button,
+        `m` flips "Mark complete" → "Completed", `j` focuses the journal
+        textarea, and — the key guard check — typing "n is just a letter
+        here" into the focused journal textarea does *not* navigate away,
+        confirming `shouldIgnoreKeyEvent` correctly ignores keys while
+        typing. Zero console errors across the whole run.
 - [ ] Audio journal notes (voice recording)
 
 ## Compatibility guarantees
