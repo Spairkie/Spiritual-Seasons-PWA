@@ -668,10 +668,15 @@ const Devotional = (() => {
       }
     } else if (isSeasonEnd) {
       const nextSeasonName = nextSeasonNames[day];
+      // season objects (from book.json) carry `title` (e.g. "Winter — A Season of Stillness"),
+      // not `name` — extract just the short name so this doesn't render as an empty string.
+      const seasonShortName = season.title
+        ? season.title.split(' — ')[0]
+        : (season.id ? season.id.charAt(0).toUpperCase() + season.id.slice(1) : '');
       card.innerHTML = `
-        <div style="font-size: 2rem; margin-bottom: var(--space-3);">${season.emoji || '🌿'}</div>
+        <div style="font-size: 2rem; margin-bottom: var(--space-3);">${Utils.getSeasonEmoji(season.id)}</div>
         <h3 style="font-family: var(--font-display); font-size: var(--text-xl); margin-bottom: var(--space-2); color: var(--season-primary);">Season Complete</h3>
-        <p style="color: var(--text-secondary); margin-bottom: var(--space-1);">You've finished the ${Utils.escapeHtml(season.name)} season.</p>
+        <p style="color: var(--text-secondary); margin-bottom: var(--space-1);">You've finished the ${Utils.escapeHtml(seasonShortName)} season.</p>
         <p style="color: var(--text-secondary); margin-bottom: var(--space-4); font-size: var(--text-sm);">${Utils.escapeHtml(nextSeasonDescriptions[day])}</p>
         <button class="btn btn-primary" data-route="devotional" data-day="${nextDay}">Begin ${Utils.escapeHtml(nextSeasonName)} Season →</button>
       `;

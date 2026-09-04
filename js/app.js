@@ -424,6 +424,12 @@ const App = (() => {
 
     const homeContent = Utils.createElement('div');
 
+    // Extract just the season name (e.g., "Winter" from "Winter — A Season of Stillness"),
+    // shared by the seasonal badge below and the today-card's "Day N of 30 in <season>" line.
+    const seasonShortName = season
+      ? (season.title ? season.title.split(' — ')[0] : season.id.charAt(0).toUpperCase() + season.id.slice(1))
+      : '';
+
     // Hero section with greeting and seasonal badge
     const hero = Utils.createElement('div', { className: 'home-hero' },
       Utils.createElement('p', { className: 'home-greeting' }, `📅 ${greeting}`),
@@ -431,8 +437,7 @@ const App = (() => {
     );
 
     if (season) {
-      // Extract just the season name (e.g., "Winter" from "Winter — A Season of Stillness")
-      const seasonTitle = season.title ? season.title.split(' — ')[0] : season.id.charAt(0).toUpperCase() + season.id.slice(1);
+      const seasonTitle = seasonShortName;
       const seasonEmoji = Utils.getSeasonEmoji(season.id);
       const seasonBadge = Utils.createElement('div', { 
         className: 'season-badge', 
@@ -457,7 +462,7 @@ const App = (() => {
           <span class="today-label">📖 TODAY'S DEVOTIONAL</span>
           <span class="today-progress">Day ${currentDay || 1} of 120</span>
         </div>
-        <p style="font-size: var(--text-xs); color: var(--color-text-muted); margin: 0 0 var(--space-2);">Day ${dayInSeason} of 30 in ${season.name || ''}</p>
+        <p style="font-size: var(--text-xs); color: var(--color-text-muted); margin: 0 0 var(--space-2);">Day ${dayInSeason} of 30 in ${seasonShortName}</p>
         <div style="height: 4px; background: var(--color-border); border-radius: 2px; margin-bottom: var(--space-3);">
           <div style="height: 100%; width: ${progressPct}%; background: var(--season-primary); border-radius: 2px; transition: width 0.4s ease;"></div>
         </div>
